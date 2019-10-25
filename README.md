@@ -44,7 +44,7 @@ Utils.getPostFromWeb = function(url, parameters) {
         wr.flush();
         wr.close();
         
-        int responseCode = con.getResponseCode();
+        var responseCode = con.getResponseCode();
         
         var isr = new java.io.InputStreamReader(con.getInputStream());
         var in = new java.io.BufferedReader(isr);
