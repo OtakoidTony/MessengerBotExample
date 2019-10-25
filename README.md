@@ -47,13 +47,13 @@ Utils.getPostFromWeb = function(url, parameters) {
         var responseCode = con.getResponseCode();
         
         var isr = new java.io.InputStreamReader(con.getInputStream());
-        var in = new java.io.BufferedReader(isr);
+        var br = new java.io.BufferedReader(isr);
         var inputLine;
         var response = new java.lang.StringBuffer();
-        while ((inputLine = in.readLine()) != null) {
+        while ((inputLine = br.readLine()) != null) {
             response.append(inputLine);
         }
-        in.close();
-        
+        br.close();
+        con.close();
         return response.toString();
 ```
