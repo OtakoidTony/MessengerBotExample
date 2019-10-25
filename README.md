@@ -28,3 +28,32 @@ Utils.getWithUAfromWeb = function(url) {
     }
 }
 ```
+## POST Request
+```javascript
+Utils.getPostFromWeb = function(url, parameters) {
+    try {
+        var url = new java.net.URL(url);
+        var con = url.openConnection();
+        
+        con.setRequestMethod("POST");
+        con.setRequestProperty("User-Agent", "\'User-Agent\': \'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36\'");
+        con.setDoOutput(true);
+        
+        var wr = new java.io.DataOutputStream(con.getOutputStream());
+        wr.writeBytes(parameters);
+        wr.flush();
+        wr.close();
+        
+        int responseCode = con.getResponseCode();
+        
+        var isr = new java.io.InputStreamReader(con.getInputStream());
+        var in = new java.io.BufferedReader(isr);
+        var inputLine;
+        var response = new java.lang.StringBuffer();
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+        
+        return response.toString();
+```
