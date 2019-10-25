@@ -56,4 +56,6 @@ Utils.getPostFromWeb = function(url, parameters) {
         br.close();
         con.close();
         return response.toString();
+    }
+}
 ```
