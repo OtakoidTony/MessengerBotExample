@@ -28,6 +28,14 @@ Utils.getWithUAfromWeb = function(url) {
     }
 }
 ```
+### Mobile User-Agent
+```
+Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.70 Mobile Safari/537.36
+```
+### Computer User-Agent
+```
+Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36
+```
 ## POST Request
 ```javascript
 Utils.getPostFromWeb = function(url, parameters) {
