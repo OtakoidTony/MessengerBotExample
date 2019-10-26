@@ -9,7 +9,7 @@ factorial = function(input) {
         output=output*temp;
         temp=temp+1;
     }
-    return output
+    return output;
 }
 
 
