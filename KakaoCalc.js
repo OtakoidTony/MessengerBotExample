@@ -2,7 +2,7 @@ String.prototype.replaceAll = function(org, dest) {
     return this.split(org).join(dest);
 }
 
-factorial = function(input) {
+function factorial(input) {
     var temp=1;
     var output=1;
     while (temp<=input){
