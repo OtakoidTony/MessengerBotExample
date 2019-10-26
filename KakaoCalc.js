@@ -2,20 +2,19 @@ String.prototype.replaceAll = function(org, dest) {
     return this.split(org).join(dest);
 }
 
-function factorial(input) {
-    var temp=1;
+Utils.factorial = function(input) {
+    var temp  =1;
     var output=1;
-    while (temp<=input){
-        output=output*temp;
-        temp=temp+1;
+    while(temp<=input){
+        output = output*temp;
+        temp   = temp+1;
     }
     return output;
 }
 
-
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
     if (msg.charAt(0) == "계" && msg.charAt(1) == "산") {
-        var calc=0;
+        var calc = 0;
         if(msg.indexOf("\'")    ==-1 && msg.indexOf("\"")     ==-1&&
            msg.indexOf("Api")   ==-1 && msg.indexOf("Utils")  ==-1&&
            msg.indexOf("Log")   ==-1 && msg.indexOf("Appdata")==-1&&
@@ -28,4 +27,3 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
         }
     }
 }
-        
