@@ -24,8 +24,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
            msg.indexOf("var")   ==-1 && msg.indexOf("?")      ==-1){
             replier.reply("Exploit Detect");
         }else{
-            eval("calc="+msg.split(" ", 2)[1]);
-            replier.reply(calc);
+            replier.reply(eval(msg.split(" ", 2)[1]));
         }
     }
 }
