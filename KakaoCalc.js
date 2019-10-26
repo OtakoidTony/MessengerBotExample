@@ -21,9 +21,9 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
            msg.indexOf("Data")  ==-1 && msg.indexOf("Bridge") ==-1&&
            msg.indexOf("Device")==-1 && msg.indexOf("File")   ==-1&&
            msg.indexOf("var")   ==-1 && msg.indexOf("?")      ==-1){
-            replier.reply("Exploit Detect");
-        }else{
             replier.reply(eval(msg.split(" ", 2)[1]));
+        }else{
+            replier.reply("Exploit Detect");
         }
     }
 }
