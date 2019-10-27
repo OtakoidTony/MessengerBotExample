@@ -30,7 +30,15 @@ cos = function(input){
     }
     return output;
 }
-
+sin = function(input){
+    var temp = 0;
+    var output = 0;
+    while (temp <= 20) {
+        output = (java.lang.Math.pow(-1, temp)*java.lang.Math.pow(input, 2*temp+1) / factorial(2*temp+1)) + output;
+        temp = temp + 1;
+    }
+    return output;
+}
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
     if (msg.charAt(0) == "계" && msg.charAt(1) == "산") {
         var calc = 0;
