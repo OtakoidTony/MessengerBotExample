@@ -21,7 +21,7 @@ exp = function(input) {
     }
     return output;
 }
-sin = function(input){
+cos = function(input){
     var temp = 0;
     var output = 0;
     while (temp <= 20) {
