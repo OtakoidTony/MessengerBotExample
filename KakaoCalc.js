@@ -21,6 +21,7 @@ exp = function(input) {
     }
     return output;
 }
+
 cos = function(input){
     var temp = 0;
     var output = 0;
@@ -30,6 +31,7 @@ cos = function(input){
     }
     return output;
 }
+
 sin = function(input){
     var temp = 0;
     var output = 0;
@@ -39,6 +41,21 @@ sin = function(input){
     }
     return output;
 }
+
+eta = function(input){
+    var temp = 1;
+    var output = 0;
+    while (temp <= 20) {
+        output = output + java.lang.Math.pow(-1, temp-1)/java.lang.Math.pow(temp, input);
+        temp = temp + 1;
+    }
+    return output
+}
+
+zeta = function(input){
+    return eta(input)/(1-java.lang.Math.pow(2, 1-input));
+}
+
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
     if (msg.charAt(0) == "계" && msg.charAt(1) == "산") {
         var calc = 0;
@@ -49,7 +66,12 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             msg.indexOf("Device") == -1 && msg.indexOf("File") == -1 &&
             msg.indexOf("var") == -1 && msg.indexOf("?") == -1 &&
             msg.indexOf("java") == -1) {
-            replier.reply(eval(msg.split(" ", 2)[1]));
+            var input = msg;
+            input = input.split(" ", 2)[1];
+            input = input.replace('η', 'eta');
+            input = input.replace('Γ', 'gamma');
+            input = input.replace('ζ', 'zeta');
+            replier.reply(eval(input));
         } else {
             replier.reply("Exploit Detect");
         }
