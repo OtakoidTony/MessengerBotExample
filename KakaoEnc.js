@@ -11,7 +11,7 @@ charToCode = function(str) {
   if (!str) return false; // Escaping if not exist
   var unicode = '';
   for (var i = 0, l = str.length; i < l; i++) {
-    unicode += '\\' + str[i].charCodeAt(0).toString(2);
+    unicode += str[i].charCodeAt(0).toString(2);
   };
   return unicode;
 }
