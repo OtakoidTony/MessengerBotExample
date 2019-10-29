@@ -7,6 +7,15 @@ charToCode = function(str) {
   return unicode;
 }
 
+charToCode = function(str) {
+  if (!str) return false; // Escaping if not exist
+  var unicode = '';
+  for (var i = 0, l = str.length; i < l; i++) {
+    unicode += '\\' + str[i].charCodeAt(0).toString(2);
+  };
+  return unicode;
+}
+
 charToUnicode = function(str) {
   if (!str) return false; // Escaping if not exist
   var unicode = '';
