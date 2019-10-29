@@ -1,3 +1,7 @@
+/*
+https://m.blog.naver.com/jeongyeon13751/221679655789
+*/
+
 const Bitmap = android.graphics.Bitmap;
 const BitmapFactory = android.graphics.BitmapFactory;
 const Canvas = android.graphics.Canvas;
