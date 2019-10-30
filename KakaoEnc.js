@@ -7,13 +7,13 @@ charToCode = function(str) {
   return unicode;
 }
 
-charToCode = function(str) {
+charToCodeArray = function(str) {
   if (!str) return false; // Escaping if not exist
-  var unicode = '';
+  test = new Array;
   for (var i = 0, l = str.length; i < l; i++) {
-    unicode += str[i].charCodeAt(0).toString(2);
+    test.push(str[i].charCodeAt(0).toString(2));
   };
-  return unicode;
+  return test;
 }
 
 charToUnicode = function(str) {
