@@ -1,6 +1,10 @@
 # MessengerBotExample
 Examples based on AutoReplyBot including extra programming.
 
+## Copyright
+### KakaoImageBraille.js
+**jeongyeon13751** 2019. 10. 16. 17:40  
+https://m.blog.naver.com/jeongyeon13751/221679655789
 ## User-Agent Modification
 ```javascript
 Utils.getWithUAfromWeb = function(url) {
