@@ -102,8 +102,11 @@ unicodeArrayToString(brailleToHex(unicodeArrayToBrailleString(stringToUnicode("�
 문자열 string
 
 brailleToHex(unicodeArrayToBrailleString(stringToUnicode("문자열 string")))
+bb38,c790,c5f4,20,73,74,72,69,6e,67
 
 unicodeArrayToBrailleString(stringToUnicode("문자열 string"))
+⢻⠸⣇⢐⣅⣴​⠠​⡳​⡴​⡲​⡩​⡮​⡧
 
 stringToUnicode("문자열 string")
+bb38,c790,c5f4,20,73,74,72,69,6e,67
 */
