@@ -3,7 +3,7 @@ Examples based on AutoReplyBot including extra programming.
 
 ## Special Copyright
 ### KakaoImageBraille.js
-**jeongyeon13751** 19. 10. 16. 17:40  
+**jeongyeon13751** 191016. 17:40  
 https://m.blog.naver.com/jeongyeon13751/221679655789
 
 ## User-Agent Modification
