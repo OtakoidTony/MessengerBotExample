@@ -13,7 +13,11 @@ unicodeToChar = function(str) {
 }
 
 HexToBraille = function(str) {
-    return String.fromCharCode(parseInt('28'+str,16))
+    if (str.length == 2){
+        return String.fromCharCode(parseInt('28'+'00',16))+String.fromCharCode(parseInt('28'+str,16))
+    }else{
+        return String.fromCharCode(parseInt('28'+str[0]+str[1],16))+String.fromCharCode(parseInt('28'+str[2]+str[3],16))
+    }
 }
 
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
