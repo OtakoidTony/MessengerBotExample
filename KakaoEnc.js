@@ -45,13 +45,40 @@ brailleToHex = function(str) {
     test = new Array;
 
     var i = 0;
+    var first = '';
+    var second = '';
     while (i<str.length) {
-        test.push(str[i].charCodeAt(0).toString(16)[2]+str[i].charCodeAt(0).toString(16)[3]+str[i+1].charCodeAt(0).toString(16)[2]+str[i+1].charCodeAt(0).toString(16)[3]);
-        i=i+2;
+        first  = str[i].charCodeAt(0).toString(16)[2]+str[i].charCodeAt(0).toString(16)[3];
+        second = str[i+1].charCodeAt(0).toString(16)[2]+str[i+1].charCodeAt(0).toString(16)[3];
+        if (str[i].charCodeAt(0).toString(16)=='200B'){
+            test.push(second);
+        } else {
+            if (str[i+1].charCodeAt(0).toString(16)=='200B'){
+                test.push(first);
+            } else {
+                test.push(first+second);
+            }
+        }
+        i = i + 2;
     };
     return test;
 }
 
+
+/* 
+input : Array
+output: String
+*/
+unicodeArrayToString = function(str) {
+    if (!str) return false; // Escaping if not exist
+    var unicode = '';
+    var i = 0;
+    while(i<str.length){
+        unicode=unicode+str[i];
+        i = i + 1;
+    }
+    return unicode;
+}
 
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
     if(msg.substring(0,3)=="enc!"){
