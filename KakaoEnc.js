@@ -112,8 +112,14 @@ hexToBraille = function(str) {
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
     if(msg.substring(0,3)=="enc!"){
         var input=msg.substring(4,msg.length-1);
+        var encoded=unicodeArrayToBrailleString(stringToUnicode(input));
+        replier.reply(encoded);
     }
-    replier.reply(eval(msg));
+    if(msg.substring(0,3)=="dec!"){
+        var input=msg.substring(4,msg.length-1);
+        var decoded=unicodeArrayToString(brailleToHex(input));
+        replier.reply(decoded);
+    }
 }
 
 /*
