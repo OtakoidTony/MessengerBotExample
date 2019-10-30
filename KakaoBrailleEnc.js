@@ -1,10 +1,3 @@
-/* 
-input : String
-output: Array
-
-stringToUnicode("문자열 string")
-bb38,c790,c5f4,20,73,74,72,69,6e,67
-*/
 stringToUnicode = function(str) {
     if (!str) return false; // Escaping if not exist
     var unicode = '';
@@ -21,13 +14,6 @@ stringToUnicode = function(str) {
     return test;
 }
 
-/* 
-input : UnicodeArray
-output: BrailleString
-
-unicodeArrayToBrailleString(stringToUnicode("문자열 string"))
-⢻⠸⣇⢐⣅⣴​⠠​⡳​⡴​⡲​⡩​⡮​⡧
-*/
 unicodeArrayToBrailleString = function(str) {
     if (!str) return false; // Escaping if not exist
     var unicode = '';
@@ -39,14 +25,6 @@ unicodeArrayToBrailleString = function(str) {
     return unicode;
 }
 
-
-/* 
-input : Braille
-output: Array
-
-brailleToHex(unicodeArrayToBrailleString(stringToUnicode("문자열 string")))
-bb38,c790,c5f4,20,73,74,72,69,6e,67
-*/
 brailleToHex = function(str) {
     if (!str) return false; // Escaping if not exist
     var unicode = '';
@@ -69,13 +47,6 @@ brailleToHex = function(str) {
     return test;
 }
 
-/*
-input : Array
-output: String
-
-unicodeArrayToString(brailleToHex(unicodeArrayToBrailleString(stringToUnicode("문자열 string"))))
-문자열 string
-*/
 unicodeArrayToString = function(str) {
     if (!str) return false; // Escaping if not exist
     var unicode = '';
@@ -87,20 +58,10 @@ unicodeArrayToString = function(str) {
     return unicode;
 }
 
-
-/* 
-input : .toString(16)
-output: Char
-*/
 unicodeToChar = function(str) {
     return String.fromCharCode(parseInt(str,16));
 }
 
-
-/* 
-input : .toString(16)
-output: Braille
-*/
 hexToBraille = function(str) {
     if (str.substring(0,2) == '00'){
         return String.fromCharCode(parseInt('200B',16))+String.fromCharCode(parseInt('28'+str[2]+str[3],16));
@@ -121,17 +82,3 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
         replier.reply(decoded);
     }
 }
-
-/*
-stringToUnicode("문자열 string")
-bb38,c790,c5f4,20,73,74,72,69,6e,67
-
-unicodeArrayToBrailleString(stringToUnicode("문자열 string"))
-⢻⠸⣇⢐⣅⣴​⠠​⡳​⡴​⡲​⡩​⡮​⡧
-
-brailleToHex(unicodeArrayToBrailleString(stringToUnicode("문자열 string")))
-bb38,c790,c5f4,20,73,74,72,69,6e,67
-
-unicodeArrayToString(brailleToHex(unicodeArrayToBrailleString(stringToUnicode("문자열 string"))))
-문자열 string
-*/
