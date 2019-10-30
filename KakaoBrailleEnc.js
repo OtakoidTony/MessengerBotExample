@@ -2,12 +2,12 @@ stringToUnicode = function(str) {
     if (!str) return false; // Escaping if not exist
     var unicode = '';
     test = new Array;
-    var ascii='';
+    var ascii = '';
     for (var i = 0, l = str.length; i < l; i++) {
         ascii = str[i].charCodeAt(0).toString(16);
-        if (ascii.length==2){
-            test.push("00"+ascii);
-        }else{
+        if (ascii.length == 2) {
+            test.push("00" + ascii);
+        } else {
             test.push(ascii);
         }
     };
@@ -18,8 +18,8 @@ unicodeArrayToBrailleString = function(str) {
     if (!str) return false; // Escaping if not exist
     var unicode = '';
     var i = 0;
-    while(i<str.length){
-        unicode=unicode+hexToBraille(str[i]);
+    while (i < str.length) {
+        unicode = unicode + hexToBraille(str[i]);
         i = i + 1;
     }
     return unicode;
@@ -33,14 +33,14 @@ brailleToHex = function(str) {
     var i = 0;
     var first = '';
     var second = '';
-    while (i<str.length) {
+    while (i < str.length) {
         Log.info(str[i]);
-        first  = str[i].charCodeAt(0).toString(16)[2]+str[i].charCodeAt(0).toString(16)[3];
-        second = str[i+1].charCodeAt(0).toString(16)[2]+str[i+1].charCodeAt(0).toString(16)[3];
-        if (str[i].charCodeAt(0).toString(16)=='200b'){
+        first = str[i].charCodeAt(0).toString(16)[2] + str[i].charCodeAt(0).toString(16)[3];
+        second = str[i + 1].charCodeAt(0).toString(16)[2] + str[i + 1].charCodeAt(0).toString(16)[3];
+        if (str[i].charCodeAt(0).toString(16) == '200b') {
             test.push(second);
         } else {
-            test.push(first+second);
+            test.push(first + second);
         }
         i = i + 2;
     };
@@ -51,34 +51,34 @@ unicodeArrayToString = function(str) {
     if (!str) return false; // Escaping if not exist
     var unicode = '';
     var i = 0;
-    while(i<str.length){
-        unicode=unicode+unicodeToChar(str[i]);
+    while (i < str.length) {
+        unicode = unicode + unicodeToChar(str[i]);
         i = i + 1;
     }
     return unicode;
 }
 
 unicodeToChar = function(str) {
-    return String.fromCharCode(parseInt(str,16));
+    return String.fromCharCode(parseInt(str, 16));
 }
 
 hexToBraille = function(str) {
-    if (str.substring(0,2) == '00'){
-        return String.fromCharCode(parseInt('200B',16))+String.fromCharCode(parseInt('28'+str[2]+str[3],16));
-    }else{
-        return String.fromCharCode(parseInt('28'+str[0]+str[1],16))+String.fromCharCode(parseInt('28'+str[2]+str[3],16));
+    if (str.substring(0, 2) == '00') {
+        return String.fromCharCode(parseInt('200B', 16)) + String.fromCharCode(parseInt('28' + str[2] + str[3], 16));
+    } else {
+        return String.fromCharCode(parseInt('28' + str[0] + str[1], 16)) + String.fromCharCode(parseInt('28' + str[2] + str[3], 16));
     }
 }
 
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
-    if(msg.substring(0,4)=="enc!"){
-        var input=msg.substring(4,msg.length);
-        var encoded=unicodeArrayToBrailleString(stringToUnicode(input));
+    if (msg.substring(0, 4) == "enc!") {
+        var input = msg.substring(4, msg.length);
+        var encoded = unicodeArrayToBrailleString(stringToUnicode(input));
         replier.reply(encoded);
     }
-    if(msg.substring(0,4)=="dec!"){
-        var input=msg.substring(4,msg.length);
-        var decoded=unicodeArrayToString(brailleToHex(input));
+    if (msg.substring(0, 4) == "dec!") {
+        var input = msg.substring(4, msg.length);
+        var decoded = unicodeArrayToString(brailleToHex(input));
         replier.reply(decoded);
     }
 }
