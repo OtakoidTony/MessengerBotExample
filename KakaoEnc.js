@@ -48,16 +48,13 @@ brailleToHex = function(str) {
     var first = '';
     var second = '';
     while (i<str.length) {
+        Log.info(str[i]);
         first  = str[i].charCodeAt(0).toString(16)[2]+str[i].charCodeAt(0).toString(16)[3];
         second = str[i+1].charCodeAt(0).toString(16)[2]+str[i+1].charCodeAt(0).toString(16)[3];
-        if (str[i].charCodeAt(0).toString(16)=='200B'){
+        if (str[i].charCodeAt(0).toString(16)=='200b'){
             test.push(second);
         } else {
-            if (str[i+1].charCodeAt(0).toString(16)=='200B'){
-                test.push(first);
-            } else {
-                test.push(first+second);
-            }
+            test.push(first+second);
         }
         i = i + 2;
     };
