@@ -1,28 +1,19 @@
-charToCode = function(str) {
+charToUnicode = function(str) {
   if (!str) return false; // Escaping if not exist
   var unicode = '';
-  for (var i = 0, l = str.length; i < l; i++) {
-    unicode += '\\' + str[i].charCodeAt(0).toString(2);
-  };
-  return unicode;
-}
-
-charToCodeArray = function(str) {
-  if (!str) return false; // Escaping if not exist
   test = new Array;
   for (var i = 0, l = str.length; i < l; i++) {
-    test.push(str[i].charCodeAt(0).toString(2));
+    test.push(str[i].charCodeAt(0).toString(16));
   };
   return test;
 }
 
-charToUnicode = function(str) {
-  if (!str) return false; // Escaping if not exist
-  var unicode = '';
-  for (var i = 0, l = str.length; i < l; i++) {
-    unicode += str[i].charCodeAt(0).toString(16);
-  };
-  return unicode;
+unicodeToChar = function(str) {
+    return String.fromCharCode(parseInt(str,16))
+}
+
+HexToBraille = function(str) {
+    return String.fromCharCode(parseInt('28'+str,16))
 }
 
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
