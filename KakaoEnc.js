@@ -1,6 +1,8 @@
-
-
-charToUnicode = function(str) {
+/* 
+input : String
+output: Array
+*/
+stringToUnicode = function(str) {
     if (!str) return false; // Escaping if not exist
     var unicode = '';
     test = new Array;
@@ -19,6 +21,7 @@ unicodeToChar = function(str) {
     return String.fromCharCode(parseInt(str,16))
 }
 
+
 /* 
 input : String.fromCharCode(parseInt(str,16))
 output: Char
@@ -30,6 +33,7 @@ hexToBraille = function(str) {
         return String.fromCharCode(parseInt('28'+str[0]+str[1],16))+String.fromCharCode(parseInt('28'+str[2]+str[3],16))
     }
 }
+
 
 /* 
 input : Braille
