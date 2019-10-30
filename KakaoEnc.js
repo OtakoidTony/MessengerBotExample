@@ -102,7 +102,7 @@ input : .toString(16)
 output: Braille
 */
 hexToBraille = function(str) {
-    if (str.length == 2){
+    if (str.substring(0,1) == '00'){
         return String.fromCharCode(parseInt('200B',16))+String.fromCharCode(parseInt('28'+str,16));
     }else{
         return String.fromCharCode(parseInt('28'+str[0]+str[1],16))+String.fromCharCode(parseInt('28'+str[2]+str[3],16));
