@@ -14,8 +14,8 @@ stringToUnicode = function(str) {
 
 
 /* 
-input : Char
-output: String.fromCharCode(parseInt(str,16))
+input : String.fromCharCode(parseInt(str,16))
+output: Char
 */
 unicodeToChar = function(str) {
     return String.fromCharCode(parseInt(str,16))
@@ -24,7 +24,7 @@ unicodeToChar = function(str) {
 
 /* 
 input : String.fromCharCode(parseInt(str,16))
-output: Char
+output: Braille
 */
 hexToBraille = function(str) {
     if (str.length == 2){
@@ -37,7 +37,7 @@ hexToBraille = function(str) {
 
 /* 
 input : Braille
-output: array
+output: Array
 */
 brailleToHex = function(str) {
     if (!str) return false; // Escaping if not exist
