@@ -94,3 +94,16 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
     }
     replier.reply(eval(msg));
 }
+
+
+
+/*
+unicodeArrayToString(brailleToHex(unicodeArrayToBrailleString(stringToUnicode("문자열 string"))))
+문자열 string
+
+brailleToHex(unicodeArrayToBrailleString(stringToUnicode("문자열 string")))
+
+unicodeArrayToBrailleString(stringToUnicode("문자열 string"))
+
+stringToUnicode("문자열 string")
+*/
