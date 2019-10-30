@@ -66,15 +66,26 @@ brailleToHex = function(str) {
 
 
 /* 
-input : Array
-output: String
+input : UnicodeArray
+output: BrailleString
 */
+unicodeArrayToBrailleString = function(str) {
+    if (!str) return false; // Escaping if not exist
+    var unicode = '';
+    var i = 0;
+    while(i<str.length){
+        unicode=unicode+hexToBraille(str[i]);
+        i = i + 1;
+    }
+    return unicode;
+}
+
 unicodeArrayToString = function(str) {
     if (!str) return false; // Escaping if not exist
     var unicode = '';
     var i = 0;
     while(i<str.length){
-        unicode=unicode+str[i];
+        unicode=unicode+unicodeToChar(str[i]);
         i = i + 1;
     }
     return unicode;
