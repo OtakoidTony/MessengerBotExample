@@ -14,8 +14,8 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             i=i+1;
         }
         var player = playerSlot[0]+playerSlot[1]+playerSlot[2]+'\n';
-        player = playerSlot[3]+playerSlot[4]+playerSlot[5]+'\n';
-        player = playerSlot[6]+playerSlot[7]+playerSlot[8];
+        player = player + playerSlot[3]+playerSlot[4]+playerSlot[5]+'\n';
+        player = player + playerSlot[6]+playerSlot[7]+playerSlot[8];
         var score=0;
         if (playerSlot[0]==playerSlot[4] && playerSlot[4]==playerSlot[8]){
             score=score+1;
