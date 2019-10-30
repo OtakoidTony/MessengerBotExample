@@ -1,11 +1,11 @@
 charToUnicode = function(str) {
-  if (!str) return false; // Escaping if not exist
-  var unicode = '';
-  test = new Array;
-  for (var i = 0, l = str.length; i < l; i++) {
-    test.push(str[i].charCodeAt(0).toString(16));
-  };
-  return test;
+    if (!str) return false; // Escaping if not exist
+    var unicode = '';
+    test = new Array;
+    for (var i = 0, l = str.length; i < l; i++) {
+        test.push(str[i].charCodeAt(0).toString(16));
+    };
+    return test;
 }
 
 unicodeToChar = function(str) {
