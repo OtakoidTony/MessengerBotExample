@@ -44,3 +44,4 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
         replier.reply(player);
         replier.reply(score);
     }
+}
