@@ -48,6 +48,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
         }
     }
     if (msg.substring(0, 5) == "slot!") {
+        var point = parseInt(read("GambleBotDB", sender + ".txt"));
         if (point !== null) {
             var SlotIconLeft = new Array("7️⃣", "🍇", "🍒", "🍈", "🍑");
             var SlotIconMiddle = new Array("7️⃣", "🍇", "🍒", "🍈", "🍑");
@@ -102,7 +103,6 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             if (playerSlot[6] == playerSlot[7] && playerSlot[7] == playerSlot[8]) {
                 score = score + 1;
             }
-            var point = parseInt(read("GambleBotDB", sender + ".txt"));
             replier.reply(player);
             var oldPoint = point;
             point = point * (0.5 + score);
