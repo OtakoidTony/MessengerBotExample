@@ -1,3 +1,14 @@
+/* ===============[ http://evalonlabs.com/2015/12/10/Simple-XOR-Encryption-in-JS/ ]=============== */
+function xorConvert (text, key) {
+    var kL = key.length;
+    return Array.prototype
+        .slice.call(text)
+        .map(function (c, index) {
+            return String.fromCharCode(c.charCodeAt(0) ^ key[index % kL].charCodeAt(0));
+        }).join('');
+}
+/* =============================================================================================== */
+
 stringToUnicode = function(str) {
     if (!str) return false; // Escaping if not exist
     var unicode = '';
@@ -73,12 +84,14 @@ hexToBraille = function(str) {
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
     if (msg.substring(0, 4) == "enc!") {
         var input = msg.substring(4, msg.length);
+        input = xorConvert(input, "test");
         var encoded = unicodeArrayToBrailleString(stringToUnicode(input));
         replier.reply(encoded);
     }
     if (msg.substring(0, 4) == "dec!") {
         var input = msg.substring(4, msg.length);
         var decoded = unicodeArrayToString(brailleToHex(input));
+        decoded = xorConvert(decoded, "test");
         replier.reply(decoded);
     }
 }
