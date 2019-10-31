@@ -16,11 +16,7 @@ stringToUnicode = function(str) {
     var ascii = '';
     for (var i = 0, l = str.length; i < l; i++) {
         ascii = str[i].charCodeAt(0).toString(16);
-        if (ascii.length == 2) {
-            test.push("00" + ascii);
-        } else {
-            test.push(ascii);
-        }
+        test.push(ascii);
     };
     return test;
 }
@@ -48,11 +44,7 @@ brailleToHex = function(str) {
         Log.info(str[i]);
         first = str[i].charCodeAt(0).toString(16)[2] + str[i].charCodeAt(0).toString(16)[3];
         second = str[i + 1].charCodeAt(0).toString(16)[2] + str[i + 1].charCodeAt(0).toString(16)[3];
-        if (str[i].charCodeAt(0).toString(16) == '200b') {
-            test.push(second);
-        } else {
-            test.push(first + second);
-        }
+        test.push(first + second);
         i = i + 2;
     };
     return test;
@@ -74,11 +66,7 @@ unicodeToChar = function(str) {
 }
 
 hexToBraille = function(str) {
-    if (str.substring(0, 2) == '00') {
-        return String.fromCharCode(parseInt('200B', 16)) + String.fromCharCode(parseInt('28' + str[2] + str[3], 16));
-    } else {
-        return String.fromCharCode(parseInt('28' + str[0] + str[1], 16)) + String.fromCharCode(parseInt('28' + str[2] + str[3], 16));
-    }
+    return String.fromCharCode(parseInt('28' + str[0] + str[1], 16)) + String.fromCharCode(parseInt('28' + str[2] + str[3], 16));
 }
 
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
