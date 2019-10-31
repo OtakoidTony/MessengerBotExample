@@ -6,6 +6,13 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                 var number = msg.split("!")[1];
                 var input_url = 'https://hitomi.la/galleries/' + number + ".html";
                 var data = Utils.getWebText(input_url);
+                
+                /* --[ hitomi.la patch ]----------------------- */
+                input_url = data.split("a href=\"")[1];
+                input_url = input_url.split("\">link")[0];
+                data = Utils.getWebText(input_url);
+                /* -------------------------------------------- */
+                
                 var title_before = "<h1><a href=\"/reader/" + number + ".html\">";
                 var title_next = "</a></h1>";
 
