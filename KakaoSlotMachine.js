@@ -104,9 +104,10 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             }
             var point = parseInt(read("GambleBotDB", sender + ".txt"));
             replier.reply(player);
-            replier.reply(score);
-            point = point + score;
-            save("GambleBotDB", sender + ".txt", point.toString(10));
+            var oldPoint = point;
+            point = point * (0.5 + score);
+            replier.reply(sender+"님의 이전 보유액: "+oldPoint.toString()+"\n현재 보유액: "+point)
+            save("GambleBotDB", sender + ".txt", point.toString());
         }
     }
 }
