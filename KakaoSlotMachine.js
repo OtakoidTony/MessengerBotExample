@@ -21,9 +21,9 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             playerSlot.push(left);
             playerSlot.push(middle);
             playerSlot.push(right);
-            SlotIconLeft.splice(SlotIconLeft.indexOf(left))
-            SlotIconMiddle.splice(SlotIconMiddle.indexOf(middle))
-            SlotIconRight.splice(SlotIconRight.indexOf(right))
+            SlotIconLeft.splice(SlotIconLeft.indexOf(left),1)
+            SlotIconMiddle.splice(SlotIconMiddle.indexOf(middle),1)
+            SlotIconRight.splice(SlotIconRight.indexOf(right),1)
             i = i + 1;
         }
         var player = playerSlot[0]+playerSlot[1]+playerSlot[2]+'\n';
