@@ -48,8 +48,9 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
         }
     }
     if (msg.substring(0, 5) == "slot!") {
-        var point = parseInt(read("GambleBotDB", sender + ".txt"));
-        if (point !== null) {
+        var point = read("GambleBotDB", sender + ".txt");
+        if (point != null) {
+            point = parseInt(point);
             var SlotIconLeft = new Array("7️⃣", "🍇", "🍒", "🍈", "🍑");
             var SlotIconMiddle = new Array("7️⃣", "🍇", "🍒", "🍈", "🍑");
             var SlotIconRight = new Array("7️⃣", "🍇", "🍒", "🍈", "🍑");
