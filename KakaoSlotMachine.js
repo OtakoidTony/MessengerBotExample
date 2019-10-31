@@ -1,13 +1,13 @@
-var SlotIconLeft = new Array("7️⃣","🍇","🍒","🍈","🍑");
-var SlotIconMiddle = new Array("7️⃣","🍇","🍒","🍈","🍑");
-var SlotIconRight = new Array("7️⃣","🍇","🍒","🍈","🍑");
-
 function randomItem(a) {
   return a[java.lang.Math.floor(java.lang.Math.random() * a.length)];
 }
 
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
     if (msg.substring(0, 5) == "slot!") {
+        var SlotIconLeft = new Array("7️⃣","🍇","🍒","🍈","🍑");
+        var SlotIconMiddle = new Array("7️⃣","🍇","🍒","🍈","🍑");
+        var SlotIconRight = new Array("7️⃣","🍇","🍒","🍈","🍑");
+      
         var playerSlot = new Array();
         var i = 1;
         
