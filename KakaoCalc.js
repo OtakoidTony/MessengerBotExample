@@ -61,16 +61,12 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
         var calc = 0;
         var input = msg;
         input = input.split(" ", 2)[1];
-        input = input.replace('η', 'eta');
-        input = input.replace('Γ', 'gamma');
-        input = input.replace('ζ', 'zeta');
+        input = input.replaceAll('η', 'eta');
+        input = input.replaceAll('Γ', 'gamma');
+        input = input.replaceAll('ζ', 'zeta');
         var test = input;
         var i = 0;
-        while (i<10){
-            test = test.replaceAll(i.ToString(10),"");
-            test = test.replaceAll(" ","");
-            i=i+1;
-        }
+        test = test.replace(/ /gi, "");
         i = 0;
         var WhiteList = new Array("sin", "cos", "exp", "eta", "zeta", "factorial", "\(", "\)");
         while (i<=WhiteList.length){
