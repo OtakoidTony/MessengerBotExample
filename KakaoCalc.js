@@ -59,21 +59,29 @@ zeta = function(input){
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
     if (msg.charAt(0) == "계" && msg.charAt(1) == "산") {
         var calc = 0;
-        if (msg.indexOf("\'") == -1 && msg.indexOf("\"") == -1 &&
-            msg.indexOf("Api") == -1 && msg.indexOf("Utils") == -1 &&
-            msg.indexOf("Log") == -1 && msg.indexOf("Appdata") == -1 &&
-            msg.indexOf("Data") == -1 && msg.indexOf("Bridge") == -1 &&
-            msg.indexOf("Device") == -1 && msg.indexOf("File") == -1 &&
-            msg.indexOf("var") == -1 && msg.indexOf("?") == -1 &&
-            msg.indexOf("java") == -1) {
-            var input = msg;
-            input = input.split(" ", 2)[1];
-            input = input.replace('η', 'eta');
-            input = input.replace('Γ', 'gamma');
-            input = input.replace('ζ', 'zeta');
+        var input = msg;
+        input = input.split(" ", 2)[1];
+        input = input.replace('η', 'eta');
+        input = input.replace('Γ', 'gamma');
+        input = input.replace('ζ', 'zeta');
+        var test = input;
+        var i = 0;
+        while (i<10){
+            test = test.replaceAll(i.ToString(10),"");
+            test = test.replaceAll(" ","");
+            i=i+1;
+        }
+        test = test.replaceAll('eta', '');
+        test = test.replaceAll('gamma', '');
+        test = test.replaceAll('zeta', '');
+        test = test.replaceAll('sin', '');
+        test = test.replaceAll('cos', '');
+        test = test.replaceAll('exp', '');
+        test = test.replaceAll('factorial', '');
+        test = test.replaceAll('\(', '');
+        test = test.replaceAll('\)', '');
+        if (test==""){
             replier.reply(eval(input));
-        } else {
-            replier.reply("Exploit Detect");
         }
     }
 }
