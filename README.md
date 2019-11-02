@@ -2,6 +2,7 @@
 Examples based on AutoReplyBot including extra programming.
 
 ## Specific Copyright
+**Excluding listed elements this array, Copyright is on OtakoidTony, Rojiku, Park Hyun.** 
 ### KakaoImageBraille.js
 **jeongyeon13751** 191016. 17:40  
 https://m.blog.naver.com/jeongyeon13751/221679655789
