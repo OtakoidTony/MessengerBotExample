@@ -71,15 +71,12 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             test = test.replaceAll(" ","");
             i=i+1;
         }
-        test = test.replaceAll('eta', '');
-        test = test.replaceAll('gamma', '');
-        test = test.replaceAll('zeta', '');
-        test = test.replaceAll('sin', '');
-        test = test.replaceAll('cos', '');
-        test = test.replaceAll('exp', '');
-        test = test.replaceAll('factorial', '');
-        test = test.replaceAll('\(', '');
-        test = test.replaceAll('\)', '');
+        i = 0;
+        var WhiteList = new Array("sin", "cos", "exp", "eta", "zeta", "factorial", "\(", "\)");
+        while (i<=WhiteList.length){
+            test = test.replaceAll(WhiteList[i], '');
+            i = i+1;
+        }
         if (test==""){
             replier.reply(eval(input));
         }
