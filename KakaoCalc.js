@@ -68,6 +68,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
         var test = input;
         var i = 0;
         test = test.replace(/ /gi, "");
+        test = test.replace(/[0-9]/g, "");
         i = 0;
         var WhiteList = new Array("sin", "cos", "exp", "eta", "zeta", "factorial", "\(", "\)", "+", "-", "*", "/");
         while (i<=WhiteList.length){
