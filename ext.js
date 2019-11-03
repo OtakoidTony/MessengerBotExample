@@ -17,6 +17,11 @@ quadEqation = function(a, b, c){
     D=(b*b)-(4*a*c);
     var i=2;
     var Dsqare=1;
+    var isComp='';
+    if (D<0){
+        D=-D;
+        isComp='i';
+    }
     while (i<=java.lang.Math.pow(D,0.5)){
         if(D%(i*i)==0){
             D=D/(i*i);
@@ -28,7 +33,9 @@ quadEqation = function(a, b, c){
     Log.info(Dsqare);
     // (-b±√b²-4ac)/2a
     var output1=0;
+    return (-b).toString(10)+'±'+Dsqare.toString(10)+'√'+D.toString(10)+isComp+'/'+(2*a).toString(10);
 }
+
 
 makeQuadEqation = function(a,b){
     var A=-(a+b);
