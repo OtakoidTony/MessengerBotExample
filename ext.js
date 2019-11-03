@@ -8,3 +8,4 @@ sigma = function(inf, sup, expression){
     }
     return output;
 }
+
