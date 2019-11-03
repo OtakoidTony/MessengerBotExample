@@ -64,11 +64,12 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
         input = input.replaceAll('η', 'eta');
         input = input.replaceAll('Γ', 'gamma');
         input = input.replaceAll('ζ', 'zeta');
+        input = input.replaceAll('÷', '/');
         var test = input;
         var i = 0;
         test = test.replace(/ /gi, "");
         i = 0;
-        var WhiteList = new Array("sin", "cos", "exp", "eta", "zeta", "factorial", "\(", "\)");
+        var WhiteList = new Array("sin", "cos", "exp", "eta", "zeta", "factorial", "\(", "\)", "+", "-", "*", "/");
         while (i<=WhiteList.length){
             test = test.replaceAll(WhiteList[i], '');
             i = i+1;
