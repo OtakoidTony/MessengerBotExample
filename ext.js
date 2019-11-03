@@ -47,6 +47,6 @@ makeQuadEqation = function(a,b){
     if (B<0){
         Bstr=B.toString(10);
     }
-    return "𝒙²"+Astr+Bstr;
+    return "𝒙²"+Astr.replace('-','–')+Bstr;
 }
     
