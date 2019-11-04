@@ -24,7 +24,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
     var probability = java.lang.Math.random() * 100;
     if (probability >=70){
         if (msg in msgDict){
-            replier.reply(msgDict[msg]);
+            replier.reply(randomItem(msgDict[msg]));
         }
     }
 }
