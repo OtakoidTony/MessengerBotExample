@@ -30,5 +30,8 @@ Utils.getPostFromWeb = function(url, parameters) {
 
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId){
     var url = 'data:image/jpeg;base64,'+ImageDB.getPicture();
-    
+    var appkey = (your app key);
+    var Authorization = "KakaoAK " + appkey;
+    var base = "https://kapi.kakao.com/v1/vision/adult/detect";
+    var res = 
 }
