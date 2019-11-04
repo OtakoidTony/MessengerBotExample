@@ -5,6 +5,7 @@ Utils.getPostFromWeb = function(url, parameters) {
         
         con.setRequestMethod("POST");
         con.setRequestProperty("User-Agent", "\'User-Agent\': \'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36\'");
+        con.setRequestProperty("Authorization", "KakaoAK " + [ Your App key ]);
         con.setDoOutput(true);
         if (con != null) {
             con.setConnectTimeout(5000);
@@ -29,9 +30,8 @@ Utils.getPostFromWeb = function(url, parameters) {
 }
 
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId){
-    var url = 'data:image/jpeg;base64,'+ImageDB.getPicture();
-    var appkey = (your app key);
-    var Authorization = "KakaoAK " + appkey;
+    var image_url = 'image_url=data:image/jpeg;base64,'+ImageDB.getPicture();
     var base = "https://kapi.kakao.com/v1/vision/adult/detect";
-    var res = 
+    var res = Utils.getPostFromWeb(base, image_url);
+    Log.info(res);
 }
