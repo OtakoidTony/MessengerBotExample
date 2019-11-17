@@ -9,7 +9,6 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
     data = data.result;
     data = data[data.length-1];
     message=data.message;
-    replier.reply(data.update_id);
     if(last_read_code<data.update_id){
         last_read_code=data.update_id;
         replier.reply("카톡 방 제목", message.text);
