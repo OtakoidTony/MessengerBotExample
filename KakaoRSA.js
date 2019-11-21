@@ -29,14 +29,12 @@ function isPrime(n, k) {
       
     // Try k times 
     var a = 0;
-    while (k > 0) { 
-        // Pick a random number in [2..n-2]      
-        // Above corner cases make sure that n > 4 
-        a = 2 + java.lang.Math.floor(Math.random() % (n - 4));  
-      
+    while (k > 0) {       
+        // Pick a randomly in the range [2, n − 2]
+        a = 2 + Math.floor(Math.random() * (n - 4));        
         // Fermat's little theorem 
-        if (java.lang.Math.pow(a, n - 1)%n != 1) {
-            return false; 
+        if (Math.pow(a, n - 1)%n != 1) {
+            return Math.pow(a, n - 1)%n; 
         }
         k=k-1;
     }
@@ -49,5 +47,6 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
         if (isPrime(i,10)){
             replier.reply(i);
         }
+        i=i+1;
     }
 }
