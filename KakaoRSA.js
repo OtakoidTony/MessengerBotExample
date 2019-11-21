@@ -22,41 +22,23 @@ modinv = function (a, m) {
     return u;
 }
 
-fermat_primality_test = function(p, s=5):
-    /*
-    a^(p-1) ≡ 1 mod p
-    Input : prime candidate p and security paramter s
-    Output: either p is a composite (always trues), or
-            p is a prime (with probability)
-    */
-    if (p == 2){
-        return true;
-    }
-    if (not p & 1){
-        return false;
-    }
-
-    for i in range(s):
-        a = Math.floor(java.lang.Math.random() * p-2) + 2;
-        x = pow(a, p-1) % p // a**(p-1) % p
-        if (x != 1){
-            return false;
+function isPrime(n, k) { 
+    // Corner cases 
+    if (n <= 1 || n == 4) return false; 
+    if (n <= 3) return true; 
+      
+    // Try k times 
+    var a = 0;
+    while (k > 0) { 
+        // Pick a random number in [2..n-2]      
+        // Above corner cases make sure that n > 4 
+        a = 2 + java.lang.Math.floor(Math.random() % (n - 4));  
+      
+        // Fermat's little theorem 
+        if (java.lang.Math.pow(a, n - 1)%n != 1) {
+            return false; 
         }
-    return true;
-
-def square_and_multiply(x, k, p=None):
-    /*
-    Square and Multiply Algorithm
-    Parameters: positive integer x and integer exponent k,
-                optional modulus p
-    Returns: x**k or x**k mod p when p is given
-    */
-    b = bin(k).lstrip('0b')
-    r = 1
-    for i in b:
-        r = r**2
-        if i == '1':
-            r = r * x
-        if p:
-            r %= p
-    return r
+        k=k-1;
+    }
+    return true; 
+}
