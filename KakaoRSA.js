@@ -84,9 +84,9 @@ function randomItem(a) {
     return a[Math.floor(Math.random() * a.length)];
 }
 
-const primes08=[101, 223, 17, 97, 199, 67, 73, 151, 41, 113];
-const primes16=[65293, 40253, 41627, 54311, 54377, 653, 20521, 52103, 34381, 21757];
-const primes32=[3387640021, 3492474943, 3565992361, 3574846283, 2755923421];
+const primes08 = [101, 223, 17, 97, 199, 67, 73, 151, 41, 113];
+const primes16 = [65293, 40253, 41627, 54311, 54377, 653, 20521, 52103, 34381, 21757];
+const primes32 = [3387640021, 3492474943, 3565992361, 3574846283, 2755923421];
 
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
     if(msg=="Bot!GetKeypair"){
