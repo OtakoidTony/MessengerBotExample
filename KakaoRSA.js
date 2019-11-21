@@ -1,5 +1,4 @@
-// https://github.com/alexvanmaele/RSA-Prime-Calculator
-modinv = function(a, m) {
+modinv = function(a, m) { // https://github.com/alexvanmaele/RSA-Prime-Calculator
     var v = 1;
     var d = a;
     var u = (a == 1);
@@ -23,8 +22,7 @@ modinv = function(a, m) {
     return u;
 }
 
-// https://www.w3resource.com/javascript-exercises/javascript-math-exercise-8.php
-function gcd(x, y) {
+function gcd(x, y) { // https://www.w3resource.com/javascript-exercises/javascript-math-exercise-8.php
     if ((typeof x !== 'number') || (typeof y !== 'number'))
         return false;
     x = Math.abs(x);
@@ -91,5 +89,14 @@ const primes32=[3387640021, 3492474943, 3565992361, 3574846283, 2755923421];
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
     var usingPrimes = primes32;
     if(msg=="Bot!GetKeypair"){
-        var p = randomItem(usingPrimes)
+        var p = randomItem(usingPrimes);
+        usingPrimes.splice(usingPrimes.indexOf(p), 1);
+        var q = randomItem(usingPrimes);
+        var tot = totient(p, q);
+        var n = p * q;
+        var publicKey = get_public_key(tot);
+        var privateKey= get_private_key(publicKey, tot);
+        replier.reply("[Public Key]\n"+"n="+n+" "+"Encrypt Key: "+publicKey.toString());
+        replier.reply("[Private Key]\n"+"n="+n+" "+"Decrypt Key: "+privateKey.toString());
+    }
 }
