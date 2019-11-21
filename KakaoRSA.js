@@ -87,8 +87,8 @@ function randomItem(a) {
 const primes32=[3387640021, 3492474943, 3565992361, 3574846283, 2755923421];
 
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
-    var usingPrimes = primes32;
     if(msg=="Bot!GetKeypair"){
+        var usingPrimes = primes32;
         var p = randomItem(usingPrimes);
         usingPrimes.splice(usingPrimes.indexOf(p), 1);
         var q = randomItem(usingPrimes);
@@ -96,7 +96,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
         var n = p * q;
         var publicKey = get_public_key(tot);
         var privateKey= get_private_key(publicKey, tot);
-        replier.reply("[Public Key]\n"+"n="+n+" "+"Encrypt Key: "+publicKey.toString());
-        replier.reply("[Private Key]\n"+"n="+n+" "+"Decrypt Key: "+privateKey.toString());
+        replier.reply("[Public Key]\n"+"n="+n.toString()+" "+"Encrypt Key: "+publicKey.toString());
+        replier.reply("[Private Key]\n"+"n="+n.toString()+" "+"Decrypt Key: "+privateKey.toString());
     }
 }
