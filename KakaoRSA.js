@@ -82,6 +82,14 @@ function get_public_key(totient) {
     return e;
 }
 
+function randomItem(a) {
+    return a[java.lang.Math.floor(java.lang.Math.random() * a.length)];
+}
+
+const primes32=[3387640021, 3492474943, 3565992361, 3574846283, 2755923421];
+
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
-    
+    var usingPrimes = primes32;
+    if(msg=="Bot!GetKeypair"){
+        var p = randomItem(usingPrimes)
 }
