@@ -22,6 +22,19 @@ modinv = function (a, m) {
     return u;
 }
 
+function gcd(x, y) {
+  if ((typeof x !== 'number') || (typeof y !== 'number')) 
+    return false;
+  x = Math.abs(x);
+  y = Math.abs(y);
+  while(y) {
+    var t = y;
+    y = x % y;
+    x = t;
+  }
+  return x;
+}
+
 function isPrime(n, k) { 
     // Corner cases 
     if (n <= 1 || n == 4) return false; 
@@ -39,6 +52,22 @@ function isPrime(n, k) {
         k=k-1;
     }
     return true; 
+}
+
+function get_private_key(e, tot){
+    var k=1;
+    while (((e*k)%tot) != 1 || k == e){
+        k+=1;
+    }
+    return k;
+}
+
+function get_public_key(totient){
+    var e=2
+    while (e< totient && gcd(e, totient)!=1){
+        e += 1;
+    }
+    return e;
 }
 
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
