@@ -81,7 +81,7 @@ function get_public_key(totient) {
 }
 
 function randomItem(a) {
-    return a[java.lang.Math.floor(java.lang.Math.random() * a.length)];
+    return a[Math.floor(Math.random() * a.length)];
 }
 
 const primes32=[3387640021, 3492474943, 3565992361, 3574846283, 2755923421];
