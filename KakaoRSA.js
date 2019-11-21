@@ -42,3 +42,12 @@ function isPrime(n, k) {
     }
     return true; 
 }
+
+function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
+    var i=1000000;
+    while(i<=1000000000){
+        if (isPrime(i,10)){
+            replier.reply(i);
+        }
+    }
+}
