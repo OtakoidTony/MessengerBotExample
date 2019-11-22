@@ -48,7 +48,22 @@ Matrix.zeros = function (a, b){
     }
     return A;
 }
-
+Matrix.time = function(A, t){
+    var out = [];
+    for (var i in A){
+        out[i]=[];
+        for (var j in A[i]){
+            out[i][j] = A[i][j]*t;
+        }
+    }
+    return out;
+}
+Matrix.plus = function(A, B){
+    var i = 0;
+    var Output = [];
+    for (i in A){
+        for (j in A[i]){
+            
 const random = {};
 
 random.rand = function(a) {
