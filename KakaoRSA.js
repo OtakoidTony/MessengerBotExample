@@ -1,3 +1,32 @@
+stringToUnicode = function(str) {
+    if (!str) return false; // Escaping if not exist
+    var unicode = '';
+    test = new Array;
+    var ascii = '';
+    for (var i = 0, l = str.length; i < l; i++) {
+        ascii = str[i].charCodeAt(0).toString(10);
+        test.push(ascii);
+    };
+    return test;
+}
+
+function encrypt(str, e, N){
+    var encArray = stringToUnicode(str);
+    var i;
+    for (i in encArray){
+        encArray[i]=Math.pow(parseInt(encArray[i]), e)%N;
+    }
+    return encArray;
+}
+
+function decrypt(arr, d, N){
+    var i;
+    for (i in arr){
+        arr[i]=String.fromCharCode(Math.pow(arr[i], d)%N);
+    }
+    return arr;
+}
+
 function get_private_key(e, tot) {
     var v = 1;
     var d = e;
