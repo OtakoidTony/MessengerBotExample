@@ -27,7 +27,9 @@ Matrix.multiply = function (a, b) {
     }
     return m;
 }
-
+Matrix.T = function (A){
+    return A[0].map((col, i) => A.map(row => row[i]));
+}
 const random = {};
 
 random.rand = function(a) {
