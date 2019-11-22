@@ -56,3 +56,11 @@ function ReLU(x) {
         return 0;
     }
 }
+function NeuralNetwork(x, y){
+    this.input = x;
+    this.weights1 = np.random.rand(self.input.shape[1],4); // considering we have 4 nodes in the hidden layer
+    this.weights2 = np.random.rand(4,1);
+    this.y = y;
+    this.output = np.zeros(y.shape);
+    
+}
