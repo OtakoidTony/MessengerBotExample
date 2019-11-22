@@ -61,10 +61,10 @@ function ReLU(x) {
 
 function NeuralNetwork(x, y){
     this.input = x;
-    this.weights1 = random.rand(this.input.shape[1],4); // considering we have 4 nodes in the hidden layer
+    this.weights1 = random.rand(Matrix.shape(this.input)[1],4); // considering we have 4 nodes in the hidden layer
     this.weights2 = random.rand(4,1);
     this.y = y;
-    this.output = np.zeros(y.shape);
+    this.output = np.zeros(Matrix.shape(y));
     
     this.feedforward = function(){
         this.layer1 = sigmoid(Matrix.multiply(this.input, this.weights1));
