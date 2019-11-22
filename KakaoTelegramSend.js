@@ -1,4 +1,3 @@
-
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId){
     if(msg.substring(0, 5) == "send!"){
         var message = msg.substring(6, msg.length);
