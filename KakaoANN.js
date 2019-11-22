@@ -115,14 +115,14 @@ Matrix.sigmoid_derivative = function(A) {
     return out;
 }
 Matrix.scalar_time = function(A, B) {
-    var out = [];
-    for (var i in A) {
-        out[i] = [];
-        for (var j in A[i]) {
-            out[i][j] = A[i][j] * B[i][j];
+    var answer = Array();
+    for (var i = 0; i < A.length; i++) {
+        answer[i] = [];
+        for (var j = 0; j < A[0].length; j++) {
+            answer[i][j] = A[i][j] * B[i][j];
         }
     }
-    return out;
+    return answer;
 }
 
 function sigmoid(x) {
@@ -180,15 +180,7 @@ function NeuralNetwork(x, y) {
                 Matrix.time(Matrix.plus(this.y,Matrix.time(this.output,-1),2),
                     Matrix.sigmoid_derivative(this.output))))
 
-        var d_weights1 = Matrix.multiply(
-            Matrix.T(this.input),
-            Matrix.multiply(
-                Matrix.time(
-                    Matrix.plus(this.y, -this.output), 2 * sigmoid_derivative(this.output)),
-                Matrix.T(this.weights2),
-
-            ), Matrix.sigmoid_derivative(this.layer1)
-        );
+        var d_weights1 = Matrix.dot(this.input.T, Matrix.scalar_time(np.dot(Matrix.time(Matrix.scalar_time(Matrix.plus(this.y ,Matrix.time(this.output,-1)),sigmoid_derivative(this.output)),2), this.weights2.T)*sigmoid_derivative(this.layer1))));
         /*
         np.dot(
             self.input.T,
@@ -207,3 +199,5 @@ function NeuralNetwork(x, y) {
         this.backprop()
     }
 }
+var X=[[0,0,1],[0,1,1],[1,0,1],[1,1,1]];
+var y=[[0],[1],[1],[0]];
