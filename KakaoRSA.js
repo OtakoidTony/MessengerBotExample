@@ -1,11 +1,11 @@
-modinv = function(a, m) { // https://github.com/alexvanmaele/RSA-Prime-Calculator
+function get_private_key(e, tot) {
     var v = 1;
-    var d = a;
-    var u = (a == 1);
+    var d = e;
+    var u = (e == 1);
     var t = 1 - u;
     if (t == 1) {
-        var c = m % a;
-        u = Math.floor(m / a);
+        var c = tot % e;
+        u = Math.floor(tot / e);
         while (c != 1 && t == 1) {
             var q = Math.floor(d / c);
             d = d % c;
@@ -17,7 +17,7 @@ modinv = function(a, m) { // https://github.com/alexvanmaele/RSA-Prime-Calculato
                 u = u + q * v;
             }
         }
-        u = v * (1 - t) + t * (m - u);
+        u = v * (1 - t) + t * (tot - u);
     }
     return u;
 }
@@ -54,18 +54,6 @@ function isPrime(n, k) {
 
 function totient(p, q) {
     return (p - 1) * (q - 1);
-}
-
-/*
-RSA 알고리즘 개념 및 구현(python)
-https://wkdtjsgur100.github.io/RSA-algorithm/
-*/
-function get_private_key(e, tot) {
-    var k = 1;
-    while (((e * k) % tot) != 1 || k == e) {
-        k += 1;
-    }
-    return k;
 }
 
 /* 
