@@ -30,6 +30,8 @@ Matrix.multiply = function (a, b) {
 Matrix.T = function (A){
     return A[0].map((col, i) => A.map(row => row[i]));
 }
+
+
 const random = {};
 
 random.rand = function(a) {
@@ -42,12 +44,9 @@ random.rand = function(a) {
     return q;
 }
 
-function sigmoid(x) {
-    return 1 / (1 + Math.exp(-x));
-}
-function sigmoid_derivative(p){
-    return p * (1 - p);
-}
+
+function sigmoid(x) { return 1 / (1 + Math.exp(-x)); }
+function sigmoid_derivative(p){ return p * (1 - p) ; }
 
 function ReLU(x) {
     if (x >= 0) {
@@ -56,11 +55,30 @@ function ReLU(x) {
         return 0;
     }
 }
+
 function NeuralNetwork(x, y){
     this.input = x;
-    this.weights1 = np.random.rand(self.input.shape[1],4); // considering we have 4 nodes in the hidden layer
-    this.weights2 = np.random.rand(4,1);
+    this.weights1 = random.rand(this.input.shape[1],4); // considering we have 4 nodes in the hidden layer
+    this.weights2 = random.rand(4,1);
     this.y = y;
     this.output = np.zeros(y.shape);
     
+    this.feedforward = function(){
+        this.layer1 = sigmoid(Matrix.multiply(this.input, this.weights1));
+        this.layer2 = sigmoid(Matrix.multiply(this.layer1, this.weights2));
+        return this.layer2
+    }
+        
+    this.backprop = function(){
+        var d_weights2 = Matrix.multiply(Matrix.T(this.layer1), 2*(this.y -this.output)*sigmoid_derivative(this.output));
+        var d_weights1 = Matrix.multiply(Matrix.T(this.input), Matrix.multiply(2*(this.y -this.output)*sigmoid_derivative(this.output), Matrix.T(this.weights2))*sigmoid_derivative(this.layer1));
+    
+        this.weights1 += d_weights1;
+        this.weights2 += d_weights2;
+    }
+
+    this.train = function(X, y){
+        this.output = this.feedforward()
+        this.backprop()
+    }
 }
