@@ -33,7 +33,21 @@ Matrix.T = function (A){
 Matrix.shape = function (A){
     return [A.length, A[0].length];
 }
-
+Matrix.zeros = function (a, b){
+    var i=0;
+    var j=0;
+    var A=[];
+    var B=[];
+    while (j<b){
+        B.push(0);
+        j=j+1;
+    }
+    while (i<a){
+        A.push(B);
+        i=i+1;
+    }
+    return A;
+}
 
 const random = {};
 
@@ -64,7 +78,7 @@ function NeuralNetwork(x, y){
     this.weights1 = random.rand(Matrix.shape(this.input)[1],4); // considering we have 4 nodes in the hidden layer
     this.weights2 = random.rand(4,1);
     this.y = y;
-    this.output = np.zeros(Matrix.shape(y));
+    this.output = Matrix.zeros(Matrix.shape(y));
     
     this.feedforward = function(){
         this.layer1 = sigmoid(Matrix.multiply(this.input, this.weights1));
