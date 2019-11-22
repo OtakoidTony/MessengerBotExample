@@ -30,6 +30,9 @@ Matrix.multiply = function (a, b) {
 Matrix.T = function (A){
     return A[0].map((col, i) => A.map(row => row[i]));
 }
+Matrix.shape = function (A){
+    return [A.length, A[0].length];
+}
 
 
 const random = {};
