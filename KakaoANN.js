@@ -180,7 +180,7 @@ function NeuralNetwork(x, y) {
                 Matrix.time(Matrix.plus(this.y,Matrix.time(this.output,-1)),2),
                     Matrix.sigmoid_derivative(this.output)))
 
-        var d_weights1 = Matrix.dot(this.input.T, Matrix.scalar_time(np.dot(Matrix.time(Matrix.scalar_time(Matrix.plus(this.y ,Matrix.time(this.output,-1)),sigmoid_derivative(this.output)),2), this.weights2.T)*sigmoid_derivative(this.layer1)));
+        var d_weights1 = Matrix.dot(Matrix.T(this.input), Matrix.scalar_time(Matrix.dot(Matrix.time(Matrix.scalar_time(Matrix.plus(this.y ,Matrix.time(this.output,-1)),sigmoid_derivative(this.output)),2), Matrix.T(this.weights2)),sigmoid_derivative(this.layer1)));
         /*
         np.dot(
             self.input.T,
