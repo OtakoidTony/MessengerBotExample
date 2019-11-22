@@ -1,7 +1,7 @@
 const Matrix = {};
 
 Matrix.sum = function(A, B) {
-    var answer = Array();
+    var answer = [];
     for (var i = 0; i < A.length; i++) {
         answer[i] = [];
         for (var j = 0; j < A[0].length; j++) {
@@ -115,7 +115,7 @@ Matrix.sigmoid_derivative = function(A) {
     return out;
 }
 Matrix.scalar_time = function(A, B) {
-    var answer = Array();
+    var answer = [];
     for (var i = 0; i < A.length; i++) {
         answer[i] = [];
         for (var j = 0; j < A[0].length; j++) {
@@ -177,10 +177,10 @@ function NeuralNetwork(x, y) {
 
     this.backprop = function() {
         var d_weights2 = Matrix.dot(Matrix.T(this.layer1), Matrix.scalar_time(
-                Matrix.time(Matrix.plus(this.y,Matrix.time(this.output,-1),2),
-                    Matrix.sigmoid_derivative(this.output))))
+                Matrix.time(Matrix.plus(this.y,Matrix.time(this.output,-1)),2),
+                    Matrix.sigmoid_derivative(this.output)))
 
-        var d_weights1 = Matrix.dot(this.input.T, Matrix.scalar_time(np.dot(Matrix.time(Matrix.scalar_time(Matrix.plus(this.y ,Matrix.time(this.output,-1)),sigmoid_derivative(this.output)),2), this.weights2.T)*sigmoid_derivative(this.layer1))));
+        var d_weights1 = Matrix.dot(this.input.T, Matrix.scalar_time(np.dot(Matrix.time(Matrix.scalar_time(Matrix.plus(this.y ,Matrix.time(this.output,-1)),sigmoid_derivative(this.output)),2), this.weights2.T)*sigmoid_derivative(this.layer1)));
         /*
         np.dot(
             self.input.T,
