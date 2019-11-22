@@ -10,4 +10,26 @@ function sumMatrix(A,B){
     return answer;
 }
 
-function 
+const random={};
+
+random.rand = function(a){
+    var q=[];
+    var i=0;
+    while (i<a){
+        q.push(Math.random());
+        i=i+1;
+    }
+    return q;
+}
+
+function sigmoid(x){
+    return 1 / (1 + Math.exp(-x));
+}
+
+function ReLU(x){
+    if (x>=0){
+        return x;
+    }else{
+        return 0;
+    }
+}
