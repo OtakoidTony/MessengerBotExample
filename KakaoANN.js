@@ -43,6 +43,9 @@ random.rand = function(a) {
 function sigmoid(x) {
     return 1 / (1 + Math.exp(-x));
 }
+function sigmoid_derivative(p){
+    return p * (1 - p);
+}
 
 function ReLU(x) {
     if (x >= 0) {
