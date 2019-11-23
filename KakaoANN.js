@@ -181,9 +181,9 @@ function ReLU(x) {
 function ArtificialNeuron(X, W, Bias, ActivationFunction){
     var i = 0;
     var output = 0;
-    while (i<X.length){
-        output=output+(X[i]*W[i]);
-        i=i+1;
+    while (i < X.length) {
+        output = output + ( X[i] * W[i] );
+        i = i + 1;
     }
     return ActivationFunction(output-Bias);
 }
