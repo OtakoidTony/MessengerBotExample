@@ -182,15 +182,15 @@ function NeuralNetwork(x, y) {
     }
 
     this.backprop = function() {
-		var y_minus_output=Matrix.minus(this.y, this.output);
-		var second_run = Matrix.time(y_minus_output, 2);
-		var third_run = Matrix.multiply(second_run, Matrix.sigmoid_derivative(this.output));
+        var y_minus_output = Matrix.minus(this.y, this.output);
+        var second_run = Matrix.time(y_minus_output, 2);
+        var third_run = Matrix.multiply(second_run, Matrix.sigmoid_derivative(this.output));
         var d_weights2 = Matrix.dot(Matrix.T(this.layer1), third_run);
-		
-		var run_4 = Matrix.dot(third_run, Matrix.T(this.weights2));
-		var run_5 = Matrix.multiply(run_4, Matrix.sigmoid_derivative(this.layer1));
-        var d_weights1 = Matrix.dot(Matrix.T(this.input),  run_5);
-        
+
+        var run_4 = Matrix.dot(third_run, Matrix.T(this.weights2));
+        var run_5 = Matrix.multiply(run_4, Matrix.sigmoid_derivative(this.layer1));
+        var d_weights1 = Matrix.dot(Matrix.T(this.input), run_5);
+
         this.weights1 = Matrix.plus(this.weights1, d_weights1);
         this.weights2 = Matrix.plus(this.weights2, d_weights2);
     }
@@ -200,12 +200,22 @@ function NeuralNetwork(x, y) {
         this.backprop();
     }
 }
-var X=[[0,0,1],[0,1,1],[1,0,1],[1,1,1]];
-var y=[[0],[1],[1],[0]];
+var X = [
+    [0, 0, 1],
+    [0, 1, 1],
+    [1, 0, 1],
+    [1, 1, 1]
+];
+var y = [
+    [0],
+    [1],
+    [1],
+    [0]
+];
 
-var NN=new NeuralNetwork(X,y);
-var i=0;
-while(i<1000){
-    NN.train(X,y);
-    i=i+1;
+var NN = new NeuralNetwork(X, y);
+var i = 0;
+while (i < 1000) {
+    NN.train(X, y);
+    i = i + 1;
 }
