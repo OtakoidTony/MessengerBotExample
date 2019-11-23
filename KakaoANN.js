@@ -259,3 +259,55 @@ while (i < 1000) {
     NN.train(X, y);
     i = i + 1;
 }
+function array_to_string(arr){
+    var i = 0;
+    var out = "";
+    while (i<arr.length){
+        if(i==arr.length-1){
+            out = out + arr[i];
+        }else{
+            out = out + arr[i]+",";
+        }
+        i=i+1;
+    }
+    return out;
+}
+/* https://chart.googleapis.com/chart?cht=lc&chd=t:60,40,70&chs=600x300&chxt=x,y&chxr=0,1,500|1,1,500&chg=5,10 */
+function GoogleChartApi(arr){
+    return "https://chart.googleapis.com/chart?cht=lc&chd=t:"+array_to_string(arr)+"&chs=1000x300&chxt=x,y&chxr=0,0,"+arr.length+"chxr=0,1,500|1,1,500&chg=5,10";
+}
+
+Utils.getShortUrlJson = function(url, parameters) {
+    try {
+        var url = new java.net.URL("https://vivoldi.com/guest/write?url="+url+"&typeIdx=103&customLinkId");
+        var con = url.openConnection();
+        
+        con.setRequestMethod("POST");
+        con.setRequestProperty("User-Agent", "\'User-Agent\': \'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36\'");
+        con.setRequestProperty("Content-Type", "multipart/form-data; boundary=----WebKitFormBoundaryB4yoMQALFribuPdn");
+        con.setRequestProperty("x-requested-with", "XMLHttpRequest");
+        
+        con.setDoOutput(true);
+        if (con != null) {
+            con.setConnectTimeout(5000);
+            con.setUseCaches(false);
+            var wr = new java.io.DataOutputStream(con.getOutputStream());
+            wr.writeBytes(parameters);
+            wr.flush();
+            wr.close();
+            var responseCode = con.getResponseCode();
+            var isr = new java.io.InputStreamReader(con.getInputStream());
+            var br = new java.io.BufferedReader(isr);
+            var inputLine;
+            var response = new java.lang.StringBuffer();
+            while ((inputLine = br.readLine()) != null) {
+                response.append(inputLine);
+            }
+            br.close();
+            con.close();
+            return response.toString();
+        }
+    } catch (e) {
+        //Log.debug(e);
+    }
+}
