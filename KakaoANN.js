@@ -178,6 +178,15 @@ function ReLU(x) {
 
 "인공 뉴런." 위키백과, . 1 7 2017, 04:00 UTC. 23 11 2019, 04:59 <https://ko.wikipedia.org/wiki/인공_뉴런>
 */
+function ArtificialNeuron(X, W, Bias, ActivationFunction){
+    var i = 0;
+    var output = 0;
+    while (i<X.length){
+        output=output+(X[i]*W[i]);
+        i=i+1;
+    }
+    return ActivationFunction(output-Bias);
+}
 
 function NeuralNetwork(x, y) {
     var NodeAmount = 4;
