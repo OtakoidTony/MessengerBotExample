@@ -205,7 +205,7 @@ var y=[[0],[1],[1],[0]];
 
 var NN=new NeuralNetwork(X,y);
 var i=0;
-while(i<100){
+while(i<1000){
     NN.train(X,y);
     i=i+1;
 }
