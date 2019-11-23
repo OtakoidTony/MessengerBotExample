@@ -169,9 +169,11 @@ function ReLU(x) {
 }
 
 function NeuralNetwork(x, y) {
+    var NodeAmount = 4;
     this.input = x;
-    this.weights1 = Matrix.rand(Matrix.shape(this.input)[1], 4); // considering we have 4 nodes in the hidden layer
-    this.weights2 = Matrix.rand(4, 1);
+    this.weights1 = Matrix.rand(Matrix.shape(this.input)[1], NodeAmount);
+    this.weights2 = Matrix.rand(NodeAmount, 1);
+    
     this.y = y;
     this.output = Matrix.zeros(Matrix.shape(y)[0], Matrix.shape(y)[1]);
 
@@ -182,12 +184,12 @@ function NeuralNetwork(x, y) {
     }
 
     this.backprop = function() {
-        var y_minus_output = Matrix.minus(this.y, this.output);
-        var second_run = Matrix.time(y_minus_output, 2);
-        var third_run = Matrix.multiply(second_run, Matrix.sigmoid_derivative(this.output));
-        var d_weights2 = Matrix.dot(Matrix.T(this.layer1), third_run);
+        var run_1 = Matrix.minus(this.y, this.output);
+        var run_2 = Matrix.time(run_1, 2);
+        var run_3 = Matrix.multiply(run_2, Matrix.sigmoid_derivative(this.output));
+        var d_weights2 = Matrix.dot(Matrix.T(this.layer1), run_3);
 
-        var run_4 = Matrix.dot(third_run, Matrix.T(this.weights2));
+        var run_4 = Matrix.dot(run_3, Matrix.T(this.weights2));
         var run_5 = Matrix.multiply(run_4, Matrix.sigmoid_derivative(this.layer1));
         var d_weights1 = Matrix.dot(Matrix.T(this.input), run_5);
 
