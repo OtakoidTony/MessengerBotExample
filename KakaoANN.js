@@ -178,16 +178,20 @@ function NeuralNetwork(x, y) {
     this.output = Matrix.zeros(Matrix.shape(y)[0], Matrix.shape(y)[1]);
 
     this.feedforward = function() {
+        /*
+        layer1=σ(input*weights1)
+        layer2=σ(layer1*weights2)
+        */
         this.layer1 = Matrix.sigmoid(Matrix.dot(this.input, this.weights1));
         this.layer2 = Matrix.sigmoid(Matrix.dot(this.layer1, this.weights2));
         return this.layer2;
     }
 
     this.backprop = function() {
-        var run_1 = Matrix.minus(this.y, this.output);
-        var run_2 = Matrix.time(run_1, 2);
-        var run_3 = Matrix.multiply(run_2, Matrix.sigmoid_derivative(this.output));
-        var d_weights2 = Matrix.dot(Matrix.T(this.layer1), run_3);
+        var run_1 = Matrix.minus(this.y, this.output); // y-output
+        var run_2 = Matrix.time(run_1, 2); // 2(y-output)
+        var run_3 = Matrix.multiply(run_2, Matrix.sigmoid_derivative(this.output)); // 2(y-output)σ'(output)
+        var d_weights2 = Matrix.dot(Matrix.T(this.layer1), run_3); // layer.T×2(y-output)σ'(output)
 
         var run_4 = Matrix.dot(run_3, Matrix.T(this.weights2));
         var run_5 = Matrix.multiply(run_4, Matrix.sigmoid_derivative(this.layer1));
