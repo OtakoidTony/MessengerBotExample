@@ -141,6 +141,20 @@ Matrix.sigmoid_derivative = function(A) {
     }
     return out;
 }
+Matrix.ReLU = function(A) {
+    var out = [];
+    for (var i in A) {
+        out[i] = [];
+        for (var j in A[i]) {
+            if (A[i][j]>=0){
+                out[i][j] = A[i][j];
+            } else {
+                out[i][j] = 0;
+            }
+        }
+    }
+    return out;
+}
 Matrix.multiply = function(A, B) {
     var answer = [];
     for (var i = 0; i < A.length; i++) {
