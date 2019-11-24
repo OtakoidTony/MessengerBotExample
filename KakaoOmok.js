@@ -10,6 +10,10 @@ function make2d_array(x, y) {
     return tt
 }
 
+Array.max = function(array){ 
+    return Math.max.apply(Math, array); 
+}; 
+
 function Omok(x, y) {
     this.board = make2d_array(x, y);
     this.numeric_board = make2d_array(x, y);
@@ -116,6 +120,16 @@ function Omok(x, y) {
         this.string_board();
     }
     this.computer = function() {
-
+        var tempX = [];
+        var tempY = [];
+        var tempZ = [];
+        var i=0;
+        while (i<this.numeric_board.length){
+            tempX.push(this.numeric_board.indexOf(Array.max(this.numeric_board[i])));
+            tempY.push(i);
+            tempZ.push(Array.max(this.numeric_board[i]));
+            i=i+1;
+        }
+        return [tempX,tempY,tempZ];
     }
 }
