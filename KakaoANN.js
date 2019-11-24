@@ -356,8 +356,8 @@ function sendPost(targetUrl, parameters){
     }
 }  
 
-var arr = error_1;
+
 function test(arr){
-    sendPost("https://chart.googleapis.com/chart", "cht=lc&chd=t:"+array_to_string(arr)+"&chs=1000x300&chxt=x,y&chxr=0,0,"+arr.length+"chxr=0,1,500|1,1,500&chg=5,10");
+    sendPost("https://chart.googleapis.com/chart", "cht=lc&chd=t:"+array_to_string(error_1)+"&chs=1000x300&chxt=x,y&chxr=0,0,"+error_1.length+"chxr=0,1,500|1,1,500&chg=5,10");
 }
     
