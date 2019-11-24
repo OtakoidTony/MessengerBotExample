@@ -1,9 +1,21 @@
-function Omok() {
-    this.board = [];
-    this.numeric_board = [];
-    this.numeric_board[0] = [];
+function make2d_array(x, y) {
+    var init = 0
+    var tt = new Array(y)
+    for (var i = 0; i < y; i++) {
+        tt[i] = new Array(x)
+        for (var j = 0; j < x; j++) {
+            tt[i][j] = init
+        }
+    }
+    return tt
+}
+
+
+function Omok(x, y) {
+    this.board = make2d_array(x, y);
+    this.numeric_board = make2d_array(x, y);
     this.string = "";
-    this.make_board = function(x, y) {
+    this.make_board = function() {
         var i = 0;
         var boardYL = []; /**/
         var boardYM = []; /**/
@@ -24,21 +36,30 @@ function Omok() {
                     boardYR[i] = "┨";
                 }
             }
-            this.numeric_board[0][i] = 0;
             i = i + 1;
         }
         i = 0;
+        var j = 0;
         while (i < x) {
             if (i == 0) {
-                this.board[i] = boardYL;
+                while (j < this.board[0].length) {
+                    this.board[i][j] = boardYL[j];
+                    j = j + 1;
+                }
             } else {
                 if (i == x - 1) {
-                    this.board[i] = boardYR;
+                    while (j < this.board[0].length) {
+                        this.board[i][j] = boardYR[j];
+                        j = j + 1;
+                    }
                 } else {
-                    this.board[i] = boardYM;
+                    while (j < this.board[0].length) {
+                        this.board[i][j] = boardYM[j];
+                        j = j + 1;
+                    }
                 }
             }
-            this.numeric_board[i] = this.numeric_board[0];
+			j = 0;
             i = i + 1;
         }
     }
@@ -57,8 +78,8 @@ function Omok() {
     }
     this.plus = function(x, y) {
         try {
-            if ((this.board[x])[y] != '●' && (this.board[x])[y] != '○' && (this.board[x])[y] != null) {
-                (this.numeric_board[x])[y] = (this.numeric_board[x])[y] + 1;
+            if (this.board[x][y] != '●' && this.board[x][y] != '○' && this.board[x][y] != null) {
+                this.numeric_board[x][y] = this.numeric_board[x][y] + 1;
             }
         } catch (e) {
             Log.debug(e);
@@ -66,8 +87,8 @@ function Omok() {
     }
     this.minus = function(x, y) {
         try {
-            if ((this.board[x])[y] != '●' && (this.board[x])[y] != '○' && (this.board[x])[y] != null) {
-                (this.numeric_board[x])[y] = (this.numeric_board[x])[y] - 1;
+            if (this.board[x][y] != '●' && this.board[x][y] != '○' && this.board[x][y] != null) {
+                this.numeric_board[x][y] = this.numeric_board[x][y] - 1;
             }
         } catch (e) {
             Log.debug(e);
@@ -75,7 +96,7 @@ function Omok() {
     }
     this.placement = function(x, y, com) {
         if (com) {
-            (this.board[x])[y] = '●';
+            this.board[x][y] = '●';
             this.plus(x + 1, y);
             this.plus(x - 1, y);
             this.plus(x, y + 1);
@@ -98,6 +119,6 @@ function Omok() {
         this.string_board();
     }
     this.computer = function() {
-        this.numeric_board;
+        
     }
 }
