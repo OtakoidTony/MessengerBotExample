@@ -64,3 +64,18 @@ function Omok() {
             i = i + 1;
         }
     }
+    this.string_board = function() {
+        var str = "";
+        var x = 0;
+        var y = 0;
+        while (y < this.board[0].length) {
+            str = str + this.board[x % this.board.length][y];
+            x = x + 1;
+            if (x != 0 && x % 10 == 0) {
+                str = str + "\n";
+                y = y + 1;
+            }
+        }
+        return str;
+    }
+}
