@@ -320,7 +320,7 @@ Utils.getShortUrl = function(url) {
     return JSON.parse(Utils.getShortUrlJson(url)).result;
 }
     
-sendPost(targetUrl, parameters){
+function sendPost(targetUrl, parameters){
     try {
         var url = new java.net.URL(targetUrl);
         var con = url.openConnection();
@@ -355,5 +355,9 @@ sendPost(targetUrl, parameters){
         Log.debug(e);
     }
 }  
-    
+
+var arr = error_1;
+function test(arr){
+    sendPost("https://chart.googleapis.com/chart", "cht=lc&chd=t:"+array_to_string(arr)+"&chs=1000x300&chxt=x,y&chxr=0,0,"+arr.length+"chxr=0,1,500|1,1,500&chg=5,10");
+}
     
