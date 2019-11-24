@@ -9,5 +9,15 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
         github[data[i].name]=data[i].download_url;
         i = i + 1;
     }
-    replier.reply(Object.getOwnPropertyNames(github);
+    i = 0;
+    var str = "";
+    while (i<Object.getOwnPropertyNames(github).length){
+        if (i != length-1) {
+            str = str + Object.getOwnPropertyNames(github)[i]+": "+github[Object.getOwnPropertyNames(github)[i]]+"\n";
+        } else {
+            str = str + Object.getOwnPropertyNames(github)[i]+": "+github[Object.getOwnPropertyNames(github)[i]];
+        }
+        i = i + 1;
+    }
+    replier.reply(str);
 }
