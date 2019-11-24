@@ -255,8 +255,18 @@ var y = [
 
 var NN = new NeuralNetwork(X, y);
 var i = 0;
+var plot_data=[];
+var error_1 = [];
+var error_2 = [];
+var error_3 = [];
+var error_4 = [];
 while (i < 1000) {
     NN.train(X, y);
+    plot_data[i]=Matrix.minus(NN.output, NN.y);
+    error_1[i]=NN.output[0]-NN.y[0];
+    error_2[i]=NN.output[1]-NN.y[1];
+    error_3[i]=NN.output[2]-NN.y[2];
+    error_4[i]=NN.output[3]-NN.y[3];
     i = i + 1;
 }
 function array_to_string(arr){
