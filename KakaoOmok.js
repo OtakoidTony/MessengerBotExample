@@ -10,58 +10,55 @@ function make2d_array(x, y) {
     return tt
 }
 
-
 function Omok(x, y) {
     this.board = make2d_array(x, y);
     this.numeric_board = make2d_array(x, y);
     this.string = "";
-    this.make_board = function() {
-        var i = 0;
-        var boardYL = []; /**/
-        var boardYM = []; /**/
-        var boardYR = []; /**/
-        while (i < y) {
-            if (i == 0) {
-                boardYL[i] = "┏";
-                boardYM[i] = "┯";
-                boardYR[i] = "┓";
+    var i = 0;
+    var boardYL = []; /**/
+    var boardYM = []; /**/
+    var boardYR = []; /**/
+    while (i < y) {
+        if (i == 0) {
+            boardYL[i] = "┏";
+            boardYM[i] = "┯";
+            boardYR[i] = "┓";
+        } else {
+            if (i == y - 1) {
+                boardYL[i] = "┗";
+                boardYM[i] = "┷";
+                boardYR[i] = "┛";
             } else {
-                if (i == y - 1) {
-                    boardYL[i] = "┗";
-                    boardYM[i] = "┷";
-                    boardYR[i] = "┛";
-                } else {
-                    boardYL[i] = "┠";
-                    boardYM[i] = "┼";
-                    boardYR[i] = "┨";
-                }
+                boardYL[i] = "┠";
+                boardYM[i] = "┼";
+                boardYR[i] = "┨";
             }
-            i = i + 1;
         }
-        i = 0;
-        var j = 0;
-        while (i < x) {
-            if (i == 0) {
+        i = i + 1;
+    }
+    i = 0;
+    var j = 0;
+    while (i < x) {
+        if (i == 0) {
+            while (j < this.board[0].length) {
+                this.board[i][j] = boardYL[j];
+                j = j + 1;
+            }
+        } else {
+            if (i == x - 1) {
                 while (j < this.board[0].length) {
-                    this.board[i][j] = boardYL[j];
+                    this.board[i][j] = boardYR[j];
                     j = j + 1;
                 }
             } else {
-                if (i == x - 1) {
-                    while (j < this.board[0].length) {
-                        this.board[i][j] = boardYR[j];
-                        j = j + 1;
-                    }
-                } else {
-                    while (j < this.board[0].length) {
-                        this.board[i][j] = boardYM[j];
-                        j = j + 1;
-                    }
+                while (j < this.board[0].length) {
+                    this.board[i][j] = boardYM[j];
+                    j = j + 1;
                 }
             }
-			j = 0;
-            i = i + 1;
         }
+        j = 0;
+        i = i + 1;
     }
     this.string_board = function() {
         this.string = "";
@@ -119,6 +116,6 @@ function Omok(x, y) {
         this.string_board();
     }
     this.computer = function() {
-        
+
     }
 }
