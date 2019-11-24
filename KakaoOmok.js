@@ -27,6 +27,7 @@
 */
 function Omok() {
     this.board = [];
+    this.string = "";
     this.make_board = function(x, y) {
         var i = 0;
         var boardYL = []; /**/
@@ -65,17 +66,24 @@ function Omok() {
         }
     }
     this.string_board = function() {
-        var str = "";
+        this.string = "";
         var x = 0;
         var y = 0;
         while (y < this.board[0].length) {
-            str = str + this.board[x % this.board.length][y];
+            this.string = this.string + this.board[x % this.board.length][y];
             x = x + 1;
-            if (x != 0 && x % 10 == 0) {
-                str = str + "\n";
+            if (x != 0 && x % this.board.length == 0) {
+                this.string = this.string + "\n";
                 y = y + 1;
             }
         }
-        return str;
+    }
+    this.placement(x, y, com) {
+        if (com) {
+            this.board[x][y] = '●';
+        } else {
+            this.board[x][y] = '○';
+        }
+        this.string_board();
     }
 }
