@@ -1,32 +1,7 @@
-/* 13, 13
-01┏┯┯┯┯┯┯┯┯┯┯┯┓
-02┠┼┼┼┼┼┼┼┼┼┼┼┨
-03┠┼┼┼┼┼┼┼┼┼┼┼┨
-04┠┼┼┼┼┼┼┼┼┼┼┼┨
-05┠┼┼┼┼┼┼┼┼┼┼┼┨
-06┠┼┼┼┼┼┼┼┼┼┼┼┨
-07┠┼┼┼┼┼┼┼┼┼┼┼┨
-08┠┼┼┼┼┼┼┼┼┼┼┼┨
-09┠┼┼┼┼┼┼┼┼┼┼┼┨
-10┠┼┼┼┼┼┼┼┼┼┼┼┨
-11┠┼┼┼┼┼┼┼┼┼┼┼┨
-12┠┼┼┼┼┼┼┼┼┼┼┼┨
-13┗┷┷┷┷┷┷┷┷┷┷┷┛
-*/
-/* 10, 10
-01┏┯┯┯┯┯┯┯┯┓
-02┠┼┼┼┼┼┼┼┼┨
-03┠┼┼┼┼┼┼┼┼┨
-04┠┼┼┼┼┼┼┼┼┨
-05┠┼┼┼┼┼┼┼┼┨
-06┠┼┼┼┼┼┼┼┼┨
-07┠┼┼┼┼┼┼┼┼┨
-08┠┼┼┼┼┼┼┼┼┨
-09┠┼┼┼┼┼┼┼┼┨
-10┗┷┷┷┷┷┷┷┷┛
-*/
 function Omok() {
     this.board = [];
+    this.numeric_board = [];
+    this.numeric_board[0] = [];
     this.string = "";
     this.make_board = function(x, y) {
         var i = 0;
@@ -49,6 +24,7 @@ function Omok() {
                     boardYR[i] = "┨";
                 }
             }
+            this.numeric_board[0][i] = 0;
             i = i + 1;
         }
         i = 0;
@@ -62,6 +38,7 @@ function Omok() {
                     this.board[i] = boardYM;
                 }
             }
+            this.numeric_board[i] = this.numeric_board[0];
             i = i + 1;
         }
     }
@@ -78,12 +55,49 @@ function Omok() {
             }
         }
     }
-    this.placement(x, y, com) {
+    this.plus = function(x, y) {
+        try {
+            if ((this.board[x])[y] != '●' && (this.board[x])[y] != '○' && (this.board[x])[y] != null) {
+                (this.numeric_board[x])[y] = (this.numeric_board[x])[y] + 1;
+            }
+        } catch (e) {
+            Log.debug(e);
+        }
+    }
+    this.minus = function(x, y) {
+        try {
+            if ((this.board[x])[y] != '●' && (this.board[x])[y] != '○' && (this.board[x])[y] != null) {
+                (this.numeric_board[x])[y] = (this.numeric_board[x])[y] - 1;
+            }
+        } catch (e) {
+            Log.debug(e);
+        }
+    }
+    this.placement = function(x, y, com) {
         if (com) {
-            this.board[x][y] = '●';
+            (this.board[x])[y] = '●';
+            this.plus(x + 1, y);
+            this.plus(x - 1, y);
+            this.plus(x, y + 1);
+            this.plus(x, y - 1);
+            this.plus(x + 1, y + 1);
+            this.plus(x - 1, y + 1);
+            this.plus(x + 1, y - 1);
+            this.plus(x - 1, y - 1);
         } else {
             this.board[x][y] = '○';
+            this.minus(x + 1, y);
+            this.minus(x - 1, y);
+            this.minus(x, y + 1);
+            this.minus(x, y - 1);
+            this.minus(x + 1, y + 1);
+            this.minus(x - 1, y + 1);
+            this.minus(x + 1, y - 1);
+            this.minus(x - 1, y - 1);
         }
         this.string_board();
+    }
+    this.computer = function() {
+        this.numeric_board;
     }
 }
