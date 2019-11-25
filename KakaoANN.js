@@ -203,10 +203,9 @@ function ArtificialNeuron(X, W, Bias, ActivationFunction){
 }
 
 function NeuralNetwork(x, y) {
-    var NodeAmount = 4;
     this.input = x;
-    this.weights1 = Matrix.rand(Matrix.shape(this.input)[1], NodeAmount);
-    this.weights2 = Matrix.rand(NodeAmount, 1);
+    this.weights1 = Matrix.rand(Matrix.shape(this.input)[1], Matrix.shape(this.input)[0]);
+    this.weights2 = Matrix.rand(Matrix.shape(y)[0], Matrix.shape(y)[1]);
     
     this.y = y;
     this.output = Matrix.zeros(Matrix.shape(y)[0], Matrix.shape(y)[1]);
