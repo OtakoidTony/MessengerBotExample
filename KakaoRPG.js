@@ -34,32 +34,60 @@ function randomItem(a) {
 var folder = new java.io.File(sdcard + "/" + game_data_folder + "/");
 folder.mkdirs(); //풀더를 sdcard에 생성
 
-funciton UserData(Data) {
+function UserData(Data) {
     this.data = {};
     this.init = function(Data, user) {
         if (Data != null) {
             this.data["name"] = Data.name;
             this.data["money"] = Data.money;
             this.data["hp"] = Data.hp;
-            this.data["item"]= Data.item;
-            this.data["level"]=Data.level;
+            this.data["item"] = Data.item;
+            this.data["level"] = Data.level;
         } else {
             this.data["name"] = user;
-            this.data["money"]=50000;
-            this.data["hp"]=300;
-            this.data["item"]=[];
-            this.data["level"]=1;
+            this.data["money"] = 50000;
+            this.data["hp"] = 300;
+            this.data["item"] = [];
+            this.data["level"] = 1;
         }
     }
-    this.save = function(data) {
-        save(game_data_folder, sender + ".txt", JSON.stringify(data));
+    this.json = JSON.stringify(data);
+        
     }
 }
+var DataBase = {};
 
+function start(user) {
+    var data = read(game_data_folder, sender + ".json");
+    if (data !== null) {
+        data = JSON.parse(data);
+        DataBase[data.name] = data;
+        return 1;
+    } else {
+        return 2;
+    }
+}
 
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
     var WhiteList = new Array("사용할 단톡방");
     if (WhiteList.indexOf(room) != -1 || isGroupChat == false) {
+        if (msg == ":login"){
+            var login_code=start(sender);
+            if (login_code==1){
+                replier.reply("ADD USER DT");
+                replier.reply("...OK");
+                var user = new UserData();
+                save(game_data_folder, sender + ".json", user.json);
+                replier.reply("Login Successed.");
+            } else {
+                replier.reply(sender + " : NOT FOUND 404");
+                replier.reply("CREATE USER DATA");
+                replier.reply("...OK");
+                replier.reply("Please re-login.");
+            }
+        }
+
+
         if (msg == "join!") {
             save(game_data_folder, sender + ".txt", "1000000");
             replier.reply(sender + "님이 갬블에 참가하셨습니다.");
