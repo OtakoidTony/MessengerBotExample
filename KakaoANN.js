@@ -235,6 +235,10 @@ function NeuralNetwork(x, y) {
     }
 
     this.train = function(X, y) {
+        if (X != null && y != null) {
+            this.input = X;
+            this.y = y;
+        }
         this.output = this.feedforward();
         this.backprop();
     }
