@@ -54,6 +54,9 @@ function UserData(Data) {
         }
     }
     this.json = JSON.stringify(this.data);
+    this.save = function(){
+        save(game_data_folder, sender + ".json", this.json);
+    }
 }
 
 
@@ -70,23 +73,39 @@ function Game(){
     }
 }
 
+function load_data(sender) {
+    var data = read(game_data_folder, sender + ".json");
+    data = JSON.parse(data);
+    var user = new UserData(data);
+    user.init(data, sender);
+    return user;
+}
+
+function command(cmd){
+    var cmd_str = cmd.split(' ')[0];
+    var param = cmd.substring(cmd_str.length+1, cmd.length);
+    return [cmd_str,param];
+}
+
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
     var WhiteList = new Array("사용할 단톡방");
     if (WhiteList.indexOf(room) != -1 || isGroupChat == false) {
-        if (msg == ":login"){
-            
-
-        
-        if (msg.substring(0, 5) == "slot!") {
-            var point = read(game_data_folder, sender + ".txt");
-            if (point != null) {
-                point = parseInt(point);
-
-                var oldPoint = point;
-                point = point * (0.5 + score);
-                replier.reply(sender + "님의 이전 보유액: " + oldPoint.toString() + "\n현재 보유액: " + point)
-                save("GambleBotDB", sender + ".txt", point.toString());
-            }
+        if (command(msg)[0] == ":start"){
+            var sender_data = new GameData();
+            sender_data.init(null, command(msg)[1]);
+            sender_data.save();
+            replier.reply("게임데이터가 생성되었습니다.");
+            replier.reply("["+sender_data.data.name+"] 어... 여기는... 어디지?");
+            replier.reply("["+sender_data.data.name+"] 여기 누구 없어요???");
+            replier.reply("주위를 둘러보았지만, 아무도 없었다.");
+            replier.reply("어흐흐흐흫ㅎ흫흙 ㅠㅠ");
+            replier.reply("[SYS] "+sender_data.data.name+"는 지금 밀폐된 공간에 갇혀있습니다. 어서 탈출하세요!");
+            replier.reply("[SYS] :items 을 입력하면 소지품을 확인 할 수 있습니다.");
+            replier.reply("[SYS] 또한 :search 를 입력하면 일정확률로 아이템을 얻을 수 있습니다.");
+        }
+        if (msg == ":items"){
+            var sender_data = load_data(sender);
+            replier.reply(sender_data.item);
         }
     }
 }
