@@ -50,8 +50,10 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             if (!(room in Attendance)) {
                 Attendance[room] = {}; /* 출석부에 없는 채팅방이면 빈 객체를 생성 */
             }
-            Attendance[room][sender] = date();
-            
+            if (Attendance[room][sender] != date()) {
+                Attendance[room][sender] = date();
+                save(folder, "Attendance.json", JSON.stringify(Attendance, null, '\t'));
+            }
             if (msg == ":attendance") {
                 var str = '';
                 var today = date();
@@ -69,6 +71,6 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
     }
 }
 
-function onStartCompile(){
+function onStartCompile() {
     save(folder, "Attendance.json", JSON.stringify(Attendance, null, '\t'));
 }
