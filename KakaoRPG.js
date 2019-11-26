@@ -38,6 +38,7 @@ folder.mkdirs(); //풀더를 sdcard에 생성
 
 function UserData(Data) {
     this.data = {};
+    this.json = '';
     this.init = function(Data, user) {
         if (Data != null) {
             this.data["name"] = Data.name;
@@ -51,10 +52,10 @@ function UserData(Data) {
             this.data["hp"] = 300;
             this.data["item"] = [];
             this.data["level"] = 1;
+            this.json = JSON.stringify(this.data, null, '\t');
         }
     }
-    this.json = JSON.stringify(this.data);
-    this.save = function(){
+    this.save = function(sender){
         save(game_data_folder, sender + ".json", this.json);
     }
 }
@@ -91,9 +92,9 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
     var WhiteList = new Array("사용할 단톡방");
     if (WhiteList.indexOf(room) != -1 || isGroupChat == false) {
         if (command(msg)[0] == ":start"){
-            var sender_data = new GameData();
+            var sender_data = new UserData();
             sender_data.init(null, command(msg)[1]);
-            sender_data.save();
+            sender_data.save(sender);
             replier.reply("게임데이터가 생성되었습니다.");
             replier.reply("["+sender_data.data.name+"] 어... 여기는... 어디지?");
             replier.reply("["+sender_data.data.name+"] 여기 누구 없어요???");
