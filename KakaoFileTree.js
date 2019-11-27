@@ -14,7 +14,7 @@ function listFiles(path){
     }
 }
 
-dfs = (path, depth, last, old, filetype) => {
+dfs = (path, filetype, depth, last, old) => {
     let chars = "━┏┣┗┃".split("");
     let file = new File(path);
     var name = file.getName();
@@ -35,7 +35,7 @@ dfs = (path, depth, last, old, filetype) => {
         let list = file.listFiles();
         for (let i = 0; i < list.length; i++) {
             var result_old = old;
-            result += dfs(list[i].getAbsolutePath(), depth + 1, i == list.length - 1, result_old, filetype);
+            result += dfs(list[i].getAbsolutePath(), filetype, depth + 1, i == list.length - 1, result_old);
         }
     }
     if (typeof result == 'undefined') {
@@ -44,10 +44,7 @@ dfs = (path, depth, last, old, filetype) => {
         return result;
     }
 }
+dfs("sdcard","mp3",0);
 
-
-const words = ['spray', 'limit', 'elite', 'exuberant', 'destruction', 'present'];
-
-const result = words.filter(word => word.length > 6);
 
 
