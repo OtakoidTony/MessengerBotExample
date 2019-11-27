@@ -176,10 +176,24 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                     }
                 }
                 if (sender_data.data.level==2){
-                    replier.reply(randomItem(Object.keys(GameItem.ch2)) + "이 떨어져있다.");
+                    var get_item = randomItem(Object.keys(GameItem.ch2));
+                    replier.reply(get_item + "이 떨어져있다.");
+                    if (!(get_item in sender_data.data.item)){
+                        sender_data.data.item.push(get_item);
+                        replier.reply(GameItem.ch1[get_item]);
+                    }else{
+                        replier.reply("이미 있는 물건이다.");
+                    }
                 }
                 if (sender_data.data.level==3){
-                    replier.reply(randomItem(Object.keys(GameItem.ch3)) + "이 떨어져있다.");
+                    var get_item = randomItem(Object.keys(GameItem.ch3));
+                    replier.reply(get_item + "이 떨어져있다.");
+                    if (!(get_item in sender_data.data.item)){
+                        sender_data.data.item.push(get_item);
+                        replier.reply(GameItem.ch1[get_item]);
+                    }else{
+                        replier.reply("이미 있는 물건이다.");
+                    }
                 }
             } else {
                 replier.reply("아무것도 없다.");
