@@ -1,4 +1,4 @@
-const File = java.io.File;
+var File = java.io.File;
 
 dfs = (path, depth, last, old, filetype) => {
 let chars = "━┏┣┗┃".split("");
@@ -27,3 +27,18 @@ let chars = "━┏┣┗┃".split("");
       return result;
    }
 }
+
+listFiles = (path)=> {
+   let file = new File(path);
+   if (file.isDirectory()) {
+      let list = file.listFiles();
+      var result = [];
+      for (var i in list){
+         result.push(i);
+      }
+      return result;
+   }else{
+      return null;
+   }
+}
+   
