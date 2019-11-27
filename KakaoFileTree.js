@@ -33,7 +33,7 @@ function listFiles(path){
     if (file.isDirectory()) {
         let f_list = file.list();
         var result = [];
-        for (let i = 0; i < list.length; i++) {
+        for (let i = 0; i < f_list.length; i++) {
             result.push(f_list[i]);
         }
         return result;
