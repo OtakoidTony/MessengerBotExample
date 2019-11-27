@@ -31,51 +31,54 @@ function read(folderName, fileName) {
 
 const game_data_folder = "Game_Data";
 
-const GameItem = {
-    'lv1': {
+/* 게임 아이템 목록 */
+const GameItem = [
+    {
         '밧줄': "무언가를 묶을 때 사용할 수 있다.",
         '진통제': "아플 때 먹으면 괜찮아 진다.",
         '손전등': "배터리가 있으면 어두운 곳을 볼 수 있다."
     },
-    'lv2': {
+    {
         '배터리': "전자기기를 사용할 수 있다.",
         '유리조각': "날카로워서 잘못 만지면 다칠 수 있다.",
         '가위': "문방구에서 살 수 있는 흔한 가위다."
     },
-    'lv3': {
+    {
         '톱': "실과시간에 쓰던거랑 비슷하게 생긴 톱이다.",
         '열쇠뭉치': "엄청나게 많은 열쇠가 있다.",
         '신분증': "모르는 사람의 신분증이다."
     }
-}
+]
 
 
 var folder = new java.io.File(sdcard + "/" + game_data_folder + "/");
-folder.mkdirs(); //풀더를 sdcard에 생성
+folder.mkdirs(); /* 풀더를 sdcard에 생성 */
 
 function UserData(Data) {
+    /*
+    >> Name     | UserData
+    >> Param    | Data : Object or Null
+    */
     this.data = {};
-    this.json = '';
     this.init = function(user) {
         if (Data != null) {
-            this.data["name"] = Data.name;
+            /* Parameters가 Null이 아닌 경우에 UserData.data으로 할당. */
+            this.data["name"]  = Data.name;
             this.data["money"] = Data.money;
-            this.data["hp"] = Data.hp;
-            this.data["item"] = Data.item;
+            this.data["hp"]    = Data.hp;
+            this.data["item"]  = Data.item;
             this.data["level"] = Data.level;
-            this.json = JSON.stringify(this.data, null, '\t');
         } else {
-            this.data["name"] = user;
+            /* Parameters가 Null인 경우에 UserData.data를 초기값으로 할당. */
+            this.data["name"]  = user;
             this.data["money"] = 50000;
-            this.data["hp"] = 300;
-            this.data["item"] = [];
+            this.data["hp"]    = 300;
+            this.data["item"]  = {};
             this.data["level"] = 1;
-            this.json = JSON.stringify(this.data, null, '\t');
         }
     }
-    Log.i(this.json);
     this.save = function(sender) {
-        save(game_data_folder, sender + ".json", this.json);
+        save(game_data_folder, sender + ".json", JSON.stringify(this.data, null, '\t'));
     }
 }
 
@@ -135,6 +138,8 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             sender_data.save(sender);
             replier.reply("게임데이터가 생성되었습니다.");
             var sender_meessage_name = "[" + sender_data.data.name + "] ";
+
+            /* 게임 첫 실행 시 스토리. */
             replier.reply(sender_meessage_name + "어... 여기는... 어디지?");
             replier.reply(sender_meessage_name + "여기 누구 없어요???");
             replier.reply("주위를 둘러보았지만, 아무도 없었다.");
@@ -163,36 +168,23 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
 
             var probability = Math.random() * 100;
             if ( probability >= (40 + ( sender_data.data.level * 10 ) ) ) {
-                if (sender_data.data.level==1){
-                    var get_item = randomItem(Object.keys(GameItem.lv1));
-                    replier.reply(get_item + "이 떨어져있다.");
-                    if (!(get_item in sender_data.data.item)){
-                        sender_data.data.item.push(get_item);
-                        replier.reply(GameItem.lv1[get_item]);
-                    }else{
-                        replier.reply("이미 있는 물건이다.");
-                    }
+
+                /*
+                >> Date     | 2019.11.27. PM 6:48
+                >> Note     | Level에 따른 분기별 조건문을 통합.
+                >> Modified | GameItem : Object -> Array
+                */
+                var get_item = randomItem(Object.keys(GameItem[sender_data.data.level - 1]));
+                replier.reply(get_item + "이 떨어져있다.");
+                if (get_item in sender_data.data.item){
+                    replier.reply("이미 있는 물건이다.");
+                } else {
+                    /* 처음 발견한 아이템일 때 이벤트 */
+                    sender_data.data.item[get_item] = 1;
+                    replier.reply(GameItem[sender_data.data.level][get_item]);
                 }
-                if (sender_data.data.level==2){
-                    var get_item = randomItem(Object.keys(GameItem.lv2));
-                    replier.reply(get_item + "이 떨어져있다.");
-                    if (!(get_item in sender_data.data.item)){
-                        sender_data.data.item.push(get_item);
-                        replier.reply(GameItem.lv2[get_item]);
-                    }else{
-                        replier.reply("이미 있는 물건이다.");
-                    }
-                }
-                if (sender_data.data.level==3){
-                    var get_item = randomItem(Object.keys(GameItem.ch3));
-                    replier.reply(get_item + "이 떨어져있다.");
-                    if (!(get_item in sender_data.data.item)){
-                        sender_data.data.item.push(get_item);
-                        replier.reply(GameItem.lv3[get_item]);
-                    }else{
-                        replier.reply("이미 있는 물건이다.");
-                    }
-                }
+
+                /* json 파일로 저장 */
                 sender_data.save(sender);
             } else {
                 replier.reply("아무것도 없다.");
