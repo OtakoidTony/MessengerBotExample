@@ -91,6 +91,43 @@ function command(cmd) {
     return [cmd_str, param];
 }
 
+var commands_help = "[Command]\n\
+:start <Nickname>\n\
+Nickname이라는 이름으로 게임을 시작합니다.\n\
+:view\n\
+현재 아이의 상태를 확인합니다.\n\
+:items\n\
+소지하고 있는 아이템의 목록을 확인합니다.\n\
+:search\n\
+근처에 떨어져 있는 물건이 있는지 찾아봅니다.\n\
+:map\n\
+지도를 소지하고 있는 경우 현재 방 위치를 확인합니다.\n\
+:room <Room>\n\
+Room이라는 방으로 이동합니다.\n\
+\
+";
+
+
+/*
+┏━━━━━┓
+┃　　　　　┃
+┃　　　　　┃
+┃　　　　　┃
+┗━┓　┏━┛
+┏┯
+┠╋╋╋╋
+╋╋╋╋╋╋
+┗
+┓╋
+┗
+┷
+┛
+┠
+┣
+┨
+*/
+
+
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
     var WhiteList = new Array("사용할 단톡방");
     if (WhiteList.indexOf(room) != -1 || isGroupChat == false) {
@@ -99,13 +136,16 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             sender_data.init(null, command(msg)[1]);
             sender_data.save(sender);
             replier.reply("게임데이터가 생성되었습니다.");
-            replier.reply("[" + sender_data.data.name + "] 어... 여기는... 어디지?");
-            replier.reply("[" + sender_data.data.name + "] 여기 누구 없어요???");
+            var sender_meessage_name = "[" + sender_data.data.name + "] ";
+            replier.reply(sender_meessage_name + "어... 여기는... 어디지?");
+            replier.reply(sender_meessage_name + "여기 누구 없어요???");
             replier.reply("주위를 둘러보았지만, 아무도 없었다.");
-            replier.reply("어흐흐흐흫ㅎ흫흙 ㅠㅠ");
+            replier.reply(sender_meessage_name + "어흐흐흐흫ㅎ흫흙 ㅠㅠ");
             replier.reply("[SYS] " + sender_data.data.name + "는 지금 밀폐된 공간에 갇혀있습니다. 어서 탈출하세요!");
-            replier.reply("[SYS] :items 을 입력하면 소지품을 확인 할 수 있습니다.");
-            replier.reply("[SYS] 또한 :search 를 입력하면 일정확률로 아이템을 얻을 수 있습니다.");
+            replier.reply("[SYS] :help를 입력하면 명령어 목록을 확인할 수 있습니다.");
+        }
+        if (msg == ":help") {
+            replier.reply(commands_help);
         }
         if (msg == ":items") {
             replier.reply(load_data(sender).name);
@@ -113,11 +153,38 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             sender_data.init(sender);
             replier.reply(sender_data.data.item);
         }
+
         if (msg == ":search") {
+            /* 플레이어 데이터 로드 */
             var sender_data = new UserData(load_data(sender));
             sender_data.init(sender);
-            replier.reply("[" + sender_data.data.name + "] 이건 뭘까...?");
-            randomItem(Object.keys(GameItem.ch1))
+
+            /* 이벤트 진입 */
+            var sender_meessage_name = "[" + sender_data.data.name + "] ";
+            replier.reply(sender_meessage_name + "이건 뭘까...?");
+
+            var probability = Math.random() * 100;
+            if ( probability >= (40 + ( sender_data.data.level * 10 ) ) ) {
+                if (sender_data.data.level==1){
+                    var get_item = randomItem(Object.keys(GameItem.ch1));
+                    replier.reply(get_item + "이 떨어져있다.");
+                    if (!(get_item in sender_data.data.item)){
+                        sender_data.data.item.push(get_item);
+                        replier.reply(GameItem.ch1[get_item]);
+                    }else{
+                        replier.reply("이미 있는 물건이다.");
+                    }
+                }
+                if (sender_data.data.level==2){
+                    replier.reply(randomItem(Object.keys(GameItem.ch2)) + "이 떨어져있다.");
+                }
+                if (sender_data.data.level==3){
+                    replier.reply(randomItem(Object.keys(GameItem.ch3)) + "이 떨어져있다.");
+                }
+            } else {
+                replier.reply("아무것도 없다.");
+                replier.reply(sender_meessage_name+"내가 잘못봤나보다...");
+            }
         }
     }
 }
