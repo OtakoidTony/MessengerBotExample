@@ -31,10 +31,12 @@ let chars = "━┏┣┗┃".split("");
 listFiles = (path)=> {
    let file = new File(path);
    if (file.isDirectory()) {
-      let list = file.list();
+      let f_list = file.list();
       var result = [];
-      for (var i in list){
-         result.push(i);
+      var i = 0;
+      whlie (i<f_list.length){
+         result.push(f_list[i]);
+         i=i+1;
       }
       return result;
    }else{
