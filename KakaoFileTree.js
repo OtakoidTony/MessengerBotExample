@@ -21,9 +21,9 @@ dfs = (path, filetype, depth, last, old) => {
     var result = 0;
     var temp = chars[4].repeat(depth) + (last ? chars[3] : chars[2]) + name + "\n";
     if (file.isDirectory()) {
-        var temp_b = listFiles(path).filter(word => word.slice(word.length - 3, word.length) == "mp3");
+        var temp_b = listFiles(path).filter(word => word.slice(word.length - 3, word.length) == filetype);
     }
-    if (name.slice(name.length - 3, name.length) == "mp3" || (file.isDirectory() && (temp_b.length != 0) && (typeof temp !== 'undefined'))) {
+    if (name.slice(name.length - 3, name.length) == filetype || (file.isDirectory() && (temp_b.length != 0) && (typeof temp !== 'undefined'))) {
         result = temp;
     } else {
         result = old;
