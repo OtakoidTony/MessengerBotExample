@@ -131,7 +131,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
     if (WhiteList.indexOf(room) != -1 || isGroupChat == false) {
         if (command(msg)[0] == ":start") {
             var sender_data = new UserData();
-            sender_data.init(null, command(msg)[1]);
+            sender_data.init(command(msg)[1]);
             sender_data.save(sender);
             replier.reply("게임데이터가 생성되었습니다.");
             var sender_meessage_name = "[" + sender_data.data.name + "] ";
@@ -164,21 +164,21 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             var probability = Math.random() * 100;
             if ( probability >= (40 + ( sender_data.data.level * 10 ) ) ) {
                 if (sender_data.data.level==1){
-                    var get_item = randomItem(Object.keys(GameItem.ch1));
+                    var get_item = randomItem(Object.keys(GameItem.lv1));
                     replier.reply(get_item + "이 떨어져있다.");
                     if (!(get_item in sender_data.data.item)){
                         sender_data.data.item.push(get_item);
-                        replier.reply(GameItem.ch1[get_item]);
+                        replier.reply(GameItem.lv1[get_item]);
                     }else{
                         replier.reply("이미 있는 물건이다.");
                     }
                 }
                 if (sender_data.data.level==2){
-                    var get_item = randomItem(Object.keys(GameItem.ch2));
+                    var get_item = randomItem(Object.keys(GameItem.lv2));
                     replier.reply(get_item + "이 떨어져있다.");
                     if (!(get_item in sender_data.data.item)){
                         sender_data.data.item.push(get_item);
-                        replier.reply(GameItem.ch1[get_item]);
+                        replier.reply(GameItem.lv2[get_item]);
                     }else{
                         replier.reply("이미 있는 물건이다.");
                     }
@@ -188,7 +188,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                     replier.reply(get_item + "이 떨어져있다.");
                     if (!(get_item in sender_data.data.item)){
                         sender_data.data.item.push(get_item);
-                        replier.reply(GameItem.ch1[get_item]);
+                        replier.reply(GameItem.lv3[get_item]);
                     }else{
                         replier.reply("이미 있는 물건이다.");
                     }
