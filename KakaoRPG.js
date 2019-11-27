@@ -193,6 +193,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                         replier.reply("이미 있는 물건이다.");
                     }
                 }
+                sender_data.save(sender);
             } else {
                 replier.reply("아무것도 없다.");
                 replier.reply(sender_meessage_name+"내가 잘못봤나보다...");
