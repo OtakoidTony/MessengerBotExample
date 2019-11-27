@@ -10,6 +10,11 @@ Utils.getPubg = function() {
         con.setRequestProperty("Accept-Encoding", "gzip, deflate");
         con.setRequestProperty("accept-language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7,ja-JP;q=0.6,ja;q=0.5");
         con.setRequestProperty("Connection", "keep-alive");
+        con.setRequestProperty("sec-fetch-mode", "sec-fetch-mode");
+        con.setRequestProperty("dnt", "1");
+        con.setRequestProperty("sec-fetch-site", "none");
+        con.setRequestProperty("sec-fetch-user", "?1");
+        con.setRequestProperty("upgrade-insecure-requests", "1");
         if (con != null) {
             con.setConnectTimeout(5000);
             con.setUseCaches(false);
@@ -26,6 +31,6 @@ Utils.getPubg = function() {
         }
         return str + "";
     } catch (e) {
-        //Log.debug(e);
+        Log.debug(e);
     }
 }
