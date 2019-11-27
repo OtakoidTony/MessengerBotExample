@@ -31,7 +31,7 @@ let chars = "━┏┣┗┃".split("");
 listFiles = (path)=> {
    let file = new File(path);
    if (file.isDirectory()) {
-      let list = file.listFiles();
+      let list = file.list();
       var result = [];
       for (var i in list){
          result.push(i);
