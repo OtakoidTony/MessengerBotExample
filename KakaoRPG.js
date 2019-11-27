@@ -1,5 +1,9 @@
 var sdcard = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
 
+function randomItem(a) {
+    return a[Math.floor(Math.random() * a.length)];
+}
+
 function save(folderName, fileName, str) {
     var c = new java.io.File(sdcard + "/" + folderName + "/" + fileName);
     var d = new java.io.FileOutputStream(c);
@@ -27,14 +31,27 @@ function read(folderName, fileName) {
 
 const game_data_folder = "Game_Data";
 
-function randomItem(a) {
-    return a[java.lang.Math.floor(java.lang.Math.random() * a.length)];
+const GameItem = {
+    'lv1': {
+        '밧줄': "무언가를 묶을 때 사용할 수 있다.",
+        '진통제': "아플 때 먹으면 괜찮아 진다.",
+        '손전등': "배터리가 있으면 어두운 곳을 볼 수 있다."
+    },
+    'lv2': {
+        '배터리': "전자기기를 사용할 수 있다.",
+        '유리조각': "날카로워서 잘못 만지면 다칠 수 있다.",
+        '가위': "문방구에서 살 수 있는 흔한 가위다."
+    },
+    'lv3': {
+        '톱': "실과시간에 쓰던거랑 비슷하게 생긴 톱이다.",
+        '열쇠뭉치': "엄청나게 많은 열쇠가 있다.",
+        '신분증': "모르는 사람의 신분증이다."
+    }
 }
+
 
 var folder = new java.io.File(sdcard + "/" + game_data_folder + "/");
 folder.mkdirs(); //풀더를 sdcard에 생성
-
-
 
 function UserData(Data) {
     this.data = {};
@@ -95,6 +112,12 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             var sender_data = new UserData(load_data(sender));
             sender_data.init(sender);
             replier.reply(sender_data.data.item);
+        }
+        if (msg == ":search") {
+            var sender_data = new UserData(load_data(sender));
+            sender_data.init(sender);
+            replier.reply("[" + sender_data.data.name + "] 이건 뭘까...?");
+            randomItem(Object.keys(GameItem.ch1))
         }
     }
 }
