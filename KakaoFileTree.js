@@ -14,7 +14,8 @@ function listFiles(path){
     }
 }
 
-dfs = (path, filetype, depth, last, old) => {
+
+dfs = (path, filetype, number, depth, last, old) => {
     let chars = "━┏┣┗┃".split("");
     let file = new File(path);
     var name = file.getName();
@@ -24,7 +25,13 @@ dfs = (path, filetype, depth, last, old) => {
         var temp_b = listFiles(path).filter(word => word.slice(word.length - 3, word.length) == filetype);
     }
     if (name.slice(name.length - 3, name.length) == filetype || (file.isDirectory() && (temp_b.length != 0) && (typeof temp !== 'undefined'))) {
-        result = temp;
+        if (file.isDirectory()) {
+            result = temp;
+            number = 1;
+        }else{
+            result = chars[4].repeat(depth) + (last ? chars[3] : chars[2]) + number.toString() + " : " + name + "\n";
+            number = number + 1;
+        }
     } else {
         result = old;
         if (typeof old == 'undefined') {
@@ -44,7 +51,7 @@ dfs = (path, filetype, depth, last, old) => {
         return result;
     }
 }
-dfs("sdcard","mp3",0);
+dfs("sdcard", "mp3", 1, 0);
 
 
 
