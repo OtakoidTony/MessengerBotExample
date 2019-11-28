@@ -1,30 +1,8 @@
-Utils.getPubg = function() {
-    try {
-        var url = new java.net.URL("https://pubg.op.gg/api/leaderboard/ranked-users?platform=steam&queue_size=1&mode=tpp&limit=10");
-        var con = url.openConnection();
-        con.setRequestProperty("User-Agent", "Mozilla/5.0");
-        if (con != null) {
-            con.setConnectTimeout(5000);
-            con.setUseCaches(false);
-            var isr = new java.io.InputStreamReader(con.getInputStream());
-            var br = new java.io.BufferedReader(isr);
-            var str = br.readLine();
-            var line = "";
-            while ((line = br.readLine()) != null) {
-                str += "\n" + line;
-            }
-            isr.close();
-            br.close();
-            con.disconnect();
-        }
-        var result = str + "";
-        return JSON.parse(result).items;
-    } catch (e) {
-        Log.debug(e);
-    }
-}
-
 /*
+>> Name   | Utils.getPubg
+>> Type   | Function
+>> Return | Object
+
 items
 items.offset
 items.user
@@ -58,3 +36,91 @@ items.ranked_stats.max_ranks
 items.ranked_stats.max_ranks.rank_points
 items.ranked_stats.lone_survivor_flag
 */
+Utils.getPubg = function() {
+    try {
+        var url = new java.net.URL("https://d2apy071ztcd66.cloudfront.net/api/leaderboard/ranked-users?platform=steam&queue_size=1&mode=tpp&limit=10");
+        var con = url.openConnection();
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+        if (con != null) {
+            con.setConnectTimeout(5000);
+            con.setUseCaches(false);
+            var isr = new java.io.InputStreamReader(con.getInputStream());
+            var br = new java.io.BufferedReader(isr);
+            var str = br.readLine();
+            var line = "";
+            while ((line = br.readLine()) != null) {
+                str += "\n" + line;
+            }
+            isr.close();
+            br.close();
+            con.disconnect();
+        }
+        var result = str + "";
+        return JSON.parse(result).items;
+    } catch (e) {
+        Log.debug(e);
+    }
+}
+
+/*
+>> Name   | Utils.getPubgUserID
+>> Type   | Function
+>> Param  | user : String
+>> Return | String : HEX
+*/
+Utils.getPubgUserID = function(user) {
+    try {
+        var url = new java.net.URL("https://d2apy071ztcd66.cloudfront.net/user/"+user);
+        var con = url.openConnection();
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+        if (con != null) {
+            con.setConnectTimeout(5000);
+            con.setUseCaches(false);
+            var isr = new java.io.InputStreamReader(con.getInputStream());
+            var br = new java.io.BufferedReader(isr);
+            var str = br.readLine();
+            var line = "";
+            while ((line = br.readLine()) != null) {
+                str += "\n" + line;
+            }
+            isr.close();
+            br.close();
+            con.disconnect();
+        }
+        var result = str + "";
+        return result.split("data-u-user_id=\"")[1].split("\"")[0];
+    } catch (e) {
+        Log.debug(e);
+    }
+}
+
+Utils.getPubgUserData = function(user) {
+    try {
+        var url = new java.net.URL("https://pubg.op.gg/api/users/"+Utils.getPubgUserID(user)+"/matches/recent?server=sea&queue_size=&");
+        var con = url.openConnection();
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+        if (con != null) {
+            con.setConnectTimeout(5000);
+            con.setUseCaches(false);
+            var isr = new java.io.InputStreamReader(con.getInputStream());
+            var br = new java.io.BufferedReader(isr);
+            var str = br.readLine();
+            var line = "";
+            while ((line = br.readLine()) != null) {
+                str += "\n" + line;
+            }
+            isr.close();
+            br.close();
+            con.disconnect();
+        }
+        var result = str + "";
+        return JSON.parse(result);
+    } catch (e) {
+        Log.debug(e);
+    }
+}
+
+
+
+
+
