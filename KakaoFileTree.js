@@ -42,7 +42,7 @@ dfs = (path, filetype, number, depth, last, old) => {
         let list = file.listFiles();
         for (let i = 0; i < list.length; i++) {
             var result_old = old;
-            result += dfs(list[i].getAbsolutePath(), filetype, depth + 1, i == list.length - 1, result_old);
+            result += dfs(list[i].getAbsolutePath(), filetype, number, depth + 1, i == list.length - 1, result_old);
         }
     }
     if (typeof result == 'undefined') {
