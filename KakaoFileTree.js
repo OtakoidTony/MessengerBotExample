@@ -21,6 +21,7 @@ dfs = (path, filetype, number, depth, last, old) => {
     var name = file.getName();
     var result = 0;
     var temp = chars[4].repeat(depth) + (last ? chars[3] : chars[2]) + name + "\n";
+    var number_temp = number;
     if (file.isDirectory()) {
         var temp_b = listFiles(path).filter(word => word.slice(word.length - 3, word.length) == filetype);
     }
