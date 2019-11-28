@@ -94,6 +94,89 @@ Utils.getPubgUserID = function(user) {
     }
 }
 
+/*
+>> Name   | Utils.getPubgUserData
+>> Type   | Function
+>> Param  | user : String
+>> Return | Object
+
+params
+params.server
+params.season
+params.queue_size
+params.mode
+params.type
+
+matches
+matches.summary
+matches.summary.matches_cnt
+matches.summary.win_matches_cnt
+matches.summary.topten_matches_cnt
+matches.summary.ranks_avg
+matches.summary.ranks_list.kills_avg
+matches.summary.ranks_list.deaths_avg
+matches.summary.ranks_list.kills_max
+matches.summary.ranks_list.damage_avg
+matches.summary.ranks_list.time_survived_avg
+matches.summary.ranks_list.modes
+matches.summary.ranks_list.modes.1
+matches.summary.ranks_list.modes.1.matches_cnt
+matches.summary.ranks_list.modes.1.win_matches_cnt
+matches.summary.ranks_list.modes.1.topten_matches_cnt
+matches.summary.ranks_list.modes.1.rating_delta_sum
+matches.items
+matches.items.match_id
+matches.items.type
+matches.items.season
+matches.items.server
+matches.items.mode
+matches.items.started_at
+matches.items.total_rank
+matches.items.offset
+matches.items.queue_size
+matches.items.map_name
+matches.items.participant
+matches.items.participant._id
+matches.items.participant.user
+matches.items.participant.user.nickname
+matches.items.participant.user.profile_url
+matches.items.participant.stats
+matches.items.participant.stats.rank
+matches.items.participant.stats.ranting
+matches.items.participant.stats.rating_delta
+matches.items.participant.stats.rank_points
+matches.items.participant.stats.combat
+matches.items.participant.stats.combat.vehicle_destroys
+matches.items.participant.stats.combat.win_place
+matches.items.participant.stats.combat.kill_place
+matches.items.participant.stats.combat.heals
+matches.items.participant.stats.combat.weapon_acquired
+matches.items.participant.stats.combat.boosts
+matches.items.participant.stats.combat.death_type
+matches.items.participant.stats.combat.most_damage
+matches.items.participant.stats.combat.time_survived
+matches.items.participant.stats.combat.kda
+matches.items.participant.stats.combat.kda.kills
+matches.items.participant.stats.combat.kda.assists
+matches.items.participant.stats.combat.kda.kill_steaks
+matches.items.participant.stats.combat.kda.road_kills
+matches.items.participant.stats.combat.kda.team_kills
+matches.items.participant.stats.combat.kda.headshot_kills
+matches.items.participant.stats.combat.kda.longest_kill
+matches.items.participant.stats.combat.distance_traveled
+matches.items.participant.stats.combat.distance_traveled.walk_distance
+matches.items.participant.stats.combat.distance_traveled.ride_distance
+matches.items.participant.stats.combat.damage
+matches.items.participant.stats.combat.damage.damage_dealt
+matches.items.participant.stats.combat.dbno
+matches.items.participant.stats.combat.dbno.knock_downs
+matches.items.participant.stats.combat.dbno.revives
+matches.items.participant.team
+matches.items.participant.team._id
+matches.items.participant.team.stats
+matches.items.participant.team.stats.rank
+matches.items.participant.team.participants
+*/
 Utils.getPubgUserData = function(user) {
     try {
         var url = new java.net.URL("https://d2apy071ztcd66.cloudfront.net/api/users/"+Utils.getPubgUserID(user)+"/matches/recent?server=sea&queue_size=&");
