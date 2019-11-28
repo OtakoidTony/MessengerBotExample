@@ -30,7 +30,7 @@ dfs = (path, filetype, number, depth, last, old) => {
             number = 1;
         }else{
             result = chars[4].repeat(depth) + (last ? chars[3] : chars[2]) + number.toString() + " : " + name + "\n";
-            number = number + 1;
+            var number_temp = number + 1;
         }
     } else {
         result = old;
@@ -42,7 +42,7 @@ dfs = (path, filetype, number, depth, last, old) => {
         let list = file.listFiles();
         for (let i = 0; i < list.length; i++) {
             var result_old = old;
-            result += dfs(list[i].getAbsolutePath(), filetype, number, depth + 1, i == list.length - 1, result_old);
+            result += dfs(list[i].getAbsolutePath(), filetype, number_temp, depth + 1, i == list.length - 1, result_old);
         }
     }
     if (typeof result == 'undefined') {
