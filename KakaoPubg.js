@@ -96,7 +96,7 @@ Utils.getPubgUserID = function(user) {
 
 Utils.getPubgUserData = function(user) {
     try {
-        var url = new java.net.URL("https://pubg.op.gg/api/users/"+Utils.getPubgUserID(user)+"/matches/recent?server=sea&queue_size=&");
+        var url = new java.net.URL("https://d2apy071ztcd66.cloudfront.net/api/users/"+Utils.getPubgUserID(user)+"/matches/recent?server=sea&queue_size=&");
         var con = url.openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
         if (con != null) {
