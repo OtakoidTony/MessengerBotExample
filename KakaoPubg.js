@@ -106,7 +106,6 @@ params.season
 params.queue_size
 params.mode
 params.type
-
 matches
 matches.summary
 matches.summary.matches_cnt
