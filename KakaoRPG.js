@@ -156,8 +156,8 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             replier.reply(sender_meessage_name + "어... 여기는... 어디지?");
             replier.reply(sender_meessage_name + "여기 누구 없어요???");
             replier.reply("주위를 둘러보았지만, 아무도 없었다.");
-            replier.reply(sender_meessage_name + "어흐흐흐흫ㅎ흫흙 ㅠㅠ");
-            replier.reply("[SYS] " + sender_data.data.name + "는 지금 밀폐된 공간에 갇혀있습니다. 어서 탈출하세요!");
+            replier.reply(sender_meessage_name + "어흐흐흐흫ㅎ흫흟 ㅠㅠ");
+            replier.reply("[SYS] " + sender_data.data.name + "는 지금 밀폐된 공간에 갇혀있습니다. 어서 탈출하십시오!");
             replier.reply("[SYS] :help를 입력하면 명령어 목록을 확인할 수 있습니다.");
             /* <--------[게임 여는 스토리 종료]--------> */
         }
@@ -203,9 +203,14 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             } else {
                 if ( probability <= 10 ) {
                     /* HP 감소 분기 */
-                    replier.reply("누군가가 있다.");
-                    replier.reply(sender_message_name+"누... 누구세요...?");
-                    replier.reply("누군가가 쓰러져있다. 어떻게 하지??");
+                    replier.reply("누군가가 있는 것 같다.");
+                    replier.reply(sender_message_name + "누... 누구세요...?");
+                    replier.reply("조심스럽게 다가간다.");
+                    replier.reply(sender_message_name + "...!");
+                    replier.reply(sender_message_name + "싫어어어어어어!!!!!!");
+                    
+                    replier.reply(sender_message_name + "(내 또래인 것 같이 보이는 여자아이가 칼에 난도질되어 있다.)");
+                    
                     
                     
                     /* json 파일로 저장 */
