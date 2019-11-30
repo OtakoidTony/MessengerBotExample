@@ -130,6 +130,13 @@ Room이라는 방으로 이동합니다.\n\
 ┗┓╋┗┛┣┓　┏
 */
 
+function probablity(x, minimum, maximum){
+    if (x>minimum && x<maximum){
+        return true;
+    } else {
+        return false;
+    }
+}
 
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
     var WhiteList = new Array("사용할 단톡방");
@@ -170,7 +177,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             sender_data.init(sender);
 
             /* 이벤트 진입 */
-            var sender_meessage_name = "[" + sender_data.data.name + "] ";
+            var sender_message_name = "[" + sender_data.data.name + "] ";
             replier.reply(sender_meessage_name + "이건 뭘까...?");
 
             var probability = Math.random() * 100;
@@ -195,10 +202,17 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                 sender_data.save(sender);
             } else {
                 if ( probability <= 10 ) {
+                    /* HP 감소 분기 */
                     replier.reply("누군가가 있다.");
+                    replier.reply(sender_message_name+"누... 누구세요...?");
+                    replier.reply("누군가가 쓰러져있다. 어떻게 하지??");
+                    
+                    
+                    /* json 파일로 저장 */
+                    sender_data.save(sender);
                 } else {
                     replier.reply("아무것도 없다.");
-                    replier.reply(sender_meessage_name+"내가 잘못봤나보다...");
+                    replier.reply(sender_message_name+"내가 잘못봤나보다...");
                 }
             }
         }
