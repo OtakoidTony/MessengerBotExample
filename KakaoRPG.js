@@ -223,6 +223,8 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                         >> Note | 여아 시체 분기 추가.
                                   여아 시체를 보게 되면 게임 진행에서 동료를
                                   구할 수 없음. 플레이어의 HP 변화량은 -10.
+                        >> TODO | 튜토리얼 완료 후 분기를 나눠서 방을 이동한
+                                  경우에만 이 분기가 발현될 수 있도록 조정.
                         */
                         replier.reply("누군가가 있는 것 같다.");
                         replier.reply(sender_message_name + "누... 누구세요...?");
