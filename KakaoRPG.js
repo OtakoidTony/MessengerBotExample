@@ -71,18 +71,26 @@ function UserData(Data) {
     this.init = function(user) {
         if (Data != null) {
             /* Parameters가 Null이 아닌 경우에 UserData.data으로 할당. */
-            this.data["name"]  = Data.name;
-            this.data["money"] = Data.money;
-            this.data["hp"]    = Data.hp;
-            this.data["item"]  = Data.item;
-            this.data["level"] = Data.level;
+            this.data["name"]   = Data.name;
+            this.data["money"]  = Data.money;
+            this.data["hp"]     = Data.hp;
+            this.data["item"]   = Data.item;
+            this.data["level"]  = Data.level;
+            this.data["room"]   = Data.room;
+            this.data["status"] = Data.status;
         } else {
             /* Parameters가 Null인 경우에 UserData.data를 초기값으로 할당. */
-            this.data["name"]  = user;
-            this.data["money"] = first_money;
-            this.data["hp"]    = first_hp;
-            this.data["item"]  = {};
-            this.data["level"] = 1;
+            this.data["name"]   = user;
+            this.data["money"]  = first_money;
+            this.data["hp"]     = first_hp;
+            this.data["item"]   = {};
+            this.data["level"]  = 1;
+            this.data["room"]   = "회색 벽으로 이루어져 있는 외딴 방";
+            this.data["status"] = {};
+            
+            /* UserData.data.status */
+            this.data.status["see_child_corpse"] = false;
+            this.data.status["friends"] = {};
         }
     }
     this.save = function(sender) {
@@ -209,18 +217,27 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             } else {
                 if ( probability <= 10 ) {
                     /* HP 감소 분기 */
-                    replier.reply("누군가가 있는 것 같다.");
-                    replier.reply(sender_message_name + "누... 누구세요...?");
-                    replier.reply("조심스럽게 다가간다.");
-                    replier.reply(sender_message_name + "...!");
-                    replier.reply(sender_message_name + "싫어어어어어어!!!!!!");
+                    if (!sender_data.data.status.see_child_corpse){
+                        /*
+                        >> Date | 2019.11.30. PM 10:03
+                        >> Note | 여아 시체 분기 추가.
+                                  여아 시체를 보게 되면 게임 진행에서 동료를
+                                  구할 수 없음. 플레이어의 HP 변화량은 -10.
+                        */
+                        replier.reply("누군가가 있는 것 같다.");
+                        replier.reply(sender_message_name + "누... 누구세요...?");
+                        replier.reply("조심스럽게 다가간다.");
+                        replier.reply(sender_message_name + "...!");
+                        replier.reply(sender_message_name + "싫어어어어어어!!!!!!");
                     
-                    replier.reply(sender_message_name + "(내 또래인 것 같이 보이는 여자아이가 나체로 칼에 난도질되어 있다.)");
-                    replier.reply("[SYS] "+sender_message_name+"의 체력이 10 감소하였습니다.");
-                    if(sender_data.data.hp==first_hp){
-                        replier.reply("[SYS] 만약에 HP가 0이하로 떨어지면 게임오버하게 됩니다.");
+                        replier.reply(sender_message_name + "(내 또래인 것 같이 보이는 여자아이가 나체로 칼에 난도질되어 있다.)");
+                        replier.reply("[SYS] "+sender_message_name+"의 체력이 10 감소하였습니다.");
+                        if(sender_data.data.hp==first_hp){
+                            replier.reply("[SYS] 만약에 HP가 0이하로 떨어지면 게임오버하게 됩니다.");
+                        }
+                        sender_data.data.hp = sender_data.data.hp - 10;
                     }
-                    sender_data.data.hp = sender_data.data.hp - 10;
+                    
                     /* json 파일로 저장 */
                     sender_data.save(sender);
                 } else {
