@@ -194,8 +194,12 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                 /* json 파일로 저장 */
                 sender_data.save(sender);
             } else {
-                replier.reply("아무것도 없다.");
-                replier.reply(sender_meessage_name+"내가 잘못봤나보다...");
+                if ( probability <= 10 ) {
+                    replier.reply("누군가가 있다.");
+                } else {
+                    replier.reply("아무것도 없다.");
+                    replier.reply(sender_meessage_name+"내가 잘못봤나보다...");
+                }
             }
         }
     }
