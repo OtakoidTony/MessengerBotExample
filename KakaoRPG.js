@@ -56,6 +56,12 @@ const GameItem = [
 var folder = new java.io.File(sdcard + "/" + game_data_folder + "/");
 folder.mkdirs(); /* 풀더를 sdcard에 생성 */
 
+
+/* UserData.data 초기값 관련 */
+var first_money = 5000;
+var first_hp = 300;
+
+/* UserData Object */
 function UserData(Data) {
     /*
     >> Name     | UserData
@@ -73,8 +79,8 @@ function UserData(Data) {
         } else {
             /* Parameters가 Null인 경우에 UserData.data를 초기값으로 할당. */
             this.data["name"]  = user;
-            this.data["money"] = 50000;
-            this.data["hp"]    = 300;
+            this.data["money"] = first_money;
+            this.data["hp"]    = first_hp;
             this.data["item"]  = {};
             this.data["level"] = 1;
         }
@@ -209,10 +215,12 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                     replier.reply(sender_message_name + "...!");
                     replier.reply(sender_message_name + "싫어어어어어어!!!!!!");
                     
-                    replier.reply(sender_message_name + "(내 또래인 것 같이 보이는 여자아이가 칼에 난도질되어 있다.)");
-                    
-                    
-                    
+                    replier.reply(sender_message_name + "(내 또래인 것 같이 보이는 여자아이가 나체로 칼에 난도질되어 있다.)");
+                    replier.reply("[SYS] "+sender_message_name+"의 체력이 10 감소하였습니다.");
+                    if(sender_data.data.hp==first_hp){
+                        replier.reply("[SYS] 만약에 HP가 0이하로 떨어지면 게임오버하게 됩니다.");
+                    }
+                    sender_data.data.hp = sender_data.data.hp - 10;
                     /* json 파일로 저장 */
                     sender_data.save(sender);
                 } else {
