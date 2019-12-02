@@ -79,7 +79,7 @@ function UserData(Data) {
             this.data["hp"]     = first_hp;
             this.data["item"]   = {};
             this.data["level"]  = 1;
-            this.data["room"]   = "회색 벽으로 이루어져 있는 외딴 방";
+            this.data["room"]   = "1";
             this.data["status"] = {};
             
             /* UserData.data.status */
@@ -288,8 +288,13 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                     sender_data.data.status.no_friends = true;
 
                 } else {
-                    if (command(msg)[1] == "붉은 방") {
-
+                    if (command(msg)[1] == "2") {
+                        sender_data.data.room = "2";
+                        replier.reply("2번방에 들어왔다.");
+                    }
+                    if (command(msg)[1] == "3") {
+                        sender_data.data.room = "3";
+                        replier.reply("3번방에 들어왔다.");
                     }
                 }
 
