@@ -289,15 +289,29 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                 if (sender_data.data.level == 1) {
 
                     sender_data.data.status.no_friends = true;
+                    replier.reply("부우우우움. 부우우우움.");
+                    replier.reply("어디선가 휴대폰 진동 소리가 들린다.");
+                    replier.reply("다시 원래 있던 방으로 되돌아가야겠다.")
+                    replier.reply("1번방에 들어왔다.");
 
-                }
-                if (command(msg)[1] == "2") {
-                    sender_data.data.room = "2";
-                    replier.reply("2번방에 들어왔다.");
-                }
-                if (command(msg)[1] == "3") {
-                    sender_data.data.room = "3";
-                    replier.reply("3번방에 들어왔다.");
+
+                    replier.reply("누군가가 있는 것 같다.");
+                    replier.reply(sender_message_name + "누... 누구세요...?");
+                    replier.reply("조심스럽게 다가간다.");
+                    replier.reply(sender_message_name + "...!");
+                    replier.reply(sender_message_name + "싫어어어어어어!!!!!!");
+
+                    replier.reply(sender_message_name + "(내 또래인 것 같이 보이는 여자아이가 나체로 칼에 난도질되어 있다.)");
+
+                } else {
+                    if (command(msg)[1] == "2") {
+                        sender_data.data.room = "2";
+                        replier.reply("2번방에 들어왔다.");
+                    }
+                    if (command(msg)[1] == "3") {
+                        sender_data.data.room = "3";
+                        replier.reply("3번방에 들어왔다.");
+                    }
                 }
             }
         }
@@ -355,12 +369,11 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                     /* HP 감소 분기 */
                     if ((sender_data.data.room == 1) && (!sender_data.data.status.see_child_corpse) && (sender_data.data.status.friends.length == 0)) {
                         /*
-                        >> Date | 2019.11.30. PM 10:03
-                        >> Note | 여아 시체 분기 추가.
-                                  여아 시체를 보게 되면 게임 진행에서 동료를
-                                  구할 수 없음. 플레이어의 HP 변화량은 -10.
-                        >> TODO | 튜토리얼 완료 후 분기를 나눠서 방을 이동한
-                                  경우에만 이 분기가 발현될 수 있도록 조정.
+                        >> Date | 2019.12.02. PM 08:50
+                        >> Note | 스토리 변경.
+                                  여아를 구출해내는 스토리로 변경.
+                                  기존 스토리는 방을 옴겼을 때로 이동.
+                        >> TODO | 스토리 변경사항에 맞게 재구성.
                         */
                         replier.reply("누군가가 있는 것 같다.");
                         replier.reply(sender_message_name + "누... 누구세요...?");
