@@ -189,6 +189,13 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                     /* 처음 발견한 아이템일 때 이벤트 */
                     sender_data.data.item[get_item] = 1;
                     replier.reply(GameItem[sender_data.data.level][get_item]);
+                    if (sender_data.data.level == 1) {
+                        replier.reply("터벅. 터벅. 터벅. 터벅.");
+                        replier.reply(sender_meessage_name + "누... 누구지...?");
+                        replier.reply("끼이익...");
+                        replier.reply("덜컹.");
+                        replier.reply(sender_meessage_name + "누가 문을...");
+                    }
                 }
 
                 /* json 파일로 저장 */
