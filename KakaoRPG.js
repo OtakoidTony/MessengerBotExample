@@ -154,6 +154,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
         if (command(msg)[0] == ":start") {
 
             /* <--------[게임 데이터 생성 시작]--------> */
+            replier.reply("이 게임은 미성년자 혹은 심약자분들께는 다소 유해할 수 있으므로 플레이에 유의해주시기 바랍니다.");
             var sender_data = new UserData();
             sender_data.init(command(msg)[1]);
             sender_data.save(sender);
@@ -180,6 +181,19 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             sender_data.init(sender);
             replier.reply(sender_data.data.item);
         }
+        if (command(msg)[0] == ":room") {
+            /* 플레이어 데이터 로드 */
+            var sender_data = new UserData(load_data(sender));
+            sender_data.init(sender);
+            var sender_message_name = "[" + sender_data.data.name + "] ";
+            if (sender_data.data.status.can_move) {
+                if (sender_data.data.level == 1) {
+                    sender_data.data.status.no_friends = true;
+
+                }
+
+            }
+        }
 
         /* 아이템 탐색 */
         if (msg == ":search") {
@@ -196,14 +210,10 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
 
             /* 확률 = 60 - ( level * 10 ) */
             if ( probability >= (40 + ( sender_data.data.level * 10 ) ) ) {
-
-                /*
-                >> Date     | 2019.11.27. PM 6:48
-                >> Note     | Level에 따른 분기별 조건문을 통합.
-                >> Modified | GameItem : Object -> Array
-                */
                 var get_item = randomItem(Object.keys(GameItem[sender_data.data.level - 1]));
                 replier.reply(get_item + "이 떨어져있다.");
+
+
                 if (get_item in sender_data.data.item){
                     replier.reply("이미 있는 물건이다.");
                     sender_data.data.item[get_item] = sender_data.data.item[get_item] + 1;
