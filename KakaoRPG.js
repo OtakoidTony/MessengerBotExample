@@ -267,7 +267,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             replier.reply(load_data(sender).name);
             var sender_data = new UserData(load_data(sender));
             sender_data.init(sender);
-            replier.reply(sender_data.data.item);
+            replier.reply(Object.keys(sender_data.data.item));
         }
         if (msg == ":map") {
             /* 플레이어 데이터 로드 */
@@ -310,7 +310,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
 
             /* 이벤트 진입 */
             var sender_message_name = "[" + sender_data.data.name + "] ";
-            replier.reply(sender_meessage_name + "이건 뭘까...?");
+            replier.reply(sender_message_name + "이건 뭘까...?");
 
             var probability = Math.random() * 100;
 
@@ -329,12 +329,12 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                     sender_data.data.item[get_item] = 1;
 
 
-                    if (sender_data.data.level == 1 && sender_data.data.item.length == GameItem[sender_data.data.level - 1].length) {
+                    if ((sender_data.data.level == 1) && (sender_data.data.item.length == Object.keys(GameItem[sender_data.data.level - 1]).length)) {
                         replier.reply("터벅. 터벅. 터벅. 터벅.");
-                        replier.reply(sender_meessage_name + "누... 누구지...?");
+                        replier.reply(sender_message_name + "누... 누구지...?");
                         replier.reply("끼이익...");
                         replier.reply("덜컹.");
-                        replier.reply(sender_meessage_name + "누가 문을...");
+                        replier.reply(sender_message_name + "누가 문을...");
 
 
                         replier.reply("[SYS] 방을 이동할 수 있게 되었습니다.");
