@@ -56,6 +56,12 @@ const GameItem = [
 var folder = new java.io.File(sdcard + "/" + game_data_folder + "/");
 folder.mkdirs(); /* 풀더를 sdcard에 생성 */
 
+
+/* UserData.data 초기값 관련 */
+var first_money = 5000;
+var first_hp = 300;
+
+/* UserData Object */
 function UserData(Data) {
     /*
     >> Name     | UserData
@@ -65,18 +71,26 @@ function UserData(Data) {
     this.init = function(user) {
         if (Data != null) {
             /* Parameters가 Null이 아닌 경우에 UserData.data으로 할당. */
-            this.data["name"]  = Data.name;
-            this.data["money"] = Data.money;
-            this.data["hp"]    = Data.hp;
-            this.data["item"]  = Data.item;
-            this.data["level"] = Data.level;
+            this.data["name"]   = Data.name;
+            this.data["money"]  = Data.money;
+            this.data["hp"]     = Data.hp;
+            this.data["item"]   = Data.item;
+            this.data["level"]  = Data.level;
+            this.data["room"]   = Data.room;
+            this.data["status"] = Data.status;
         } else {
             /* Parameters가 Null인 경우에 UserData.data를 초기값으로 할당. */
-            this.data["name"]  = user;
-            this.data["money"] = 50000;
-            this.data["hp"]    = 300;
-            this.data["item"]  = {};
-            this.data["level"] = 1;
+            this.data["name"]   = user;
+            this.data["money"]  = first_money;
+            this.data["hp"]     = first_hp;
+            this.data["item"]   = {};
+            this.data["level"]  = 1;
+            this.data["room"]   = "회색 벽으로 이루어져 있는 외딴 방";
+            this.data["status"] = {};
+            
+            /* UserData.data.status */
+            this.data.status["see_child_corpse"] = false;
+            this.data.status["friends"] = {};
         }
     }
     this.save = function(sender) {
@@ -130,6 +144,13 @@ Room이라는 방으로 이동합니다.\n\
 ┗┓╋┗┛┣┓　┏
 */
 
+function probablity(x, minimum, maximum){
+    if (x>minimum && x<maximum){
+        return true;
+    } else {
+        return false;
+    }
+}
 
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
     var WhiteList = new Array("사용할 단톡방");
@@ -149,8 +170,8 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             replier.reply(sender_meessage_name + "어... 여기는... 어디지?");
             replier.reply(sender_meessage_name + "여기 누구 없어요???");
             replier.reply("주위를 둘러보았지만, 아무도 없었다.");
-            replier.reply(sender_meessage_name + "어흐흐흐흫ㅎ흫흙 ㅠㅠ");
-            replier.reply("[SYS] " + sender_data.data.name + "는 지금 밀폐된 공간에 갇혀있습니다. 어서 탈출하세요!");
+            replier.reply(sender_meessage_name + "어흐흐흐흫ㅎ흫흟 ㅠㅠ");
+            replier.reply("[SYS] " + sender_data.data.name + "는 지금 밀폐된 공간에 갇혀있습니다. 어서 탈출하십시오!");
             replier.reply("[SYS] :help를 입력하면 명령어 목록을 확인할 수 있습니다.");
             /* <--------[게임 여는 스토리 종료]--------> */
         }
@@ -170,7 +191,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             sender_data.init(sender);
 
             /* 이벤트 진입 */
-            var sender_meessage_name = "[" + sender_data.data.name + "] ";
+            var sender_message_name = "[" + sender_data.data.name + "] ";
             replier.reply(sender_meessage_name + "이건 뭘까...?");
 
             var probability = Math.random() * 100;
@@ -201,8 +222,37 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                 /* json 파일로 저장 */
                 sender_data.save(sender);
             } else {
-                replier.reply("아무것도 없다.");
-                replier.reply(sender_meessage_name+"내가 잘못봤나보다...");
+                if ( probability <= 10 ) {
+                    /* HP 감소 분기 */
+                    if (!sender_data.data.status.see_child_corpse){
+                        /*
+                        >> Date | 2019.11.30. PM 10:03
+                        >> Note | 여아 시체 분기 추가.
+                                  여아 시체를 보게 되면 게임 진행에서 동료를
+                                  구할 수 없음. 플레이어의 HP 변화량은 -10.
+                        >> TODO | 튜토리얼 완료 후 분기를 나눠서 방을 이동한
+                                  경우에만 이 분기가 발현될 수 있도록 조정.
+                        */
+                        replier.reply("누군가가 있는 것 같다.");
+                        replier.reply(sender_message_name + "누... 누구세요...?");
+                        replier.reply("조심스럽게 다가간다.");
+                        replier.reply(sender_message_name + "...!");
+                        replier.reply(sender_message_name + "싫어어어어어어!!!!!!");
+                    
+                        replier.reply(sender_message_name + "(내 또래인 것 같이 보이는 여자아이가 나체로 칼에 난도질되어 있다.)");
+                        replier.reply("[SYS] "+sender_message_name+"의 체력이 10 감소하였습니다.");
+                        if(sender_data.data.hp==first_hp){
+                            replier.reply("[SYS] 만약에 HP가 0이하로 떨어지면 게임오버하게 됩니다.");
+                        }
+                        sender_data.data.hp = sender_data.data.hp - 10;
+                    }
+                    
+                    /* json 파일로 저장 */
+                    sender_data.save(sender);
+                } else {
+                    replier.reply("아무것도 없다.");
+                    replier.reply(sender_message_name+"내가 잘못봤나보다...");
+                }
             }
         }
     }
