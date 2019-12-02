@@ -12,7 +12,6 @@ function method_of_least_squares(p){
         sigma_xy = sigma_xy + ( p[i][0] * p[i][1] );
         i = i + 1;
     }
-    
     var b = ((sigma_y1*sigma_x1)-(n*sigma_xy))/((sigma_x1*sigma_x1)-(n*sigma_x2));
     var a = (sigma_y1-(b*sigma_x1))/n;
     return [a, b];
