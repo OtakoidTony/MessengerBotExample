@@ -328,22 +328,27 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
 
             var probability = Math.random() * 100;
 
+            if (sender_data.data.level == 1 && sender_data.data.room == "1" && sender_data.data.status.can_move == true) {
 
-            /* 확률 = 60 - ( level * 10 ) */
-            if (probability >= (40 + (sender_data.data.level * 10))) {
-                var get_item = randomItem(Object.keys(GameItem[sender_data.data.level - 1]));
-                replier.reply(get_item + "이 떨어져있다.");
-
-
-                if (get_item in sender_data.data.item) {
-                    replier.reply("이미 있는 물건이다.");
-                    sender_data.data.item[get_item] = sender_data.data.item[get_item] + 1;
-                } else {
-                    /* 발견한 아이템이 처음 발견한 아이템일 때 이벤트 */
-                    sender_data.data.item[get_item] = 1;
+            } else {
+                /* 확률 = 60 - ( level * 10 ) */
+                if (probability >= (40 + (sender_data.data.level * 10))) {
+                    var get_item = randomItem(Object.keys(GameItem[sender_data.data.level - 1]));
+                    replier.reply(get_item + "이 떨어져있다.");
 
 
-                    if ((sender_data.data.level == 1) && (sender_data.data.item.length == Object.keys(GameItem[sender_data.data.level - 1]).length)) {
+                    if (get_item in sender_data.data.item) {
+                        replier.reply("이미 있는 물건이다.");
+                        sender_data.data.item[get_item] = sender_data.data.item[get_item] + 1;
+                    } else {
+                        /* 발견한 아이템이 처음 발견한 아이템일 때 이벤트 */
+                        sender_data.data.item[get_item] = 1;
+
+
+                        
+
+                    }
+                    if ((sender_data.data.status.can_move == false)&&(sender_data.data.level == 1) && (sender_data.data.item.length == Object.keys(GameItem[sender_data.data.level - 1]).length)) {
                         replier.reply("터벅. 터벅. 터벅. 터벅.");
                         replier.reply(sender_message_name + "누... 누구지...?");
                         replier.reply("끼이익...");
@@ -354,42 +359,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                         replier.reply("[SYS] 방을 이동할 수 있게 되었습니다.");
                         replier.reply("[SYS] 명령어: :room <Room>");
                         sender_data.data.status.can_move = true;
-                        /*
-                         * 분기는 friends.length=0이고 level=1일 때,
-                         * 방을 이동하면 여아 시체 분기로 할당.
-                         */
                     }
-
-                }
-
-                /* json 파일로 저장 */
-                sender_data.save(sender);
-            } else {
-                if (probability <= 10) {
-                    /* HP 감소 분기 */
-                    if ((sender_data.data.room == 1) && (!sender_data.data.status.see_child_corpse) && (sender_data.data.status.friends.length == 0)) {
-                        /*
-                        >> Date | 2019.12.02. PM 08:50
-                        >> Note | 스토리 변경.
-                                  여아를 구출해내는 스토리로 변경.
-                                  기존 스토리는 방을 옴겼을 때로 이동.
-                        >> TODO | 스토리 변경사항에 맞게 재구성.
-                        */
-                        replier.reply("누군가가 있는 것 같다.");
-                        replier.reply(sender_message_name + "누... 누구세요...?");
-                        replier.reply("조심스럽게 다가간다.");
-                        replier.reply(sender_message_name + "...!");
-                        replier.reply(sender_message_name + "싫어어어어어어!!!!!!");
-
-                        replier.reply(sender_message_name + "(내 또래인 것 같이 보이는 여자아이가 나체로 칼에 난도질되어 있다.)");
-                        replier.reply("[SYS] " + sender_message_name + "의 체력이 10 감소하였습니다.");
-                        if (sender_data.data.hp == first_hp) {
-                            replier.reply("[SYS] 만약에 HP가 0이하로 떨어지면 게임오버하게 됩니다.");
-                        }
-                        sender_data.data.see_child_corpse = true;
-                        sender_data.data.hp = sender_data.data.hp - 10;
-                    }
-
                     /* json 파일로 저장 */
                     sender_data.save(sender);
                 } else {
@@ -397,6 +367,8 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                     replier.reply(sender_message_name + "내가 잘못봤나보다...");
                 }
             }
+
+            
         }
     }
 }
