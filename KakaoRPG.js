@@ -32,24 +32,23 @@ function read(folderName, fileName) {
 const game_data_folder = "Game_Data";
 
 /* 게임 아이템 목록 */
-const GameItem = [
-    {
-        '지도': "🗺 이게 있으면 이곳이 어디인지 알 수 있을 것 같다.",
-        '진통제': "💊 아플 때 먹으면 괜찮아 진다.",
-        '밧줄': "무언가를 묶을 때 사용할 수 있다.",
-        '손전등': "🔦 배터리가 있으면 어두운 곳을 볼 수 있다."
-    },
-    {
-        '진통제': "💊 아플 때 먹으면 괜찮아 진다.",
-        '배터리': "🔋 전자기기를 사용할 수 있다.",
-        '가위': "✁ 문방구에서 살 수 있는 흔한 가위다."
-    },
-    {
-        '진통제': "💊 아플 때 먹으면 괜찮아 진다.",
-        '열쇠뭉치': "🔑 엄청나게 많은 열쇠가 있다.",
-        '신분증': "모르는 사람의 신분증이다.",
-        '칼': "🔪 잘못 사용하면 큰일나는 무시무시한 칼이다."
-    }
+const GameItem = [{
+    '지도': "🗺 이게 있으면 이곳이 어디인지 알 수 있을 것 같다.",
+    '진통제': "💊 아플 때 먹으면 괜찮아 진다.",
+    '밧줄': "무언가를 묶을 때 사용할 수 있다.",
+    '손전등': "🔦 배터리가 있으면 어두운 곳을 볼 수 있다."
+},
+{
+    '진통제': "💊 아플 때 먹으면 괜찮아 진다.",
+    '배터리': "🔋 전자기기를 사용할 수 있다.",
+    '가위': "✁ 문방구에서 살 수 있는 흔한 가위다."
+},
+{
+    '진통제': "💊 아플 때 먹으면 괜찮아 진다.",
+    '열쇠뭉치': "🔑 엄청나게 많은 열쇠가 있다.",
+    '신분증': "모르는 사람의 신분증이다.",
+    '칼': "🔪 잘못 사용하면 큰일나는 무시무시한 칼이다."
+}
 ]
 
 
@@ -68,20 +67,20 @@ function UserData(Data) {
     >> Param    | Data : Object or Null
     */
     this.data = {};
-    this.init = function(user) {
+    this.init = function (user) {
         if (Data != null) {
             /* Parameters가 Null이 아닌 경우에 UserData.data으로 할당. */
             this.data = Data;
         } else {
             /* Parameters가 Null인 경우에 UserData.data를 초기값으로 할당. */
-            this.data["name"]   = user;
-            this.data["money"]  = first_money;
-            this.data["hp"]     = first_hp;
-            this.data["item"]   = {};
-            this.data["level"]  = 1;
-            this.data["room"]   = "1";
+            this.data["name"] = user;
+            this.data["money"] = first_money;
+            this.data["hp"] = first_hp;
+            this.data["item"] = {};
+            this.data["level"] = 1;
+            this.data["room"] = "1";
             this.data["status"] = {};
-            
+
             /* UserData.data.status */
             this.data.status["see_child_corpse"] = false;
             this.data.status["friends"] = {};
@@ -89,7 +88,7 @@ function UserData(Data) {
             this.data.status["can_move"] = false;
         }
     }
-    this.save = function(sender) {
+    this.save = function (sender) {
         save(game_data_folder, sender + ".json", JSON.stringify(this.data, null, '\t'));
     }
 }
@@ -214,8 +213,8 @@ Room이라는 방으로 이동합니다.\n\
 ┗┓╋┗┛┣┓　┏
 */
 
-function probablity(x, minimum, maximum){
-    if (x>minimum && x<maximum){
+function probablity(x, minimum, maximum) {
+    if (x > minimum && x < maximum) {
         return true;
     } else {
         return false;
@@ -291,17 +290,15 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
 
                     sender_data.data.status.no_friends = true;
 
-                } else {
-                    if (command(msg)[1] == "2") {
-                        sender_data.data.room = "2";
-                        replier.reply("2번방에 들어왔다.");
-                    }
-                    if (command(msg)[1] == "3") {
-                        sender_data.data.room = "3";
-                        replier.reply("3번방에 들어왔다.");
-                    }
                 }
-
+                if (command(msg)[1] == "2") {
+                    sender_data.data.room = "2";
+                    replier.reply("2번방에 들어왔다.");
+                }
+                if (command(msg)[1] == "3") {
+                    sender_data.data.room = "3";
+                    replier.reply("3번방에 들어왔다.");
+                }
             }
         }
 
@@ -319,12 +316,12 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
 
 
             /* 확률 = 60 - ( level * 10 ) */
-            if ( probability >= (40 + ( sender_data.data.level * 10 ) ) ) {
+            if (probability >= (40 + (sender_data.data.level * 10))) {
                 var get_item = randomItem(Object.keys(GameItem[sender_data.data.level - 1]));
                 replier.reply(get_item + "이 떨어져있다.");
 
 
-                if (get_item in sender_data.data.item){
+                if (get_item in sender_data.data.item) {
                     replier.reply("이미 있는 물건이다.");
                     sender_data.data.item[get_item] = sender_data.data.item[get_item] + 1;
                 } else {
@@ -348,13 +345,13 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                          * 방을 이동하면 여아 시체 분기로 할당.
                          */
                     }
-                    
+
                 }
 
                 /* json 파일로 저장 */
                 sender_data.save(sender);
             } else {
-                if ( probability <= 10 ) {
+                if (probability <= 10) {
                     /* HP 감소 분기 */
                     if ((sender_data.data.room == 1) && (!sender_data.data.status.see_child_corpse) && (sender_data.data.status.friends.length == 0)) {
                         /*
@@ -370,21 +367,21 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                         replier.reply("조심스럽게 다가간다.");
                         replier.reply(sender_message_name + "...!");
                         replier.reply(sender_message_name + "싫어어어어어어!!!!!!");
-                    
+
                         replier.reply(sender_message_name + "(내 또래인 것 같이 보이는 여자아이가 나체로 칼에 난도질되어 있다.)");
-                        replier.reply("[SYS] "+sender_message_name+"의 체력이 10 감소하였습니다.");
-                        if(sender_data.data.hp==first_hp){
+                        replier.reply("[SYS] " + sender_message_name + "의 체력이 10 감소하였습니다.");
+                        if (sender_data.data.hp == first_hp) {
                             replier.reply("[SYS] 만약에 HP가 0이하로 떨어지면 게임오버하게 됩니다.");
                         }
                         sender_data.data.see_child_corpse = true;
                         sender_data.data.hp = sender_data.data.hp - 10;
                     }
-                    
+
                     /* json 파일로 저장 */
                     sender_data.save(sender);
                 } else {
                     replier.reply("아무것도 없다.");
-                    replier.reply(sender_message_name+"내가 잘못봤나보다...");
+                    replier.reply(sender_message_name + "내가 잘못봤나보다...");
                 }
             }
         }
