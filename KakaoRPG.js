@@ -71,13 +71,7 @@ function UserData(Data) {
     this.init = function(user) {
         if (Data != null) {
             /* Parameters가 Null이 아닌 경우에 UserData.data으로 할당. */
-            this.data["name"]   = Data.name;
-            this.data["money"]  = Data.money;
-            this.data["hp"]     = Data.hp;
-            this.data["item"]   = Data.item;
-            this.data["level"]  = Data.level;
-            this.data["room"]   = Data.room;
-            this.data["status"] = Data.status;
+            this.data = Data;
         } else {
             /* Parameters가 Null인 경우에 UserData.data를 초기값으로 할당. */
             this.data["name"]   = user;
@@ -91,6 +85,8 @@ function UserData(Data) {
             /* UserData.data.status */
             this.data.status["see_child_corpse"] = false;
             this.data.status["friends"] = {};
+            this.data.status["no_friends"] = false;
+            this.data.status["can_move"] = false;
         }
     }
     this.save = function(sender) {
@@ -126,7 +122,6 @@ Room이라는 방으로 이동합니다.\n\
 \
 ";
 
-
 /*
 황인 여자아이
 ┏━━━━━┓
@@ -155,6 +150,7 @@ function probablity(x, minimum, maximum){
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
     var WhiteList = new Array("사용할 단톡방");
     if (WhiteList.indexOf(room) != -1 || isGroupChat == false) {
+
         if (command(msg)[0] == ":start") {
 
             /* <--------[게임 데이터 생성 시작]--------> */
@@ -185,6 +181,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             replier.reply(sender_data.data.item);
         }
 
+        /* 아이템 탐색 */
         if (msg == ":search") {
             /* 플레이어 데이터 로드 */
             var sender_data = new UserData(load_data(sender));
@@ -195,6 +192,9 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             replier.reply(sender_meessage_name + "이건 뭘까...?");
 
             var probability = Math.random() * 100;
+
+
+            /* 확률 = 60 - ( level * 10 ) */
             if ( probability >= (40 + ( sender_data.data.level * 10 ) ) ) {
 
                 /*
@@ -206,17 +206,29 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                 replier.reply(get_item + "이 떨어져있다.");
                 if (get_item in sender_data.data.item){
                     replier.reply("이미 있는 물건이다.");
+                    sender_data.data.item[get_item] = sender_data.data.item[get_item] + 1;
                 } else {
-                    /* 처음 발견한 아이템일 때 이벤트 */
+                    /* 발견한 아이템이 처음 발견한 아이템일 때 이벤트 */
                     sender_data.data.item[get_item] = 1;
-                    replier.reply(GameItem[sender_data.data.level][get_item]);
-                    if (sender_data.data.level == 1) {
+
+
+                    if (sender_data.data.level == 1 && sender_data.data.item.length == GameItem[sender_data.data.level - 1].length) {
                         replier.reply("터벅. 터벅. 터벅. 터벅.");
                         replier.reply(sender_meessage_name + "누... 누구지...?");
                         replier.reply("끼이익...");
                         replier.reply("덜컹.");
                         replier.reply(sender_meessage_name + "누가 문을...");
+
+
+                        replier.reply("[SYS] 방을 이동할 수 있게 되었습니다.");
+                        replier.reply("[SYS] 명령어: :room <Room>");
+                        sender_data.data.status.can_move = true;
+                        /*
+                         * 분기는 friends.length=0이고 level=1일 때,
+                         * 방을 이동하면 여아 시체 분기로 할당.
+                         */
                     }
+                    
                 }
 
                 /* json 파일로 저장 */
@@ -224,7 +236,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             } else {
                 if ( probability <= 10 ) {
                     /* HP 감소 분기 */
-                    if (!sender_data.data.status.see_child_corpse){
+                    if ((!sender_data.data.status.see_child_corpse) && (sender_data.data.status.friends.length==0)) {
                         /*
                         >> Date | 2019.11.30. PM 10:03
                         >> Note | 여아 시체 분기 추가.
@@ -244,6 +256,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                         if(sender_data.data.hp==first_hp){
                             replier.reply("[SYS] 만약에 HP가 0이하로 떨어지면 게임오버하게 됩니다.");
                         }
+                        sender_data.data.see_child_corpse = true;
                         sender_data.data.hp = sender_data.data.hp - 10;
                     }
                     
