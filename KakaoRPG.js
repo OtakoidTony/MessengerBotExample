@@ -226,6 +226,7 @@ var game_map = "\
 var Game = {};
 Game.Ending = {};
 Game.Ending.no_friends = function (sender_data, replier) {
+    var sender_message_name = "[" + sender_data.data.name + "] ";
     sender_data.data.status.no_friends = true;
     replier.reply("부우우우움. 부우우우움.");
     replier.reply("어디선가 휴대폰 진동 소리가 들린다.");
@@ -240,6 +241,21 @@ Game.Ending.no_friends = function (sender_data, replier) {
     replier.reply(sender_message_name + "싫어어어어어어!!!!!!");
 
     replier.reply(sender_message_name + "(내 또래인 것 같이 보이는 여자아이가 나체로 칼에 난도질되어 있다.)");
+    replier.reply("[???] 어떤 귀여운 녀석이 또 소리를 지르는걸까~?");
+    replier.reply("누군가가 터벅터벅 들어온다.");
+    replier.reply("[???] 아~ 이제 일어났구나~?");
+    replier.reply("[???] 아저씨랑 재밌는거 하자꾸나~~!");
+    replier.reply(sender_message_name + "누구세요...?!");
+    replier.reply("[???] 아저씨? 아저씨는 말이야...");
+    replier.reply("순간, 내 앞에 있는 죽은 여자애가 눈에 들어왔다.");
+    replier.reply("[???] 어이구야~ 못 볼 것을 본 것 같네?");
+    replier.reply(sender_message_name + "싫어어어어어어!!!!!!");
+    replier.reply("[???] 쳇,");
+    replier.reply("슈컹!");
+    replier.reply(sender_message_name + "왜 나한테 이런 ㅇ...");
+    replier.reply("그리고 이틀 뒤..." + sender_data.data.name + "네 집...");
+    replier.reply("[" + sender_data.data.name + "의 어머니] 네???????");
+    replier.reply("[경]")
 }
 Game.Sys = {};
 Game.Sys.Script = {};
@@ -353,12 +369,12 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             sender_data.save(sender);
             /* <--------[게임 데이터 생성 완료]--------> */
 
-            replier.reply("게임데이터가 생성되었습니다.");
-            var sender_meessage_name = "[" + sender_data.data.name + "] ";
-            replier.reply(sender_meessage_name + "어... 여기는... 어디지?");
-            replier.reply(sender_meessage_name + "여기 누구 없어요???");
+            replier.reply("[SYS] 게임데이터가 생성되었습니다.");
+            var sender_message_name = "[" + sender_data.data.name + "] ";
+            replier.reply(sender_message_name + "어... 여기는... 어디지?");
+            replier.reply(sender_message_name + "여기 누구 없어요???");
             replier.reply("주위를 둘러보았지만, 아무도 없었다.");
-            replier.reply(sender_meessage_name + "어흐흐흐흫ㅎ흫흟 ㅠㅠ");
+            replier.reply(sender_message_name + "어흐흐흐흫ㅎ흫흟 ㅠㅠ");
 
             if ((parseInt(sender_data.data.name[sender_data.data.name.length - 1].charCodeAt(0).toString(16), 16) - parseInt("AC00", 16)) % 28 == 0) {
                 replier.reply("[SYS] " + sender_data.data.name + "는 지금 밀폐된 공간에 갇혀있습니다. 어서 탈출하십시오!");
