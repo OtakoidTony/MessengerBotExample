@@ -1,9 +1,5 @@
 var sdcard = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
 
-function randomItem(a) {
-    return a[Math.floor(Math.random() * a.length)];
-}
-
 function save(folderName, fileName, str) {
     var c = new java.io.File(sdcard + "/" + folderName + "/" + fileName);
     var d = new java.io.FileOutputStream(c);
@@ -27,4 +23,32 @@ function read(folderName, fileName) {
     d.close();
     e.close();
     return f.toString();
+}
+
+var folder = new java.io.File(sdcard + "/RoomPoint/");
+folder.mkdirs();
+
+var Point = load(folder, "Point.json"); // 출석부 객체
+if (Point == null) {
+    Point = {};
+} else {
+    Point = JSON.parse(Point);
+}
+
+function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
+    try {
+        if (isGroupChat) {
+            if (!(room in Point)) {
+                Attendance[room] = {}; /* Point에 없는 채팅방이면 빈 객체를 생성 */
+            }
+            
+        }
+    } catch (e) {
+        save(folder, "Point.json", JSON.stringify(Attendance, null, '\t'));
+        Log.debug(e);
+    }
+}
+
+function onStartCompile() {
+    save(folder, "Point.json", JSON.stringify(Attendance, null, '\t'));
 }
