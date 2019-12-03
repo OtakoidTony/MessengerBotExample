@@ -33,7 +33,7 @@ Utils.getWithUAfromWeb = function(url) {
     try {
         var url = new java.net.URL(url);
         var con = url.openConnection();
-        con.setRequestProperty("User-Agent", "\'User-Agent\': \'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36\'");
+        con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36");
         if (con != null) {
             con.setConnectTimeout(5000);
             con.setUseCaches(false);
@@ -70,7 +70,7 @@ Utils.getPostFromWeb = function(url, parameters) {
         var con = url.openConnection();
         
         con.setRequestMethod("POST");
-        con.setRequestProperty("User-Agent", "\'User-Agent\': \'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36\'");
+        con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36");
         con.setDoOutput(true);
         if (con != null) {
             con.setConnectTimeout(5000);
