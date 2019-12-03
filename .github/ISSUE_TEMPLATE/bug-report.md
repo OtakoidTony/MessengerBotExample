@@ -12,7 +12,7 @@ assignees: OtakoidTony
 
 **Development Environment**
 ```
-Device Model :
+Device Model : 
 Package Name : 
 OS Version   : 
 ```
