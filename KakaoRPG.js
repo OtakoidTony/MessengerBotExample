@@ -31,7 +31,9 @@ function read(folderName, fileName) {
 
 const game_data_folder = "Game_Data";
 
-/* 게임 아이템 목록 */
+/**
+ * 게임 아이템 목록
+ * */
 const GameItem = [{
     '지도': "🗺 이게 있으면 이곳이 어디인지 알 수 있을 것 같다.",
     '진통제': "💊 아플 때 먹으면 괜찮아 진다.",
@@ -91,7 +93,7 @@ function UserData(Data) {
         }
     }
     /**
-     * Save UserData object as json file.
+     * Save UserData.data object as json file.
      * @param {any} sender
      */
     this.save = function (sender) {
@@ -101,7 +103,7 @@ function UserData(Data) {
 
 /**
  * Load a json file named [sender] in game_data_folder
- * and then return a UserData object.
+ * and then return a UserData.data object.
  * @param {string} sender
  * @returns {UserData}
  */
@@ -245,9 +247,10 @@ var game_map = "\
 var Game = {};
 Game.Ending = {};
 /**
- * Bad Ending
- * @param {UserData} sender_data
- * @param {any} replier
+ * Bad Ending #1
+ * @param {any} sender_data
+ * @param {any} replier 응답용 객체. replier.reply("메시지") 또는
+ * replier.reply("방이름","메시지")으로 전송
  */
 Game.Ending.no_friends = function (sender_data, replier) {
     var sender_message_name = "[" + sender_data.data.name + "] ";
@@ -385,9 +388,10 @@ Game.search = function (sender, replier) {
  * @param {string} msg 메시지 내용
  * @param {string} sender 전송자 닉네임
  * @param {boolean} isGroupChat 단체/오픈채팅 여부
- * @param {any} replier 응답용 객체. replier.reply("메시지") 또는 replier.reply("방이름","메시지")로 전송
+ * @param {any} replier 응답용 객체. replier.reply("메시지") 또는
+ * replier.reply("방이름","메시지")으로 전송
  * @param {any} ImageDB ImageDB.getProfileImage(): 전송자의 프로필 이미지를 Base64로 인코딩하여 반환
- * @param {string} packageName 메시지를 받은 메신저의 패키지 이름.
+ * @param {string} packageName 메시지를 받은 메신저의 패키지 이름
  * @param {number} threadId 현재 쓰레드의 순번(스크립트별로 따로 매김) Api,Utils객체에 대해서는 설정의 도움말 참조
  */
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
