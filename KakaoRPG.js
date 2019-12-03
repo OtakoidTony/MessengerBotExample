@@ -255,7 +255,7 @@ Game.Ending.no_friends = function (sender_data, replier) {
     replier.reply(sender_message_name + "왜 나한테 이런 ㅇ...");
     replier.reply("그리고 이틀 뒤..." + sender_data.data.name + "네 집...");
     replier.reply("[" + sender_data.data.name + "의 어머니] 네???????");
-    replier.reply("[경]")
+    replier.reply("[경찰] ")
 }
 Game.Sys = {};
 Game.Sys.Script = {};
