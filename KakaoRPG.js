@@ -105,21 +105,7 @@ function command(cmd) {
     return [cmd_str, param];
 }
 
-var commands_help = "[Command]\n\
-:start <Nickname>\n\
-Nickname이라는 이름으로 게임을 시작합니다.\n\
-:view\n\
-현재 아이의 상태를 확인합니다.\n\
-:items\n\
-소지하고 있는 아이템의 목록을 확인합니다.\n\
-:search\n\
-근처에 떨어져 있는 물건이 있는지 찾아봅니다.\n\
-:map\n\
-지도를 소지하고 있는 경우 현재 방 위치를 확인합니다.\n\
-:room <Room>\n\
-Room이라는 방으로 이동합니다.\n\
-\
-";
+
 
 /*
 황인 여자아이
@@ -255,6 +241,49 @@ Game.Ending.no_friends = function (sender_data, replier) {
 
     replier.reply(sender_message_name + "(내 또래인 것 같이 보이는 여자아이가 나체로 칼에 난도질되어 있다.)");
 }
+Game.Sys = {};
+Game.Sys.Script = {};
+Game.Sys.Script.Commands = {};
+Game.Sys.Script.Commands.New = {};
+Game.Sys.Script.Commands.Help = {};
+
+Game.Sys.Script.Commands.New.room = "\
+[SYS] 방을 이동할 수 있게 되었습니다.\n\
+[SYS] 명령어: :room <Room>";
+
+Game.Sys.Script.Commands.Help.start = "\
+[SYS] 명령어: :start <Nickname>\n\
+[SYS] Nickname이라는 이름으로 게임을 시작합니다.";
+
+Game.Sys.Script.Commands.Help.view = "\
+[SYS] 명령어: :view\n\
+[SYS] 현재 아이의 상태를 확인합니다.";
+
+Game.Sys.Script.Commands.Help.items = "\
+[SYS] 명령어: :items\n\
+[SYS] 소지하고 있는 아이템의 목록을 확인합니다.";
+
+Game.Sys.Script.Commands.Help.map = "\
+[SYS] 명령어: :map\n\
+[SYS] 근처에 떨어져 있는 물건이 있는지 찾아봅니다.";
+
+Game.Sys.Script.Commands.Help.room = "\
+[SYS] 명령어: :room <Room>\n\
+[SYS] Room이라는 방으로 이동합니다.";
+
+var commands_help = "[Command]\n\
+:start <Nickname>\n\
+Nickname이라는 이름으로 게임을 시작합니다.\n\
+:view\n\
+현재 아이의 상태를 확인합니다.\n\
+:items\n\
+소지하고 있는 아이템의 목록을 확인합니다.\n\
+:search\n\
+근처에 떨어져 있는 물건이 있는지 찾아봅니다.\n\
+:map\n\
+지도를 소지하고 있는 경우 현재 방 위치를 확인합니다.\n\
+:room <Room>\n\
+Room이라는 방으로 이동합니다.";
 
 Game.search = function (sender, replier) {
     /* 플레이어 데이터 로드 */
@@ -267,8 +296,8 @@ Game.search = function (sender, replier) {
 
     var probability = Math.random() * 100;
 
-    if (sender_data.data.level == 1 && sender_data.data.room == "1" &&
-        sender_data.data.status.can_move && sender_data.data.status.friends.length == 0) {
+    if (sender_data.data.level == 2 && sender_data.data.room == "1" &&
+        sender_data.data.status.can_move && Object.keys(sender_data.data.status.friends).length == 0) {
         /*
         >> Date | 2019.12.03. PM 03:08
         >> TODO | 같은 나이 또래의 여아를 구출하는 장면 구현.
@@ -284,7 +313,7 @@ Game.search = function (sender, replier) {
             }
             
             if (get_item in sender_data.data.item) {
-                replier.reply("이미 있는 물건이다.");
+                replier.reply("이미 있는 거다.");
                 sender_data.data.item[get_item] = sender_data.data.item[get_item] + 1;
             } else {
                 /* 발견한 아이템이 처음 발견한 아이템일 때 이벤트 */
@@ -297,11 +326,9 @@ Game.search = function (sender, replier) {
                 replier.reply("끼이익...");
                 replier.reply("덜컹.");
                 replier.reply(sender_message_name + "누가 문을...");
-
-
-                replier.reply("[SYS] 방을 이동할 수 있게 되었습니다.");
-                replier.reply("[SYS] 명령어: :room <Room>");
+                replier.reply(Game.Sys.Script.Commands.New.room);
                 sender_data.data.status.can_move = true;
+                sender_data.data.level = 2;
             }
             /* json 파일로 저장 */
             sender_data.save(sender);
@@ -357,7 +384,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             if ('지도' in sender_data.data.item) {
                 replier.reply(game_map);
             } else {
-                replier.reply(sender_message_name + "지도가 없다.")
+                replier.reply(sender_message_name + "지도가 없어.")
             }
         }
         if (command(msg)[0] == ":room") {
