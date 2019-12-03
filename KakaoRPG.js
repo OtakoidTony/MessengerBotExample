@@ -392,7 +392,8 @@ Game.search = function (sender, replier) {
  * replier.reply("방이름","메시지")으로 전송
  * @param {any} ImageDB ImageDB.getProfileImage(): 전송자의 프로필 이미지를 Base64로 인코딩하여 반환
  * @param {string} packageName 메시지를 받은 메신저의 패키지 이름
- * @param {number} threadId 현재 쓰레드의 순번(스크립트별로 따로 매김) Api,Utils객체에 대해서는 설정의 도움말 참조
+ * @param {number} threadId 현재 쓰레드의 순번(스크립트별로 따로 매김)
+ * Api,Utils객체에 대해서는 설정의 도움말 참조
  */
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
     var WhiteList = new Array("사용할 단톡방");
