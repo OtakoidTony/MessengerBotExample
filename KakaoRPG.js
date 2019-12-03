@@ -51,7 +51,7 @@ const GameItem = [{
 }
 ]
 
-
+    
 var folder = new java.io.File(sdcard + "/" + game_data_folder + "/");
 folder.mkdirs(); /* 풀더를 sdcard에 생성 */
 
@@ -237,10 +237,86 @@ var game_map = "\
 　　┗━━━━━━┛\n\
 "
 
+var Game = {};
+Game.Ending = {};
+Game.Ending.no_friends = function (sender_data, replier) {
+    sender_data.data.status.no_friends = true;
+    replier.reply("부우우우움. 부우우우움.");
+    replier.reply("어디선가 휴대폰 진동 소리가 들린다.");
+    replier.reply("다시 원래 있던 방으로 되돌아가야겠다.");
+    replier.reply("1번방에 들어왔다.");
+
+
+    replier.reply("누군가가 있는 것 같다.");
+    replier.reply(sender_message_name + "누... 누구세요...?");
+    replier.reply("조심스럽게 다가간다.");
+    replier.reply(sender_message_name + "...!");
+    replier.reply(sender_message_name + "싫어어어어어어!!!!!!");
+
+    replier.reply(sender_message_name + "(내 또래인 것 같이 보이는 여자아이가 나체로 칼에 난도질되어 있다.)");
+}
+
+Game.search = function (sender, replier) {
+    /* 플레이어 데이터 로드 */
+    var sender_data = new UserData(load_data(sender));
+    sender_data.init(sender);
+
+    /* 이벤트 진입 */
+    var sender_message_name = "[" + sender_data.data.name + "] ";
+    replier.reply(sender_message_name + "이건 뭘까...?");
+
+    var probability = Math.random() * 100;
+
+    if (sender_data.data.level == 1 && sender_data.data.room == "1" &&
+        sender_data.data.status.can_move && sender_data.data.status.friends.length == 0) {
+        /*
+        >> Date | 2019.12.03. PM 03:08
+        >> TODO | 같은 나이 또래의 여아를 구출하는 장면 구현.
+        */
+    } else {
+        /* 확률 = 60 - ( level * 10 ) */
+        if (probability >= (40 + (sender_data.data.level * 10))) {
+            var get_item = randomItem(Object.keys(GameItem[sender_data.data.level - 1]));
+            if ((parseInt(get_item[get_item.length - 1].charCodeAt(0).toString(16), 16) - parseInt("AC00", 16)) % 28 == 0) {
+                replier.reply(get_item + "가 떨어져있다.");
+            } else {
+                replier.reply(get_item + "이 떨어져있다.");
+            }
+            
+            if (get_item in sender_data.data.item) {
+                replier.reply("이미 있는 물건이다.");
+                sender_data.data.item[get_item] = sender_data.data.item[get_item] + 1;
+            } else {
+                /* 발견한 아이템이 처음 발견한 아이템일 때 이벤트 */
+                sender_data.data.item[get_item] = 1;
+                replier.reply(GameItem[sender_data.data.level - 1][get_item]);
+            }
+            if ((sender_data.data.status.can_move == false) && (sender_data.data.level == 1) && (Object.keys(sender_data.data.item).length == Object.keys(GameItem[sender_data.data.level - 1]).length)) {
+                replier.reply("터벅. 터벅. 터벅. 터벅.");
+                replier.reply(sender_message_name + "누... 누구지...?");
+                replier.reply("끼이익...");
+                replier.reply("덜컹.");
+                replier.reply(sender_message_name + "누가 문을...");
+
+
+                replier.reply("[SYS] 방을 이동할 수 있게 되었습니다.");
+                replier.reply("[SYS] 명령어: :room <Room>");
+                sender_data.data.status.can_move = true;
+            }
+            /* json 파일로 저장 */
+            sender_data.save(sender);
+        } else {
+            replier.reply("아무것도 없다.");
+            replier.reply(sender_message_name + "내가 잘못봤나보다...");
+        }
+    }
+}
+
+
+
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
     var WhiteList = new Array("사용할 단톡방");
     if (WhiteList.indexOf(room) != -1 || isGroupChat == false) {
-
         if (command(msg)[0] == ":start") {
 
             /* <--------[게임 데이터 생성 시작]--------> */
@@ -256,10 +332,14 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             replier.reply(sender_meessage_name + "여기 누구 없어요???");
             replier.reply("주위를 둘러보았지만, 아무도 없었다.");
             replier.reply(sender_meessage_name + "어흐흐흐흫ㅎ흫흟 ㅠㅠ");
-            replier.reply("[SYS] " + sender_data.data.name + "는 지금 밀폐된 공간에 갇혀있습니다. 어서 탈출하십시오!");
+
+            if ((parseInt(sender_data.data.name[sender_data.data.name.length - 1].charCodeAt(0).toString(16), 16) - parseInt("AC00", 16)) % 28 == 0) {
+                replier.reply("[SYS] " + sender_data.data.name + "는 지금 밀폐된 공간에 갇혀있습니다. 어서 탈출하십시오!");
+            } else {
+                replier.reply("[SYS] " + sender_data.data.name + "은 지금 밀폐된 공간에 갇혀있습니다. 어서 탈출하십시오!");
+            }
             replier.reply("[SYS] :help를 입력하면 명령어 목록을 확인할 수 있습니다.");
         }
-
         if (msg == ":help") {
             replier.reply(commands_help);
         }
@@ -287,22 +367,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             var sender_message_name = "[" + sender_data.data.name + "] ";
             if (sender_data.data.status.can_move) {
                 if (sender_data.data.level == 1) {
-
-                    sender_data.data.status.no_friends = true;
-                    replier.reply("부우우우움. 부우우우움.");
-                    replier.reply("어디선가 휴대폰 진동 소리가 들린다.");
-                    replier.reply("다시 원래 있던 방으로 되돌아가야겠다.")
-                    replier.reply("1번방에 들어왔다.");
-
-
-                    replier.reply("누군가가 있는 것 같다.");
-                    replier.reply(sender_message_name + "누... 누구세요...?");
-                    replier.reply("조심스럽게 다가간다.");
-                    replier.reply(sender_message_name + "...!");
-                    replier.reply(sender_message_name + "싫어어어어어어!!!!!!");
-
-                    replier.reply(sender_message_name + "(내 또래인 것 같이 보이는 여자아이가 나체로 칼에 난도질되어 있다.)");
-
+                    Game.Ending.no_friends(sender_data, replier);
                 } else {
                     if (command(msg)[1] == "2") {
                         sender_data.data.room = "2";
@@ -315,60 +380,8 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                 }
             }
         }
-
-        /* 아이템 탐색 */
         if (msg == ":search") {
-            /* 플레이어 데이터 로드 */
-            var sender_data = new UserData(load_data(sender));
-            sender_data.init(sender);
-
-            /* 이벤트 진입 */
-            var sender_message_name = "[" + sender_data.data.name + "] ";
-            replier.reply(sender_message_name + "이건 뭘까...?");
-
-            var probability = Math.random() * 100;
-
-            if (sender_data.data.level == 1 && sender_data.data.room == "1" && sender_data.data.status.can_move == true) {
-
-            } else {
-                /* 확률 = 60 - ( level * 10 ) */
-                if (probability >= (40 + (sender_data.data.level * 10))) {
-                    var get_item = randomItem(Object.keys(GameItem[sender_data.data.level - 1]));
-                    replier.reply(get_item + "이 떨어져있다.");
-
-
-                    if (get_item in sender_data.data.item) {
-                        replier.reply("이미 있는 물건이다.");
-                        sender_data.data.item[get_item] = sender_data.data.item[get_item] + 1;
-                    } else {
-                        /* 발견한 아이템이 처음 발견한 아이템일 때 이벤트 */
-                        sender_data.data.item[get_item] = 1;
-
-
-                        
-
-                    }
-                    if ((sender_data.data.status.can_move == false)&&(sender_data.data.level == 1) && (sender_data.data.item.length == Object.keys(GameItem[sender_data.data.level - 1]).length)) {
-                        replier.reply("터벅. 터벅. 터벅. 터벅.");
-                        replier.reply(sender_message_name + "누... 누구지...?");
-                        replier.reply("끼이익...");
-                        replier.reply("덜컹.");
-                        replier.reply(sender_message_name + "누가 문을...");
-
-
-                        replier.reply("[SYS] 방을 이동할 수 있게 되었습니다.");
-                        replier.reply("[SYS] 명령어: :room <Room>");
-                        sender_data.data.status.can_move = true;
-                    }
-                    /* json 파일로 저장 */
-                    sender_data.save(sender);
-                } else {
-                    replier.reply("아무것도 없다.");
-                    replier.reply(sender_message_name + "내가 잘못봤나보다...");
-                }
-            }
-
-            
+            Game.search(sender, replier);
         }
     }
 }
