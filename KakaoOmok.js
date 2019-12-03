@@ -52,8 +52,14 @@ Array.max_loc_array = function(array){
     }
     return output;
 }
-    
-
+function randomItem(a) {
+    return a[Math.floor(Math.random() * a.length)];
+}
+function sign(x){
+    if(x <0){return -1;}
+    if(x==0){return 0 ;}
+    if(x >0){return 1 ;}
+}
 
 function Omok(x, y) {
     this.board = make2d_array(x, y);
@@ -141,7 +147,6 @@ function Omok(x, y) {
     this.placement = function(x, y, com) {
         if (com) {
             this.board[x][y] = '●';
-            this.numeric_board[x][y] = 0;
             this.plus(x + 1, y);
             this.plus(x - 1, y);
             this.plus(x, y + 1);
@@ -152,7 +157,6 @@ function Omok(x, y) {
             this.plus(x - 1, y - 1);
         } else {
             this.board[x][y] = '○';
-            this.numeric_board[x][y] = 0;
             this.minus(x + 1, y);
             this.minus(x - 1, y);
             this.minus(x, y + 1);
@@ -173,15 +177,19 @@ function Omok(x, y) {
             temp_min.push(Array.min(this.numeric_board[i]));
             i=i+1;
         }
-        where = Array.min_loc(temp_min);
+        where = randomItem(Array.min_loc_array(temp_min));
         console.log(where);
         var where_x = where;
         temp_min = this.numeric_board[where_x];
         console.log(temp_min);
-        var where_y = Array.min_loc(temp_min);
+        var where_y = randomItem(Array.min_loc_array(temp_min));
         this.placement(where_x,where_y,true);
         console.log(this.board);
     }
+}
+
+Omok.prototype.analyze = function(board, numeric_board){
+    var result = numeric_board;
 }
 
 var omok = new Omok(8,8);
