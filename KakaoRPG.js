@@ -55,18 +55,20 @@ const GameItem = [{
 var folder = new java.io.File(sdcard + "/" + game_data_folder + "/");
 folder.mkdirs(); /* 풀더를 sdcard에 생성 */
 
-
-/* UserData.data 초기값 관련 */
 var first_money = 5000;
 var first_hp = 300;
 
-/* UserData Object */
+/**
+ * 
+ * @param {any} Data
+ */
 function UserData(Data) {
-    /*
-    >> Name     | UserData
-    >> Param    | Data : Object or Null
-    */
     this.data = {};
+
+    /**
+     * Initialize userdata.
+     * @param {string} user user is the name in [ :start <name> ]
+     */
     this.init = function (user) {
         if (Data != null) {
             /* Parameters가 Null이 아닌 경우에 UserData.data으로 할당. */
@@ -88,17 +90,31 @@ function UserData(Data) {
             this.data.status["can_move"] = false;
         }
     }
+    /**
+     * Save UserData object as json file.
+     * @param {any} sender
+     */
     this.save = function (sender) {
         save(game_data_folder, sender + ".json", JSON.stringify(this.data, null, '\t'));
     }
 }
 
+/**
+ * Load a json file named [sender] in game_data_folder
+ * and then return a UserData object.
+ * @param {string} sender
+ * @returns {UserData}
+ */
 function load_data(sender) {
     var data = read(game_data_folder, sender + ".json");
     data = JSON.parse(data);
     return data;
 }
 
+/**
+ * 
+ * @param {string} cmd
+ */
 function command(cmd) {
     var cmd_str = cmd.split(' ')[0];
     var param = cmd.substring(cmd_str.length + 1, cmd.length);
@@ -122,7 +138,7 @@ function command(cmd) {
 ┗━━━━━┛
 １２３４５６７８９
 　　　　　　　　　　　　　　　　　　　　　　　;
-　☠ ☢ ☣ ♲‘ ’ “ ” ‹ › « » 【 】 〖 〗 「 」 『 』 〈 〉 《 》
+　
  👧    ;
 ┏━━━━┓
 ┃１ 👧       ┃　┏━━━━┓
@@ -199,6 +215,9 @@ function command(cmd) {
 ┗┓╋┗┛┣┓　┏
 */
 
+
+
+
 function probablity(x, minimum, maximum) {
     if (x > minimum && x < maximum) {
         return true;
@@ -225,6 +244,11 @@ var game_map = "\
 
 var Game = {};
 Game.Ending = {};
+/**
+ * Bad Ending
+ * @param {UserData} sender_data
+ * @param {any} replier
+ */
 Game.Ending.no_friends = function (sender_data, replier) {
     var sender_message_name = "[" + sender_data.data.name + "] ";
     sender_data.data.status.no_friends = true;
@@ -262,7 +286,6 @@ Game.Sys.Script = {};
 Game.Sys.Script.Commands = {};
 Game.Sys.Script.Commands.New = {};
 Game.Sys.Script.Commands.Help = {};
-
 Game.Sys.Script.Commands.New.room = "\
 [SYS] 방을 이동할 수 있게 되었습니다.\n\
 [SYS] 명령어: :room <Room>";
@@ -356,7 +379,17 @@ Game.search = function (sender, replier) {
 }
 
 
-
+/**
+ * 
+ * @param {string} room 메시지를 받은 방 이름
+ * @param {string} msg 메시지 내용
+ * @param {string} sender 전송자 닉네임
+ * @param {boolean} isGroupChat 단체/오픈채팅 여부
+ * @param {any} replier 응답용 객체. replier.reply("메시지") 또는 replier.reply("방이름","메시지")로 전송
+ * @param {any} ImageDB ImageDB.getProfileImage(): 전송자의 프로필 이미지를 Base64로 인코딩하여 반환
+ * @param {string} packageName 메시지를 받은 메신저의 패키지 이름.
+ * @param {number} threadId 현재 쓰레드의 순번(스크립트별로 따로 매김) Api,Utils객체에 대해서는 설정의 도움말 참조
+ */
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
     var WhiteList = new Array("사용할 단톡방");
     if (WhiteList.indexOf(room) != -1 || isGroupChat == false) {
@@ -364,6 +397,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
 
             /* <--------[게임 데이터 생성 시작]--------> */
             replier.reply("🔞 경고! 이 게임은 미성년자 혹은 심약자분들께는 다소 유해할 수 있으므로 플레이에 유의해주시기 바랍니다.");
+
             var sender_data = new UserData();
             sender_data.init(command(msg)[1]);
             sender_data.save(sender);
