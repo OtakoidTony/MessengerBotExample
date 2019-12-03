@@ -320,7 +320,7 @@ Game.search = function (sender, replier) {
                 sender_data.data.item[get_item] = 1;
                 replier.reply(GameItem[sender_data.data.level - 1][get_item]);
             }
-            if ((sender_data.data.status.can_move == false) && (sender_data.data.level == 1) && (Object.keys(sender_data.data.item).length == Object.keys(GameItem[sender_data.data.level - 1]).length)) {
+            if ((sender_data.data.level == 1) && (Object.keys(sender_data.data.item).length == Object.keys(GameItem[sender_data.data.level - 1]).length)) {
                 replier.reply("터벅. 터벅. 터벅. 터벅.");
                 replier.reply(sender_message_name + "누... 누구지...?");
                 replier.reply("끼이익...");
