@@ -28,7 +28,7 @@ function read(folderName, fileName) {
 var folder = new java.io.File(sdcard + "/RoomPoint/");
 folder.mkdirs();
 
-var Point = load(folder, "Point.json"); // 출석부 객체
+var Point = load(folder, "Point.json");
 if (Point == null) {
     Point = {};
 } else {
@@ -39,16 +39,17 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
     try {
         if (isGroupChat) {
             if (!(room in Point)) {
-                Attendance[room] = {}; /* Point에 없는 채팅방이면 빈 객체를 생성 */
+                Point[room] = {};
             }
-            
+            if (sender in Point[room]){
+                Point[room][sender]=Point[room][sender]+1;
+            }else{
+                Point[room][sender]=1;
+            }
+            save(folder, "Point.json", JSON.stringify(Point, null, '\t'));
         }
     } catch (e) {
-        save(folder, "Point.json", JSON.stringify(Attendance, null, '\t'));
+        save(folder, "Point.json", JSON.stringify(Point, null, '\t'));
         Log.debug(e);
     }
-}
-
-function onStartCompile() {
-    save(folder, "Point.json", JSON.stringify(Attendance, null, '\t'));
 }
