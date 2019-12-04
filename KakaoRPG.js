@@ -216,8 +216,9 @@ function command(cmd) {
 ┗┓╋┗┛┣┓　┏
 */
 
-
-
+function wait(second) {
+    java.lang.Thread.sleep(1000*second);
+}
 
 function probablity(x, minimum, maximum) {
     if (x > minimum && x < maximum) {
@@ -245,7 +246,7 @@ var game_map = "\
 
 var Game = {};
 Game.Ending = {};
-
+const wait_term = 0.25;
 /**
  * Bad Ending #1
  * @param {any} sender_data var sender_data = new UserData(load_data(sender));
@@ -257,39 +258,41 @@ Game.Ending = {};
 Game.Ending.no_friends = function (sender_data, replier, sender) {
     var sender_message_name = "[" + sender_data.data.name + "] ";
     sender_data.data.status.no_friends = true;
-    replier.reply("부우우우움. 부우우우움.");
-    replier.reply("어디선가 휴대폰 진동 소리가 들린다.");
-    replier.reply("다시 원래 있던 방으로 되돌아가야겠다.");
-    replier.reply("1번방에 들어왔다.");
-
-
-    replier.reply("누군가가 있는 것 같다.");
-    replier.reply(sender_message_name + "누... 누구세요...?");
-    replier.reply("조심스럽게 다가간다.");
-    replier.reply(sender_message_name + "...!");
-    replier.reply(sender_message_name + "싫어어어어어어!!!!!!");
-
-    replier.reply(sender_message_name + "(내 또래인 것 같이 보이는 여자아이가 나체로 칼에 난도질되어 있다.)");
-    replier.reply("[???] 어떤 귀여운 녀석이 또 소리를 지르는걸까~?");
-    replier.reply("누군가가 터벅터벅 들어온다.");
-    replier.reply("[???] 아~ 이제 일어났구나~?");
-    replier.reply("[???] 아저씨랑 재밌는거 하자꾸나~~!");
-    replier.reply(sender_message_name + "누구세요...?!");
-    replier.reply("[???] 아저씨? 아저씨는 말이야...");
-    replier.reply("순간, 내 앞에 있는 죽은 여자애가 눈에 들어왔다.");
-    replier.reply("[???] 어이구야~ 못 볼 것을 본 것 같네?");
-    replier.reply(sender_message_name + "싫어어어어어어!!!!!!");
-    replier.reply("[???] 쳇,");
-    replier.reply("슈컹!");
-    replier.reply(sender_message_name + "왜 나한테 이런 ㅇ...");
-    replier.reply("그리고 이틀 뒤..." + sender_data.data.name + "네 집...");
-    replier.reply("[" + sender_data.data.name + "의 어머니] 네???????");
-    replier.reply("[경찰] .... 그게, 급히 오셔야 될 것 같습니다.");
-    replier.reply("[" + sender_data.data.name + "의 어머니] 네, 지금 당장 가죠.");
-    replier.reply("그리고... 서둘러 간 곳에는 이미 사늘한 " + sender_message_name + "의 시신만이 있었다.");
-    replier.reply("엉망진창이 되어 너덜너덜해진체로...");
-    replier.reply("[SYS] Game Over.");
-    replier.reply("[SYS] " + sender_message_name + "의 데이터를 삭제합니다.");
+    const scripts = [
+        "부우우우움. 부우우우움.",
+        "어디선가 휴대폰 진동 소리가 들린다.",
+        "다시 원래 있던 방으로 되돌아가야겠다.",
+        "1번방에 들어왔다.",
+        "누군가가 있는 것 같다.",
+        sender_message_name + "누... 누구세요...?",
+        "조심스럽게 다가간다.",
+        sender_message_name + "...!",
+        sender_message_name + "싫어어어어어어!!!!!!",
+        sender_message_name + "(내 또래인 것 같이 보이는 여자아이가 나체로 칼에 난도질되어 있다.)",
+        "[???] 어떤 귀여운 녀석이 또 소리를 지르는걸까~?",
+        "누군가가 터벅터벅 들어온다.",
+        "[???] 아~ 이제 일어났구나~?",
+        "[???] 아저씨랑 재밌는거 하자꾸나~~!",
+        sender_message_name + "누구세요...?!",
+        "[???] 아저씨? 아저씨는 말이야...",
+        "순간, 내 앞에 있는 죽은 여자애가 눈에 들어왔다.",
+        "[???] 어이구야~ 못 볼 것을 본 것 같네?",
+        sender_message_name + "싫어어어어어어!!!!!!",
+        "[???] 쳇,",
+        "슈컹!",
+        sender_message_name + "왜 나한테 이런 ㅇ...",
+        "그리고 이틀 뒤..." + sender_data.data.name + "네 집...",
+        "[" + sender_data.data.name + "의 어머니] 네???????",
+        "[경찰] .... 그게, 급히 오셔야 될 것 같습니다.",
+        "[" + sender_data.data.name + "의 어머니] 네, 지금 당장 가죠.",
+        "그리고... 서둘러 간 곳에는 이미 사늘한 " + sender_message_name + "의 시신만이 있었다.\n엉망진창이 되어 너덜너덜해진체로...",
+        "[SYS] Game Over.\n[ 엔딩 | 혼자서는 무리였어 ]",
+        "[SYS] " + sender_message_name + "의 데이터를 삭제합니다.",
+    ];
+    for (i in scripts) {
+        replier.reply(i);
+        wait(wait_term);
+    }
     var b = new java.io.File(sdcard + "/" + game_data_folder + "/" + sender + ".json");
     b.delete();
     replier.reply("[SYS] " + sender_message_name + "의 데이터가 삭제되었습니다.");
