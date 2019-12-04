@@ -59,5 +59,9 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
     if (msg == "@배운말") {
         replier.reply(Object.keys(learned_data));
     }
+    if (command(msg)[0] == "@삭제하기") {
+        delete(learned_data[command(msg)[1]]);
+        replier.reply("삭제되었습니다.")
+    }
 }
 
