@@ -35,7 +35,7 @@ function command(cmd) {
 }
 
 var learned_data = {};
-var learned_data_json = read("Teach", "learned_data.json.json");
+var learned_data_json = read("Teach", "learned_data.json");
 if (learned_data_json == null) {
     learned_data = {};
 } else {
@@ -46,12 +46,15 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
     if (command(msg)[0] == "@조교하기") {
         var teach_left = command(msg)[1].split("|")[0];
         var teach_right = command(msg)[1].split("|")[1];
-        learned_data[teach_left] = teach_right;
+        learned_data[teach_left] = {};
+        learned_data[teach_left]["trainer"] = sender;
+        learned_data[teach_left]["returns"] = teach_right;
+
         save("Teach", "learned_data.json", JSON.stringify(learned_data, null, '\t'));
         replier.reply("새로운 말을 배웠습니다.");
     }
     if (msg in learned_data) {
-        replier.reply(learned_data[msg]);
+        replier.reply(learned_data[msg]["returns"]);
     }
     if (msg == "@배운말") {
         replier.reply(Object.keys(learned_data));
