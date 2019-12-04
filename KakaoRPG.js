@@ -245,14 +245,16 @@ var game_map = "\
 
 var Game = {};
 Game.Ending = {};
+
 /**
  * Bad Ending #1
  * @param {any} sender_data var sender_data = new UserData(load_data(sender));
-    sender_data.init(sender);
+ * sender_data.init(sender);
  * @param {any} replier 응답용 객체. replier.reply("메시지") 또는
  * replier.reply("방이름","메시지")으로 전송
+ * @param {any} sender
  */
-Game.Ending.no_friends = function (sender_data, replier) {
+Game.Ending.no_friends = function (sender_data, replier, sender) {
     var sender_message_name = "[" + sender_data.data.name + "] ";
     sender_data.data.status.no_friends = true;
     replier.reply("부우우우움. 부우우우움.");
@@ -282,7 +284,15 @@ Game.Ending.no_friends = function (sender_data, replier) {
     replier.reply(sender_message_name + "왜 나한테 이런 ㅇ...");
     replier.reply("그리고 이틀 뒤..." + sender_data.data.name + "네 집...");
     replier.reply("[" + sender_data.data.name + "의 어머니] 네???????");
-    replier.reply("[경찰] ")
+    replier.reply("[경찰] .... 그게, 급히 오셔야 될 것 같습니다.");
+    replier.reply("[" + sender_data.data.name + "의 어머니] 네, 지금 당장 가죠.");
+    replier.reply("그리고... 서둘러 간 곳에는 이미 사늘한 " + sender_message_name + "의 시신만이 있었다.");
+    replier.reply("엉망진창이 되어 너덜너덜해진체로...");
+    replier.reply("[SYS] Game Over.");
+    replier.reply("[SYS] " + sender_message_name + "의 데이터를 삭제합니다.");
+    var b = new java.io.File(sdcard + "/" + game_data_folder + "/" + sender + ".json");
+    b.delete();
+    replier.reply("[SYS] " + sender_message_name + "의 데이터가 삭제되었습니다.");
 }
 Game.Sys = {};
 Game.Sys.Script = {};
@@ -449,7 +459,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             var sender_message_name = "[" + sender_data.data.name + "] ";
             if (sender_data.data.status.can_move) {
                 if (sender_data.data.level == 1) {
-                    Game.Ending.no_friends(sender_data, replier);
+                    Game.Ending.no_friends(sender_data, replier, sender);
                 } else {
                     if (command(msg)[1] == "2") {
                         sender_data.data.room = "2";
