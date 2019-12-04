@@ -57,7 +57,19 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
         replier.reply(learned_data[msg]["returns"]);
     }
     if (msg == "@배운말") {
-        replier.reply(Object.keys(learned_data));
+        var learned = Object.keys(learned_data);
+        replier.reply(learned);
+        var result = "[ 배운 말 리스트 ]";
+        var i = 0;
+        while (i < learned.length) {
+            if (i != learned.length - 1) {
+                result = result + learned[i] + "\n" + ">> Trainer |" + learned_data[learned[i]]["trainer"] + "\n" + ">> Returns |" + learned_data[learned[i]]["returns"] + "\n";
+            } else {
+                result = result + learned[i] + "\n" + ">> Trainer |" + learned_data[learned[i]]["trainer"] + "\n" + ">> Returns |" + learned_data[learned[i]]["returns"];
+            }
+            i = i + 1;
+        }
+        replier.reply(result);
     }
     if (command(msg)[0] == "@삭제하기") {
         delete(learned_data[command(msg)[1]]);
