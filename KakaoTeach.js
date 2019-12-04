@@ -48,6 +48,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
         var teach_right = command(msg)[1].split("|")[1];
         learned_data[teach_left] = teach_right;
         save("Teach", "learned_data.json", JSON.stringify(learned_data, null, '\t'));
+        replier.reply("새로운 말을 배웠습니다.");
     }
     if (msg in learned_data) {
         replier.reply(learned_data[msg]);
