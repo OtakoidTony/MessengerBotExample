@@ -13,6 +13,12 @@ function command(cmd) {
 }
 
 /**
+ * Hitomi.la Crawling Object
+ * 
+ * This object includes only string datas because there
+ * is no function about crawling gallery images because
+ * KakaoTalk does not support sending images API that
+ * can use in open chat service.
  * 
  * @param {string} gallery_id
  */
@@ -23,7 +29,6 @@ function Hitomi(gallery_id) {
     input_url = data.split("a href=\"")[1].split("\">link")[0];
     data = Utils.getWebText(input_url);
     /* --------------------------------------------------------- */
-
     this.artist = data.split("<ul class=\"comma-list\">")[1]
         .replace('\n', "").split("</li>")[0]
         .replace(/(<([^>]+)>)/g, "")
