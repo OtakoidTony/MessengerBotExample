@@ -44,8 +44,8 @@ if (learned_data_json == null) {
 
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
     if (command(msg)[0] == "@조교하기") {
-        var teach_left = command(msg)[1].split("|")[0];
-        var teach_right = command(msg)[1].split("|")[1];
+        var teach_left = command(msg)[1].split("=")[0];
+        var teach_right = command(msg)[1].split("=")[1];
         learned_data[teach_left] = {};
         learned_data[teach_left]["trainer"] = sender;
         learned_data[teach_left]["returns"] = teach_right;
