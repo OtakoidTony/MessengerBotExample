@@ -105,7 +105,6 @@ function UserData(Data) {
  * Load a json file named [sender] in game_data_folder
  * and then return a UserData.data object.
  * @param {string} sender
- * @returns {UserData}
  */
 function load_data(sender) {
     var data = read(game_data_folder, sender + ".json");
@@ -248,7 +247,8 @@ var Game = {};
 Game.Ending = {};
 /**
  * Bad Ending #1
- * @param {any} sender_data
+ * @param {any} sender_data var sender_data = new UserData(load_data(sender));
+    sender_data.init(sender);
  * @param {any} replier 응답용 객체. replier.reply("메시지") 또는
  * replier.reply("방이름","메시지")으로 전송
  */
@@ -383,7 +383,7 @@ Game.search = function (sender, replier) {
 
 
 /**
- * 
+ * Main function including almost of routines.
  * @param {string} room 메시지를 받은 방 이름
  * @param {string} msg 메시지 내용
  * @param {string} sender 전송자 닉네임
@@ -439,7 +439,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             if ('지도' in sender_data.data.item) {
                 replier.reply(game_map);
             } else {
-                replier.reply(sender_message_name + "지도가 없어.")
+                replier.reply(sender_message_name + "지도가 없어...")
             }
         }
         if (command(msg)[0] == ":room") {
@@ -466,4 +466,12 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             Game.search(sender, replier);
         }
     }
+}
+
+/**
+ * 컴파일 또는 Api.reload호출시, 컴파일 되기 이전에 호출되는 함수입니다.
+ * 제안하는 용도: 리로드시 자동 백업
+ * */
+function onStartCompile() {
+
 }
