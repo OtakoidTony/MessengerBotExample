@@ -246,7 +246,7 @@ var game_map = "\
 
 var Game = {};
 Game.Ending = {};
-const wait_term = 0.25;
+const wait_term = 0.9;
 /**
  * Bad Ending #1
  * @param {any} sender_data var sender_data = new UserData(load_data(sender));
@@ -281,21 +281,21 @@ Game.Ending.no_friends = function (sender_data, replier, sender) {
         "[???] 쳇,",
         "슈컹!",
         sender_message_name + "왜 나한테 이런 ㅇ...",
-        "그리고 이틀 뒤..." + sender_data.data.name + "네 집...",
+        "그리고 이틀 뒤... " + sender_data.data.name + "네 집.",
         "[" + sender_data.data.name + "의 어머니] 네???????",
         "[경찰] .... 그게, 급히 오셔야 될 것 같습니다.",
         "[" + sender_data.data.name + "의 어머니] 네, 지금 당장 가죠.",
-        "그리고... 서둘러 간 곳에는 이미 사늘한 " + sender_message_name + "의 시신만이 있었다.\n엉망진창이 되어 너덜너덜해진체로...",
+        "그리고... 서둘러 간 곳에는 이미 사늘한 " + sender_data.data.name + "의 시신만이 있었다.\n엉망진창이 되어 너덜너덜해진체로...",
         "[SYS] Game Over.\n[ 엔딩 | 혼자서는 무리였어 ]",
-        "[SYS] " + sender_message_name + "의 데이터를 삭제합니다.",
+        "[SYS] " + sender_data.data.name + "의 데이터를 삭제합니다.",
     ];
     for (i in scripts) {
-        replier.reply(i);
+        replier.reply(scripts[i]);
         wait(wait_term);
     }
     var b = new java.io.File(sdcard + "/" + game_data_folder + "/" + sender + ".json");
     b.delete();
-    replier.reply("[SYS] " + sender_message_name + "의 데이터가 삭제되었습니다.");
+    replier.reply("[SYS] " + sender_data.data.name + "의 데이터가 삭제되었습니다.");
 }
 Game.Sys = {};
 Game.Sys.Script = {};
@@ -305,6 +305,9 @@ Game.Sys.Script.Commands.Help = {};
 Game.Sys.Script.Commands.New.room = "\
 [SYS] 방을 이동할 수 있게 되었습니다.\n\
 [SYS] 명령어: :room <Room>";
+Game.Sys.Script.Commands.New.map = "\
+[SYS] :map 을 입력하면 지도를 볼 수 있습니다.\n\
+[SYS] 명령어: :map";
 
 Game.Sys.Script.Commands.Help.start = "\
 [SYS] 명령어: :start <Nickname>\n\
@@ -320,6 +323,10 @@ Game.Sys.Script.Commands.Help.items = "\
 
 Game.Sys.Script.Commands.Help.map = "\
 [SYS] 명령어: :map\n\
+[SYS] :map 을 입력하면 지도를 볼 수 있습니다.";
+
+Game.Sys.Script.Commands.Help.search = "\
+[SYS] 명령어: :search\n\
 [SYS] 근처에 떨어져 있는 물건이 있는지 찾아봅니다.";
 
 Game.Sys.Script.Commands.Help.room = "\
@@ -348,7 +355,7 @@ Game.search = function (sender, replier) {
     /* 이벤트 진입 */
     var sender_message_name = "[" + sender_data.data.name + "] ";
     replier.reply(sender_message_name + "이건 뭘까...?");
-
+    wait(wait_term);
     var probability = Math.random() * 100;
 
     if (sender_data.data.level == 2 && sender_data.data.room == "1" &&
@@ -366,7 +373,7 @@ Game.search = function (sender, replier) {
             } else {
                 replier.reply(get_item + "이 떨어져있다.");
             }
-            
+            wait(wait_term);
             if (get_item in sender_data.data.item) {
                 replier.reply("이미 있는 거다.");
                 sender_data.data.item[get_item] = sender_data.data.item[get_item] + 1;
@@ -377,11 +384,16 @@ Game.search = function (sender, replier) {
             }
             if ((sender_data.data.level == 1) && (Object.keys(sender_data.data.item).length == Object.keys(GameItem[sender_data.data.level - 1]).length)) {
                 replier.reply("터벅. 터벅. 터벅. 터벅.");
+                wait(wait_term);
                 replier.reply(sender_message_name + "누... 누구지...?");
+                wait(wait_term);
                 replier.reply("끼이익...");
+                wait(wait_term);
                 replier.reply("덜컹.");
+                wait(wait_term);
                 replier.reply(sender_message_name + "누가 문을...");
                 replier.reply(Game.Sys.Script.Commands.New.room);
+                replier.reply(Game.Sys.Script.Commands.New.map);
                 sender_data.data.status.can_move = true;
                 sender_data.data.level = 2;
             }
@@ -389,6 +401,7 @@ Game.search = function (sender, replier) {
             sender_data.save(sender);
         } else {
             replier.reply("아무것도 없다.");
+            wait(wait_term);
             replier.reply(sender_message_name + "내가 잘못봤나보다...");
         }
     }
@@ -415,23 +428,29 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
 
             /* <--------[게임 데이터 생성 시작]--------> */
             replier.reply("🔞 경고! 이 게임은 미성년자 혹은 심약자분들께는 다소 유해할 수 있으므로 플레이에 유의해주시기 바랍니다.");
-
+            wait(wait_term);
             var sender_data = new UserData();
             sender_data.init(command(msg)[1]);
             sender_data.save(sender);
             /* <--------[게임 데이터 생성 완료]--------> */
 
             replier.reply("[SYS] 게임데이터가 생성되었습니다.");
+            wait(wait_term);
             var sender_message_name = "[" + sender_data.data.name + "] ";
             replier.reply(sender_message_name + "어... 여기는... 어디지?");
+            wait(wait_term);
             replier.reply(sender_message_name + "여기 누구 없어요???");
+            wait(wait_term);
             replier.reply("주위를 둘러보았지만, 아무도 없었다.");
+            wait(wait_term);
             replier.reply(sender_message_name + "어흐흐흐흫ㅎ흫흟 ㅠㅠ");
-
+            wait(wait_term);
             if ((parseInt(sender_data.data.name[sender_data.data.name.length - 1].charCodeAt(0).toString(16), 16) - parseInt("AC00", 16)) % 28 == 0) {
                 replier.reply("[SYS] " + sender_data.data.name + "는 지금 밀폐된 공간에 갇혀있습니다. 어서 탈출하십시오!");
+                wait(wait_term);
             } else {
                 replier.reply("[SYS] " + sender_data.data.name + "은 지금 밀폐된 공간에 갇혀있습니다. 어서 탈출하십시오!");
+                wait(wait_term);
             }
             replier.reply("[SYS] :help를 입력하면 명령어 목록을 확인할 수 있습니다.");
         }
@@ -461,7 +480,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             sender_data.init(sender);
             var sender_message_name = "[" + sender_data.data.name + "] ";
             if (sender_data.data.status.can_move) {
-                if (sender_data.data.level == 1) {
+                if (sender_data.data.level == 2 && Object.keys(sender_data.data.status.friends).length == 0) {
                     Game.Ending.no_friends(sender_data, replier, sender);
                 } else {
                     if (command(msg)[1] == "2") {
