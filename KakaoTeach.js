@@ -42,16 +42,29 @@ if (learned_data_json == null) {
     learned_data = JSON.parse(learned_data_json);
 }
 
-function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
-    if (command(msg)[0] == "@조교하기") {
-        var teach_left = command(msg)[1].split("=")[0];
-        var teach_right = command(msg)[1].split("=")[1];
-        learned_data[teach_left] = {};
-        learned_data[teach_left]["trainer"] = sender;
-        learned_data[teach_left]["returns"] = teach_right;
+const teach_filter = [];
 
-        save("Teach", "learned_data.json", JSON.stringify(learned_data, null, '\t'));
-        replier.reply("새로운 말을 배웠습니다.");
+function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
+
+    if (command(msg)[0] == "@조교하기") {
+        var test = msg;
+        while (i <= teach_filter.length) {
+            test = test.replaceAll(teach_filter[i], '');
+            i = i + 1;
+        }
+        if (test == msg) {
+            var teach_left = command(msg)[1].split("=")[0];
+            var teach_right = command(msg)[1].split("=")[1];
+            learned_data[teach_left] = {};
+            learned_data[teach_left]["trainer"] = sender;
+            learned_data[teach_left]["returns"] = teach_right;
+
+            save("Teach", "learned_data.json", JSON.stringify(learned_data, null, '\t'));
+            replier.reply("새로운 말을 배웠습니다.");
+        } else {
+            replier.reply("도대체 무슨 말을 가르칠려구...!");
+        }
+        
     }
     if (msg in learned_data) {
         replier.reply(learned_data[msg]["returns"]);
