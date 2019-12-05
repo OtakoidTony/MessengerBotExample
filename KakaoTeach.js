@@ -44,6 +44,10 @@ if (learned_data_json == null) {
 
 const teach_filter = [];
 
+String.prototype.replaceAll = function (org, dest) {
+    return this.split(org).join(dest);
+}
+
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
 
     if (command(msg)[0] == "@조교하기") {
