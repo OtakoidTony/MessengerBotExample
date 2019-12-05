@@ -401,10 +401,20 @@ Game.search = function (sender, replier) {
 
     if (sender_data.data.level == 2 && sender_data.data.room == "1" &&
         sender_data.data.status.can_move && Object.keys(sender_data.data.status.friends).length == 0) {
-        /*
-        >> Date | 2019.12.03. PM 03:08
-        >> TODO | 같은 나이 또래의 여아를 구출하는 장면 구현.
-        */
+        var scripts_child_rescue = [
+            "부우우우움. 부우우우움.",
+            "어디선가 휴대폰 진동 소리가 들린다.",
+            sender_message_name + "어디서 휴대폰 진동이...",
+            "진동이 울리는 곳으로 가보았더니 내 또래의 여자아이가 실오라기 하나 걸치지 않으며 겁에 질린 체로 휴대폰을 손에 쥔 체 웅크려 있었다.",
+            sender_message_name + "너는 누구야? 왜 옷을 안입고 있어?",
+            "[여자아이] ....",
+            sender_message_name + "내 옷이라도 입고 있어.",
+            "어차피 나는 속에 옷을 여러장 입고 있던터라 겉옷이라도 벗어 입혀주었다.",
+            sender_message_name + "(내 냄새는 안나겠지...? >_<)",
+            "[여자아이] ....",
+            sender_message_name
+        ];
+
     } else {
         /* 확률 = 60 - ( level * 10 ) */
         if (probability >= (40 + (sender_data.data.level * 10))) {
