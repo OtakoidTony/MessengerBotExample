@@ -52,6 +52,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
 
     if (command(msg)[0] == "@조교하기") {
         var test = msg;
+        var i = 0;
         while (i <= teach_filter.length) {
             test = test.replaceAll(teach_filter[i], '');
             i = i + 1;
