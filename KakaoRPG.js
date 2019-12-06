@@ -402,7 +402,8 @@ Game.search = function (sender, replier) {
 function view_status(sender_data) {
     var result = "";
     result = result + "현재 아이의 상태는 다음과 같습니다.\n\n";
-    result = result + "아이템: "
+    result = result + "아이템: " + Object.keys(sender_data.data.item) + "\n";
+    return result;
 }
 
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
@@ -412,7 +413,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             /* 플레이어 데이터 로드 */
             var sender_data = new UserData(load_data(sender));
             sender_data.init(sender);
-            view_status(sender, sender_data, replier);
+            replier.reply(view_status(sender_data));
         }
         if (temp_child_makers.indexOf(sender) != -1) {
             /* 플레이어 데이터 로드 */
