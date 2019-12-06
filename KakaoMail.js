@@ -11,7 +11,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
     if (command(msg)[0] == "/메일쓰기") {
         var receiver = command(msg)[1].split(':')[0];
         var contents = command(msg)[1].split(':')[1];
-        if (!(receiver in mail)) { mail[receiver] = [receiver + "님에게 메일이 도착했습니다." + allsee];}
+        if (!(receiver in mail)) { mail[receiver] = [receiver + "님에게 메일이 도착했습니다.\n" + allsee];}
         mail[receiver].push("\n\n" + sender + "가 보낸 메일\n" + contents);
         replier.reply(receiver + "님에게\n" + sender + "님이\n메일을 보냈습니다.")
     }
