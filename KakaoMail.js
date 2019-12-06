@@ -16,7 +16,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
     }
     if (sender in mail) {
         replier.reply(mail[sender]);
-        delete(mail, sender);
+        delete(mail[sender]);
     }
 }
 
