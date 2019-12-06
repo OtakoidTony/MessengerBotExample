@@ -398,9 +398,22 @@ Game.search = function (sender, replier) {
     }
 }
 
+
+function view_status(sender_data) {
+    var result = "";
+    result = result + "현재 아이의 상태는 다음과 같습니다.\n\n";
+    result = result + "아이템: "
+}
+
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
     var WhiteList = new Array("사용할 단톡방");
     if (WhiteList.indexOf(room) != -1 || isGroupChat == false) {
+        if (msg == ":view") {
+            /* 플레이어 데이터 로드 */
+            var sender_data = new UserData(load_data(sender));
+            sender_data.init(sender);
+            view_status(sender, sender_data, replier);
+        }
         if (temp_child_makers.indexOf(sender) != -1) {
             /* 플레이어 데이터 로드 */
             var sender_data = new UserData(load_data(sender));
