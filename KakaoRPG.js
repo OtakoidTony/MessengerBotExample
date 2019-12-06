@@ -139,60 +139,7 @@ function command(cmd) {
 ┗━━━━━┛
 １２３４５６７８９
 　　　　　　　　　　　　　　　　　　　　　　　;
-　
- 👧    ;
-┏━━━━┓
-┃１ 👧       ┃　┏━━━━┓
-┃　　　　┃　┃２　　　┃
-┗━━┓┏┛　┃　　　　┃
-　　　┃┗━━┛　　　　┃
-　　　┃┏━━┓　　　　┃
-　　　┃┃　　┗━━━━┛
-　　┏┛┗━━━━━┓
-　　┃　　　　　　　┃
-　　┃　　　　　　　┃
-　　┃　　　　　　　┃
-　　┗━━━━━━━┛
- ;
-┏━━━━┓
-┃１　　　┃　┏━━━━┓
-┃　　　　┃　┃２　　　┃
-┗━━┓┏┛　┃　　　　┃
-　　　┃┗━━┛　　　　┃
-　　　┃┏━━┓　　　　┃
-　　　┃┃　　┗━━━━┛
-　　┏┛┗━━━━━┓
-　　┃　　　　　　　┃
-　　┃　　　　　　　┃
-　　┃　　　　　　　┃
-　　┗━━━━━━━┛
-┏━━━━┓
-┃１　　　┃　┏━━━━┓
-┃　　　　┃　┃２　　　┃
-┗━━┓┏┛　┃　　　　┃
-　　　┃┗━━┛　　　　┃
-　　　┃┏━━┓　　　　┃
-　　　┃┃　　┗━━━━┛
-　　┏┛┗━━━━┓
-　　┃３　　　　　┃
-　　┃　　　　　　┃
-　　┃　　　　　▤┃
-　　┗━━━━━━┛
 
-
-카톡에서는 표시 잘됨.
-┏━━━━┓
-┃１👧　   ┃　┏━━━━┓
-┃　　　　┃　┃２　　　┃
-┗━━┓┏┛　┃　　　　┃
-　　　┃┗━━┛　　　　┃
-　　　┃┏━━┓　　　　┃
-　　　┃┃　　┗━━━━┛
-　　┏┛┗━━━━┓
-　　┃３　　　　　┃
-　　┃　　　　　　┃
-　　┃　　　　　　┃
-　　┗━━━━━━┛
 
 🔑 🔏 🔐 🔒 🔓  🔦 📻
 🔒 🔓 💊 💉 🔪  ✑ ✒
@@ -388,6 +335,8 @@ Nickname이라는 이름으로 게임을 시작합니다.\n\
 :room <Room>\n\
 Room이라는 방으로 이동합니다.";
 
+var temp_child_makers = [];
+
 Game.search = function (sender, replier) {
     /* 플레이어 데이터 로드 */
     var sender_data = new UserData(load_data(sender));
@@ -399,7 +348,7 @@ Game.search = function (sender, replier) {
     wait(wait_term);
     var probability = Math.random() * 100;
 
-    if (sender_data.data.level == 2 && sender_data.data.room == "1" &&
+    if (!(sender in temp_child_makers) && sender_data.data.level == 2 && sender_data.data.room == "1" &&
         sender_data.data.status.can_move && Object.keys(sender_data.data.status.friends).length == 0) {
         var scripts_child_rescue = [
             "부우우우움. 부우우우움.",
@@ -412,9 +361,14 @@ Game.search = function (sender, replier) {
             "어차피 나는 속에 옷을 여러장 입고 있던터라 겉옷이라도 벗어 입혀주었다.",
             sender_message_name + "(내 냄새는 안나겠지...? >_<)",
             "[여자아이] ....",
-            sender_message_name
+            "[SYS] 동료가 추가되었습니다.",
+            "[SYS] 동료의 이름을 지어주십시오."
         ];
-
+        for (var i in scripts_child_rescue) {
+            replier.reply(scripts_child_rescue[i]);
+            wait(wait_term);
+        }
+        temp_child_makers.push(sender);
     } else {
         /* 확률 = 60 - ( level * 10 ) */
         if (probability >= (40 + (sender_data.data.level * 10))) {
@@ -458,23 +412,23 @@ Game.search = function (sender, replier) {
     }
 }
 
-
-/**
- * Main function including almost of routines.
- * @param {string} room 메시지를 받은 방 이름
- * @param {string} msg 메시지 내용
- * @param {string} sender 전송자 닉네임
- * @param {boolean} isGroupChat 단체/오픈채팅 여부
- * @param {any} replier 응답용 객체. replier.reply("메시지") 또는
- * replier.reply("방이름","메시지")으로 전송
- * @param {any} ImageDB ImageDB.getProfileImage(): 전송자의 프로필 이미지를 Base64로 인코딩하여 반환
- * @param {string} packageName 메시지를 받은 메신저의 패키지 이름
- * @param {number} threadId 현재 쓰레드의 순번(스크립트별로 따로 매김)
- * Api,Utils객체에 대해서는 설정의 도움말 참조
- */
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
     var WhiteList = new Array("사용할 단톡방");
     if (WhiteList.indexOf(room) != -1 || isGroupChat == false) {
+
+        if (sender in temp_child_makers) {
+            /* 플레이어 데이터 로드 */
+            var sender_data = new UserData(load_data(sender));
+            sender_data.init(sender);
+
+            var sender_message_name = "[" + sender_data.data.name + "] ";
+
+            sender_data.data.status.friends[msg] = {};
+            sender_data.save(sender);
+            replier.reply("[SYS] 동료의 이름을 설정하였습니다.");
+            temp_child_makers.splice(temp_child_makers.indexOf(sender), 1)
+        }
+
         if (command(msg)[0] == ":start") {
 
             /* <--------[게임 데이터 생성 시작]--------> */
@@ -520,7 +474,15 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             sender_data.init(sender);
             var sender_message_name = "[" + sender_data.data.name + "] ";
             if ('지도' in sender_data.data.item) {
-                replier.reply(game_map);
+                if (sender_data.data.room == "1") {
+                    replier.reply(game_map_1);
+                }
+                if (sender_data.data.room == "2") {
+                    replier.reply(game_map_2);
+                }
+                if (sender_data.data.room == "3") {
+                    replier.reply(game_map_3);
+                }
             } else {
                 replier.reply(sender_message_name + "지도가 없어...")
             }
