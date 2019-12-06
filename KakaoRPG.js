@@ -496,13 +496,22 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                 if (sender_data.data.level == 2 && Object.keys(sender_data.data.status.friends).length == 0) {
                     Game.Ending.no_friends(sender_data, replier, sender);
                 } else {
-                    if (command(msg)[1] == "2") {
-                        sender_data.data.room = "2";
-                        replier.reply("2번방에 들어왔다.");
-                    }
-                    if (command(msg)[1] == "3") {
-                        sender_data.data.room = "3";
-                        replier.reply("3번방에 들어왔다.");
+                    if (command(msg)[1] == sender_data.data.room) {
+                        replier.reply(sender_message_name + "으아아, 침착하자! 침착! 지금 있는 곳이 " + sender_data.data.room + "번방이야!");
+                    } else {
+                        if (command(msg)[1] == "1") {
+                            sender_data.data.room = "1";
+                            replier.reply("1번방에 들어왔다.");
+                        }
+                        if (command(msg)[1] == "2") {
+                            sender_data.data.room = "2";
+                            replier.reply("2번방에 들어왔다.");
+                        }
+                        if (command(msg)[1] == "3") {
+                            sender_data.data.room = "3";
+                            replier.reply("3번방에 들어왔다.");
+                        }
+                        sender_data.save(sender);
                     }
                 }
             }
