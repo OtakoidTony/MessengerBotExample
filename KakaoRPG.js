@@ -139,23 +139,9 @@ function command(cmd) {
 ┗━━━━━┛
 １２３４５６７８９
 　　　　　　　　　　　　　　　　　　　　　　　;
-
-
 🔑 🔏 🔐 🔒 🔓  🔦 📻
 🔒 🔓 💊 💉 🔪  ✑ ✒
 ✂ ✄ ✁ ✃ 📛  📇
-
-　　┏━━━━┓
-　　┃１　　　┃　┏━━━━┓
-　　┃　　　　┃　┃２　　　┃
-　　┗━━┓┏┛　┃　　　　┃
-　　　　　┃┗━━┛　　　　┃
-　　　　　┃┏━━┓　　　　┃
-　　　　　┛┃　　┗━━━━┛
-　　　━━━┛　　┏━━━━┓
-┃１　　　┃
-┃　　　　┃
-┗━━┓┏┛
 ╋╋╋╋╋╋╋╋╋╋╋╋╋
 
 ╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋
@@ -348,7 +334,7 @@ Game.search = function (sender, replier) {
     wait(wait_term);
     var probability = Math.random() * 100;
 
-    if (!(sender in temp_child_makers) && sender_data.data.level == 2 && sender_data.data.room == "1" &&
+    if (temp_child_makers.indexOf(sender) == -1 && sender_data.data.level == 2 && sender_data.data.room == "1" &&
         sender_data.data.status.can_move && Object.keys(sender_data.data.status.friends).length == 0) {
         var scripts_child_rescue = [
             "부우우우움. 부우우우움.",
@@ -415,8 +401,7 @@ Game.search = function (sender, replier) {
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
     var WhiteList = new Array("사용할 단톡방");
     if (WhiteList.indexOf(room) != -1 || isGroupChat == false) {
-
-        if (sender in temp_child_makers) {
+        if (temp_child_makers.indexOf(sender) != -1) {
             /* 플레이어 데이터 로드 */
             var sender_data = new UserData(load_data(sender));
             sender_data.init(sender);
