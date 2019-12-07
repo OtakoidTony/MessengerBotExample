@@ -99,7 +99,7 @@ const GameItem = [{
     '열쇠뭉치': "🔑 엄청나게 많은 열쇠가 있다.",
     '신분증': "모르는 사람의 신분증이다.",
     '칼': "🔪 잘못 사용하면 큰일나는 무시무시한 칼이다."
-}]
+}];
 var folder = new java.io.File(sdcard + "/" + game_data_folder + "/");
 folder.mkdirs(); /* 풀더를 sdcard에 생성 */
 var first_money = 5000;
@@ -157,14 +157,166 @@ function command(cmd) {
     var param = cmd.substring(cmd_str.length + 1, cmd.length);
     return [cmd_str, param];
 }
+/*
+황인 여자아이
+┏━━━━━┓
+┃　　　　　┃
+┃　　👧　   ┃
+┃　　　　　┃
+┗━━━━━┛
+백인 여자아이
+┏━━━━━┓
+┃　　　　　┃
+┃　　👧🏻　   ┃
+┃　　　　　┃
+┗━━━━━┛
+１２３４５６７８９
+　　　　　　　　　　　　　　　　　　　　　　　;
+🔑 🔏 🔐 🔒 🔓  🔦 📻
+🔒 🔓 💊 💉 🔪  ✑ ✒
+✂ ✄ ✁ ✃ 📛  📇
+╋╋╋╋╋╋╋╋╋╋╋╋╋
 
+╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋
+ "\u200b".repeat(500);
+┗┓╋┗┛┣┓　┏
+*/
 function wait(second) {
     java.lang.Thread.sleep(1000 * second);
 }
 
+function probablity(x, minimum, maximum) {
+    if (x > minimum && x < maximum) {
+        return true;
+    } else {
+        return false;
+    }
+}
 var Game = {};
 Game.Ending = {};
 const wait_term = 0.9;
+/**
+ * Bad Ending #1
+ * @param {any} sender_data var sender_data = new UserData(load_data(sender));
+ * sender_data.init(sender);
+ * @param {any} replier 응답용 객체. replier.reply("메시지") 또는
+ * replier.reply("방이름","메시지")으로 전송
+ * @param {any} sender
+ */
+Game.Ending.no_friends = function(sender_data, replier, sender) {
+    var sender_message_name = "[" + sender_data.data.name + "] ";
+    const scripts = [
+        "부우우우움. 부우우우움.",
+        "어디선가 휴대폰 진동 소리가 들린다.",
+        "다시 원래 있던 방으로 되돌아가야겠다.",
+        "1번방에 들어왔다.",
+        "누군가가 있는 것 같다.",
+        sender_message_name + "누... 누구세요...?",
+        "조심스럽게 다가간다.",
+        sender_message_name + "...!",
+        sender_message_name + "싫어어어어어어!!!!!!",
+        sender_message_name + "(내 또래인 것 같이 보이는 여자아이가 나체로 칼에 난도질되어 있다.)",
+        "[???] 어떤 귀여운 녀석이 또 소리를 지르는걸까~?",
+        "누군가가 터벅터벅 들어온다.",
+        "[???] 아~ 이제 일어났구나~?",
+        "[???] 아저씨랑 재밌는거 하자꾸나~~!",
+        sender_message_name + "누구세요...?!",
+        "[???] 아저씨? 아저씨는 말이야...",
+        "순간, 내 앞에 있는 죽은 여자애가 눈에 들어왔다.",
+        "[???] 어이구야~ 못 볼 것을 본 것 같네?",
+        sender_message_name + "싫어어어어어어!!!!!!",
+        "[???] 쳇,",
+        "슈컹!",
+        sender_message_name + "왜 나한테 이런 ㅇ...",
+        "그리고 이틀 뒤... " + sender_data.data.name + "네 집.",
+        "[" + sender_data.data.name + "의 어머니] 네???????",
+        "[경찰] .... 그게, 급히 오셔야 될 것 같습니다.",
+        "[" + sender_data.data.name + "의 어머니] 네, 지금 당장 가죠.",
+        "그리고... 서둘러 간 곳에는 이미 사늘한 " + sender_data.data.name + "의 시신만이 있었다.\n엉망진창이 되어 너덜너덜해진체로...",
+        "[SYS] Game Over.\n[ 엔딩 | 혼자서는 무리였어 ]",
+        "[SYS] " + sender_data.data.name + "의 데이터를 삭제합니다.",
+    ];
+    for (i in scripts) {
+        replier.reply(scripts[i]);
+        wait(wait_term);
+    }
+    var b = new java.io.File(sdcard + "/" + game_data_folder + "/" + sender + ".json");
+    b.delete();
+    replier.reply("[SYS] " + sender_data.data.name + "의 데이터가 삭제되었습니다.");
+}
+Game.Sys = {};
+Game.Sys.Script = {};
+Game.Sys.Script.Commands = {};
+Game.Sys.Script.Commands.New = {};
+Game.Sys.Script.Commands.Help = {};
+Game.Sys.Script.Commands.New.room = "\
+[SYS] 방을 이동할 수 있게 되었습니다.\n\
+[SYS] 명령어: :room <Room>";
+Game.Sys.Script.Commands.New.map = "\
+[SYS] :map 을 입력하면 지도를 볼 수 있습니다.\n\
+[SYS] 명령어: :map";
+Game.Sys.Script.Commands.Help.start = "\
+[SYS] 명령어: :start <Nickname>\n\
+[SYS] Nickname이라는 이름으로 게임을 시작합니다.";
+Game.Sys.Script.Commands.Help.view = "\
+[SYS] 명령어: :view\n\
+[SYS] 현재 아이의 상태를 확인합니다.";
+Game.Sys.Script.Commands.Help.items = "\
+[SYS] 명령어: :items\n\
+[SYS] 소지하고 있는 아이템의 목록을 확인합니다.";
+Game.Sys.Script.Commands.Help.map = "\
+[SYS] 명령어: :map\n\
+[SYS] :map 을 입력하면 지도를 볼 수 있습니다.";
+Game.Sys.Script.Commands.Help.search = "\
+[SYS] 명령어: :search\n\
+[SYS] 근처에 떨어져 있는 물건이 있는지 찾아봅니다.";
+Game.Sys.Script.Commands.Help.room = "\
+[SYS] 명령어: :room <Room>\n\
+[SYS] Room이라는 방으로 이동합니다.";
+var commands_help = "[Command]\n\
+:start <Nickname>\n\
+Nickname이라는 이름으로 게임을 시작합니다.\n\
+:view\n\
+현재 아이의 상태를 확인합니다.\n\
+:items\n\
+소지하고 있는 아이템의 목록을 확인합니다.\n\
+:search\n\
+근처에 떨어져 있는 물건이 있는지 찾아봅니다.\n\
+:map\n\
+지도를 소지하고 있는 경우 현재 방 위치를 확인합니다.\n\
+:room <Room>\n\
+Room이라는 방으로 이동합니다.";
+var temp_child_makers = [];
+
+MD5 = str => {
+    let result = "";
+    try {
+        let md = java.security.MessageDigest.getInstance("MD5");
+        md.update(str.split("").map(e => e.charCodeAt(0)));
+        let bytes = md.digest();
+        bytes.forEach(e => result += java.lang.Integer.toString((e & 0xff) + 0x100, 16).substr(1));
+    } catch (e) {
+        Log.debug(e);
+        return null;
+    }
+    return result;
+}
+
+SHA256 = str => {
+    let result = "";
+    try {
+        let sha = java.security.MessageDigest.getInstance("SHA-256");
+        sha.update(str.split("").map(e => e.charCodeAt(0)));
+        let bytes = sha.digest();
+        bytes.forEach(e => result += java.lang.Integer.toString((e & 0xff) + 0x100, 16).substr(1));
+    } catch (e) {
+        Log.debug(e);
+        return null;
+    }
+    return result;
+}
+
+
 
 Game.search = function(sender, replier) {
     /* 플레이어 데이터 로드 */
