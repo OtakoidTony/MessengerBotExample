@@ -1,5 +1,4 @@
-var sdcard = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
-
+﻿var sdcard = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
 var game_map = "\
 ┏━━━━┓\n\
 ┃１　　　┃　┏━━━━┓\n\
@@ -13,7 +12,6 @@ var game_map = "\
 　　┃　　　　　　┃\n\
 　　┃　　　　　▤┃\n\
 　　┗━━━━━━┛";
-
 var game_map_1 = "\
 ┏━━━━┓\n\
 ┃１👧　   ┃　┏━━━━┓\n\
@@ -27,7 +25,6 @@ var game_map_1 = "\
 　　┃　　　　　　┃\n\
 　　┃　　　　　▤┃\n\
 　　┗━━━━━━┛";
-
 var game_map_2 = "\
 ┏━━━━┓\n\
 ┃１　　　┃　┏━━━━┓\n\
@@ -41,7 +38,6 @@ var game_map_2 = "\
 　　┃　　　　　　┃\n\
 　　┃　　　　　▤┃\n\
 　　┗━━━━━━┛";
-
 var game_map_3 = "\
 ┏━━━━┓\n\
 ┃１　　　┃　┏━━━━┓\n\
@@ -84,16 +80,13 @@ function read(folderName, fileName) {
     e.close();
     return f.toString();
 }
-
 const game_data_folder = "Game_Data";
-
 /**
  * 게임 아이템 목록
  * */
 const GameItem = [{
     '지도': "🗺 이게 있으면 이곳이 어디인지 알 수 있을 것 같다.",
     '진통제': "💊 아플 때 먹으면 괜찮아 진다.",
-    '밧줄': "무언가를 묶을 때 사용할 수 있다.",
     '손전등': "🔦 배터리가 있으면 어두운 곳을 볼 수 있다."
 },
 {
@@ -106,24 +99,19 @@ const GameItem = [{
     '열쇠뭉치': "🔑 엄청나게 많은 열쇠가 있다.",
     '신분증': "모르는 사람의 신분증이다.",
     '칼': "🔪 잘못 사용하면 큰일나는 무시무시한 칼이다."
-}
-]
-
-    
+}]
 var folder = new java.io.File(sdcard + "/" + game_data_folder + "/");
 folder.mkdirs(); /* 풀더를 sdcard에 생성 */
-
 var first_money = 5000;
 var first_hp = 300;
 
 function UserData(Data) {
     this.data = {};
-
     /**
      * Initialize userdata.
      * @param {string} user user is the name in [ :start <name> ]
      */
-    this.init = function (user) {
+    this.init = function(user) {
         if (Data != null) {
             /* Parameters가 Null이 아닌 경우에 UserData.data으로 할당. */
             this.data = Data;
@@ -135,24 +123,21 @@ function UserData(Data) {
             this.data["item"] = {};
             this.data["level"] = 1;
             this.data["room"] = "1";
-            this.data["status"] = {};
-
-            /* UserData.data.status */
-            this.data.status["see_child_corpse"] = false;
-            this.data.status["friends"] = {};
-            this.data.status["no_friends"] = false;
-            this.data.status["can_move"] = false;
+            this.data["can_move"] = false;
+            this.data["friends"] = {};
+            this.data["flags"] = {};
+            /* UserData.data.flags */
+            this.data.flags["after_rescued_child"] = false;
         }
     }
     /**
      * Save UserData.data object as json file.
      * @param {any} sender
      */
-    this.save = function (sender) {
+    this.save = function(sender) {
         save(game_data_folder, sender + ".json", JSON.stringify(this.data, null, '\t'));
     }
 }
-
 /**
  * Load a json file named [sender] in game_data_folder
  * and then return a UserData.data object.
@@ -163,7 +148,6 @@ function load_data(sender) {
     data = JSON.parse(data);
     return data;
 }
-
 /**
  * 
  * @param {string} cmd
@@ -173,9 +157,6 @@ function command(cmd) {
     var param = cmd.substring(cmd_str.length + 1, cmd.length);
     return [cmd_str, param];
 }
-
-
-
 /*
 황인 여자아이
 ┏━━━━━┓
@@ -200,9 +181,8 @@ function command(cmd) {
  "\u200b".repeat(500);
 ┗┓╋┗┛┣┓　┏
 */
-
 function wait(second) {
-    java.lang.Thread.sleep(1000*second);
+    java.lang.Thread.sleep(1000 * second);
 }
 
 function probablity(x, minimum, maximum) {
@@ -212,10 +192,6 @@ function probablity(x, minimum, maximum) {
         return false;
     }
 }
-
-
-
-
 var Game = {};
 Game.Ending = {};
 const wait_term = 0.9;
@@ -227,9 +203,8 @@ const wait_term = 0.9;
  * replier.reply("방이름","메시지")으로 전송
  * @param {any} sender
  */
-Game.Ending.no_friends = function (sender_data, replier, sender) {
+Game.Ending.no_friends = function(sender_data, replier, sender) {
     var sender_message_name = "[" + sender_data.data.name + "] ";
-    sender_data.data.status.no_friends = true;
     const scripts = [
         "부우우우움. 부우우우움.",
         "어디선가 휴대폰 진동 소리가 들린다.",
@@ -280,31 +255,24 @@ Game.Sys.Script.Commands.New.room = "\
 Game.Sys.Script.Commands.New.map = "\
 [SYS] :map 을 입력하면 지도를 볼 수 있습니다.\n\
 [SYS] 명령어: :map";
-
 Game.Sys.Script.Commands.Help.start = "\
 [SYS] 명령어: :start <Nickname>\n\
 [SYS] Nickname이라는 이름으로 게임을 시작합니다.";
-
 Game.Sys.Script.Commands.Help.view = "\
 [SYS] 명령어: :view\n\
 [SYS] 현재 아이의 상태를 확인합니다.";
-
 Game.Sys.Script.Commands.Help.items = "\
 [SYS] 명령어: :items\n\
 [SYS] 소지하고 있는 아이템의 목록을 확인합니다.";
-
 Game.Sys.Script.Commands.Help.map = "\
 [SYS] 명령어: :map\n\
 [SYS] :map 을 입력하면 지도를 볼 수 있습니다.";
-
 Game.Sys.Script.Commands.Help.search = "\
 [SYS] 명령어: :search\n\
 [SYS] 근처에 떨어져 있는 물건이 있는지 찾아봅니다.";
-
 Game.Sys.Script.Commands.Help.room = "\
 [SYS] 명령어: :room <Room>\n\
 [SYS] Room이라는 방으로 이동합니다.";
-
 var commands_help = "[Command]\n\
 :start <Nickname>\n\
 Nickname이라는 이름으로 게임을 시작합니다.\n\
@@ -318,22 +286,48 @@ Nickname이라는 이름으로 게임을 시작합니다.\n\
 지도를 소지하고 있는 경우 현재 방 위치를 확인합니다.\n\
 :room <Room>\n\
 Room이라는 방으로 이동합니다.";
-
 var temp_child_makers = [];
 
-Game.search = function (sender, replier) {
+MD5 = str => {
+    let result = "";
+    try {
+        let md = java.security.MessageDigest.getInstance("MD5");
+        md.update(str.split("").map(e => e.charCodeAt(0)));
+        let bytes = md.digest();
+        bytes.forEach(e => result += java.lang.Integer.toString((e & 0xff) + 0x100, 16).substr(1));
+    } catch (e) {
+        Log.debug(e);
+        return null;
+    }
+    return result;
+}
+
+SHA256 = str => {
+    let result = "";
+    try {
+        let sha = java.security.MessageDigest.getInstance("SHA-256");
+        sha.update(str.split("").map(e => e.charCodeAt(0)));
+        let bytes = sha.digest();
+        bytes.forEach(e => result += java.lang.Integer.toString((e & 0xff) + 0x100, 16).substr(1));
+    } catch (e) {
+        Log.debug(e);
+        return null;
+    }
+    return result;
+}
+
+
+
+Game.search = function(sender, replier) {
     /* 플레이어 데이터 로드 */
     var sender_data = new UserData(load_data(sender));
     sender_data.init(sender);
-
-    /* 이벤트 진입 */
     var sender_message_name = "[" + sender_data.data.name + "] ";
     replier.reply(sender_message_name + "이건 뭘까...?");
     wait(wait_term);
     var probability = Math.random() * 100;
-
     if (temp_child_makers.indexOf(sender) == -1 && sender_data.data.level == 2 && sender_data.data.room == "1" &&
-        sender_data.data.status.can_move && Object.keys(sender_data.data.status.friends).length == 0) {
+        sender_data.data.can_move && Object.keys(sender_data.data.friends).length == 0) {
         var scripts_child_rescue = [
             "부우우우움. 부우우우움.",
             "어디선가 휴대폰 진동 소리가 들린다.",
@@ -383,7 +377,7 @@ Game.search = function (sender, replier) {
                 replier.reply(sender_message_name + "누가 문을...");
                 replier.reply(Game.Sys.Script.Commands.New.room);
                 replier.reply(Game.Sys.Script.Commands.New.map);
-                sender_data.data.status.can_move = true;
+                sender_data.data.can_move = true;
                 sender_data.data.level = 2;
             }
             /* json 파일로 저장 */
@@ -396,11 +390,10 @@ Game.search = function (sender, replier) {
     }
 }
 
-
 function view_status(sender_data) {
     var result = "";
     result = result + "현재 아이의 상태는 다음과 같습니다.\n\n";
-    result = result + "아이템: " + Object.keys(sender_data.data.item) + "\n";
+    result = result + "소지품: " + Object.keys(sender_data.data.item) + "\n";
     return result;
 }
 
@@ -417,25 +410,38 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             /* 플레이어 데이터 로드 */
             var sender_data = new UserData(load_data(sender));
             sender_data.init(sender);
-
             var sender_message_name = "[" + sender_data.data.name + "] ";
-
-            sender_data.data.status.friends[msg] = {};
+            sender_data.data.friends[msg] = {};
+            sender_data.data.flags.after_rescued_child = true;
             sender_data.save(sender);
             replier.reply("[SYS] 동료의 이름을 설정하였습니다.");
-            temp_child_makers.splice(temp_child_makers.indexOf(sender), 1)
+            temp_child_makers.splice(temp_child_makers.indexOf(sender), 1);
+            var friend_message_name = "[" + msg + "] ";
+            var scripts_cb3e6f66f9be29a494397b5b153ab6ff = [
+                friend_message_name + "도, 도와줘...",
+                sender_message_name + "에...?",
+                "그 아이는 울먹이며 부들부들 떨고 있었다.",
+                "[???] 무슨 일이야?!",
+                friend_message_name + "히이이이익!!!!!",
+                sender_message_name + "...!",
+                "[???] 우히히히히, 귀여운 것들...!",
+                friend_message_name + "도망쳐!!!",
+                "그 아이는 갑자기 일어서더니 나의 손목을 잡고 달렸다. 표정을 자세히는 보지 못했지만 달리면서도 많이 떠는 것만 같았다.",
+                "[???] 어차피 여기서 나갈 수 없다고~?",
+                "그 이상한 아저씨를 뒤로한체 나와 " + msg + "는 3번방에 가게 되었다.",
+                game_map_3
+            ];
+            for (var i in scripts_cb3e6f66f9be29a494397b5b153ab6ff) {
+                replier.reply(scripts_cb3e6f66f9be29a494397b5b153ab6ff[i]);
+                wait(wait_term);
+            }
         }
-
         if (command(msg)[0] == ":start") {
-
-            /* <--------[게임 데이터 생성 시작]--------> */
             replier.reply("🔞 경고! 이 게임은 미성년자 혹은 심약자분들께는 다소 유해할 수 있으므로 플레이에 유의해주시기 바랍니다.");
             wait(wait_term);
             var sender_data = new UserData();
             sender_data.init(command(msg)[1]);
             sender_data.save(sender);
-            /* <--------[게임 데이터 생성 완료]--------> */
-
             replier.reply("[SYS] 게임데이터가 생성되었습니다.");
             wait(wait_term);
             var sender_message_name = "[" + sender_data.data.name + "] ";
@@ -489,8 +495,8 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             var sender_data = new UserData(load_data(sender));
             sender_data.init(sender);
             var sender_message_name = "[" + sender_data.data.name + "] ";
-            if (sender_data.data.status.can_move) {
-                if (sender_data.data.level == 2 && Object.keys(sender_data.data.status.friends).length == 0) {
+            if (sender_data.data.can_move) {
+                if (sender_data.data.level == 2 && Object.keys(sender_data.data.friends).length == 0) {
                     Game.Ending.no_friends(sender_data, replier, sender);
                 } else {
                     if (command(msg)[1] == sender_data.data.room) {
