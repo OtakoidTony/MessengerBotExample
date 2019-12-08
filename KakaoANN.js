@@ -155,6 +155,20 @@ Matrix.ReLU = function(A) {
     }
     return out;
 }
+Matrix.ReLU_derivative = function(A) {
+    var out = [];
+    for (var i in A) {
+        out[i] = [];
+        for (var j in A[i]) {
+            if (A[i][j]>=0){
+                out[i][j] = 1;
+            } else {
+                out[i][j] = 0;
+            }
+        }
+    }
+    return out;
+}
 Matrix.multiply = function(A, B) {
     var answer = [];
     for (var i = 0; i < A.length; i++) {
@@ -270,6 +284,52 @@ while (i < 1000) {
     error_4[i]=NN.output[3]-NN.y[3];
     i = i + 1;
 }
+
+
+
+/* 3 layer */
+function NeuralNetwork3Layer(x, y){
+	var l2 = 5;
+	var l3 = 4;
+	this.synaptic_weights1 = Matrix.minus(Matrix.time(Matrix.rand(3, l2), 2), Matrix.numbers(3, l2, 1));
+	this.synaptic_weights2 = Matrix.minus(Matrix.time(Matrix.rand(l2, l3), 2), Matrix.numbers(l2, l3, 1));
+	this.synaptic_weights3 = Matrix.minus(Matrix.time(Matrix.rand(l3, 1), 2), Matrix.numbers(l3, 1, 1));
+	
+	this.train = function(training_set_inputs, training_set_outputs, number_of_training_iterations){
+		for (k = 0; k < number_of_training_iterations; k++){
+			var a2 = Matrix.sigmoid(Matrix.dot(training_set_inputs, this.synaptic_weights1));
+			var a3 = Matrix.sigmoid(Matrix.dot(a2, this.synaptic_weights2));
+			var a4 = Matrix.sigmoid(Matrix.dot(a3, this.synaptic_weights3));
+			
+			var del4 = Matrix.multiply(Matrix.minus(training_set_outputs, a4), Matrix.sigmoid_derivative(a4));
+			var del3 = Matrix.multiply(Matrix.dot(this.synaptic_weights3, Matrix.T(del4)),(Matrix.T(Matrix.sigmoid_derivative(a3))));
+			var del2 = Matrix.multiply(Matrix.dot(this.synaptic_weights2, del3),(Matrix.T(Matrix.sigmoid_derivative(a2))));
+			
+			var adjustment3 = Matrix.dot(Matrix.T(a3), del4);
+			var adjustment2 = Matrix.dot(Matrix.T(a2), Matrix.T(del3));
+			var adjustment1 = Matrix.dot(Matrix.T(training_set_inputs), Matrix.T(del2));
+			
+			this.synaptic_weights1 = Matrix.plus(this.synaptic_weights1, adjustment1);
+			this.synaptic_weights2 = Matrix.plus(this.synaptic_weights2, adjustment2);
+			this.synaptic_weights3 = Matrix.plus(this.synaptic_weights3, adjustment3);
+		}
+	}
+	
+	this.forward_pass = function(inputs){
+		var a2 = Matrix.sigmoid(Matrix.dot(inputs, this.synaptic_weights1));
+		var a3 = Matrix.sigmoid(Matrix.dot(a2, this.synaptic_weights2));
+		var a4 = Matrix.sigmoid(Matrix.dot(a3, this.synaptic_weights3));
+		return a4;
+	}
+}	
+
+var neural_network = new NeuralNetwork3Layer();
+training_set_inputs = [[0,0,1],[1,1,1],[1,0,1],[0,1,1]];
+training_set_outputs = Matrix.T([[0,1,1,0]]);
+
+neural_network.train(training_set_inputs, training_set_outputs, 10000);
+neural_network.forward_pass([[1,0,0]]);
+
 function array_to_string(arr){
     var i = 0;
     var out = "";
