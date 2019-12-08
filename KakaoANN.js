@@ -1,15 +1,5 @@
 var Matrix = {};
 
-Matrix.sum = function(A, B) {
-    var answer = [];
-    for (var i = 0; i < A.length; i++) {
-        answer[i] = [];
-        for (var j = 0; j < A[0].length; j++) {
-            answer[i][j] = A[i][j] + B[i][j];
-        }
-    }
-    return answer;
-}
 Matrix.dot = function(a, b) {
     var aNumRows = a.length,
         aNumCols = a[0].length,
