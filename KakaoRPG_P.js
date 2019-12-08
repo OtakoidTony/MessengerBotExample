@@ -122,6 +122,11 @@ function UserData(Data) {
             this.data.def = 5;
             /* Experience */
             this.data.exp = 0;
+
+
+
+            this.data.flags = {};
+            this.data.flags.monster = null;
         }
     }
     this.save = function(sender) {
@@ -154,7 +159,12 @@ function randomItem(a) {
 }
 
 const monsters = {
-    '몬스터1'= {
+    '몬스터': {
+        'hp': 30,
+        'atk': 3,
+        'def': 3
+    },
+    '꾸루몬': {
         'hp': 30,
         'atk': 3,
         'def': 3
@@ -173,6 +183,17 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
         } else {
             var sender_data = new UserData(load_data(sender));
             sender_data.init();
+            var monster_name = randomItem(Object.keys(monsters));
+            var monster = new monsters(monster_name);
+            sender_data.data.flags.monster = monster;
+            sender_data.save(sender);
+            if ((parseInt(monster_name.charCodeAt(0).toString(16), 16) - parseInt("AC00", 16)) % 28 == 0) {
+                replier.reply(sender_data.data.name + "가 나타났다!");
+                wait(wait_term);
+            } else {
+                replier.reply(sender_data.data.name + "이 나타났다!");
+                wait(wait_term);
+            }
         }
     }
 }
