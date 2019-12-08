@@ -128,6 +128,7 @@ function UserData(Data) {
             this.data["flags"] = {};
             /* UserData.data.flags */
             this.data.flags["after_rescued_child"] = false;
+            this.data.flags["cb3e6f66f9be29a494397b5b153ab6ff"] = false;
         }
     }
     /**
@@ -195,14 +196,7 @@ function probablity(x, minimum, maximum) {
 var Game = {};
 Game.Ending = {};
 const wait_term = 0.9;
-/**
- * Bad Ending #1
- * @param {any} sender_data var sender_data = new UserData(load_data(sender));
- * sender_data.init(sender);
- * @param {any} replier 응답용 객체. replier.reply("메시지") 또는
- * replier.reply("방이름","메시지")으로 전송
- * @param {any} sender
- */
+
 Game.Ending.no_friends = function(sender_data, replier, sender) {
     var sender_message_name = "[" + sender_data.data.name + "] ";
     const scripts = [
@@ -346,6 +340,7 @@ Game.search = function(sender, replier) {
             replier.reply(scripts_child_rescue[i]);
             wait(wait_term);
         }
+        sender_data.data.flags.cb3e6f66f9be29a494397b5b153ab6ff = true;
         temp_child_makers.push(sender);
     } else {
         /* 확률 = 60 - ( level * 10 ) */
@@ -410,30 +405,33 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             /* 플레이어 데이터 로드 */
             var sender_data = new UserData(load_data(sender));
             sender_data.init(sender);
-            var sender_message_name = "[" + sender_data.data.name + "] ";
-            sender_data.data.friends[msg] = {};
-            sender_data.data.flags.after_rescued_child = true;
-            sender_data.save(sender);
-            replier.reply("[SYS] 동료의 이름을 설정하였습니다.");
-            temp_child_makers.splice(temp_child_makers.indexOf(sender), 1);
-            var friend_message_name = "[" + msg + "] ";
-            var scripts_cb3e6f66f9be29a494397b5b153ab6ff = [
-                friend_message_name + "도, 도와줘...",
-                sender_message_name + "에...?",
-                "그 아이는 울먹이며 부들부들 떨고 있었다.",
-                "[???] 무슨 일이야?!",
-                friend_message_name + "히이이이익!!!!!",
-                sender_message_name + "...!",
-                "[???] 우히히히히, 귀여운 것들...!",
-                friend_message_name + "도망쳐!!!",
-                "그 아이는 갑자기 일어서더니 나의 손목을 잡고 달렸다. 표정을 자세히는 보지 못했지만 달리면서도 많이 떠는 것만 같았다.",
-                "[???] 어차피 여기서 나갈 수 없다고~?",
-                "그 이상한 아저씨를 뒤로한체 나와 " + msg + "는 3번방에 가게 되었다.",
-                game_map_3
-            ];
-            for (var i in scripts_cb3e6f66f9be29a494397b5b153ab6ff) {
-                replier.reply(scripts_cb3e6f66f9be29a494397b5b153ab6ff[i]);
-                wait(wait_term);
+            if (sender_data.data.flags.cb3e6f66f9be29a494397b5b153ab6ff) {
+                var sender_message_name = "[" + sender_data.data.name + "] ";
+                sender_data.data.friends[msg] = {};
+                sender_data.data.flags.after_rescued_child = true;
+                sender_data.save(sender);
+                replier.reply("[SYS] 동료의 이름을 설정하였습니다.");
+                temp_child_makers.splice(temp_child_makers.indexOf(sender), 1);
+                var friend_message_name = "[" + msg + "] ";
+                var scripts_cb3e6f66f9be29a494397b5b153ab6ff = [
+                    friend_message_name + "도, 도와줘...",
+                    sender_message_name + "에...?",
+                    "그 아이는 울먹이며 부들부들 떨고 있었다.",
+                    "[???] 무슨 일이야?!",
+                    friend_message_name + "히이이이익!!!!!",
+                    sender_message_name + "...!",
+                    "[???] 우히히히히, 귀여운 것들...!",
+                    friend_message_name + "도망쳐!!!",
+                    "그 아이는 갑자기 일어서더니 나의 손목을 잡고 달렸다. 표정을 자세히는 보지 못했지만 달리면서도 많이 떠는 것만 같았다.",
+                    "[???] 어차피 여기서 나갈 수 없다고~?",
+                    "그 이상한 아저씨를 뒤로한체 나와 " + msg + "는 3번방에 가게 되었다.",
+                    game_map_3
+                ];
+                for (var i in scripts_cb3e6f66f9be29a494397b5b153ab6ff) {
+                    replier.reply(scripts_cb3e6f66f9be29a494397b5b153ab6ff[i]);
+                    wait(wait_term);
+                }
+                sender_data.data.flags.cb3e6f66f9be29a494397b5b153ab6ff = false;
             }
         }
         if (command(msg)[0] == ":start") {
