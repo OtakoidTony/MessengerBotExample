@@ -5,11 +5,11 @@ Matrix.dot = function(a, b) {
         aNumCols = a[0].length,
         bNumRows = b.length,
         bNumCols = b[0].length,
-        m = new Array(aNumRows); // initialize array of rows
+        m = new Array(aNumRows);
     for (var r = 0; r < aNumRows; ++r) {
-        m[r] = new Array(bNumCols); // initialize the current row
+        m[r] = new Array(bNumCols);
         for (var c = 0; c < bNumCols; ++c) {
-            m[r][c] = 0; // initialize the current cell
+            m[r][c] = 0;
             for (var i = 0; i < aNumCols; ++i) {
                 m[r][c] += a[r][i] * b[i][c];
             }
@@ -136,11 +136,7 @@ Matrix.ReLU = function(A) {
     for (var i in A) {
         out[i] = [];
         for (var j in A[i]) {
-            if (A[i][j]>=0){
-                out[i][j] = A[i][j];
-            } else {
-                out[i][j] = 0;
-            }
+            out[i][j] = Math.max(0.00000000001, A[i][j]);
         }
     }
     return out;
@@ -150,11 +146,7 @@ Matrix.ReLU_derivative = function(A) {
     for (var i in A) {
         out[i] = [];
         for (var j in A[i]) {
-            if (A[i][j]>=0){
-                out[i][j] = 1;
-            } else {
-                out[i][j] = 0;
-            }
+            out[i][j] = Math.max(0.00000000001, 1);
         }
     }
     return out;
@@ -245,77 +237,128 @@ function NeuralNetwork(x, y) {
         this.backprop();
     }
 }
-var X = [
-    [0, 0, 1],
-    [0, 1, 1],
-    [1, 0, 1],
-    [1, 1, 1]
-];
-var y = [
-    [0],
-    [1],
-    [1],
-    [0]
-];
-
-var NN = new NeuralNetwork(X, y);
-var i = 0;
-var plot_data=[];
-var error_1 = [];
-var error_2 = [];
-var error_3 = [];
-var error_4 = [];
-while (i < 1000) {
-    NN.train(X, y);
-    plot_data[i]=Matrix.minus(NN.output, NN.y);
-    error_1[i]=NN.output[0]-NN.y[0];
-    error_2[i]=NN.output[1]-NN.y[1];
-    error_3[i]=NN.output[2]-NN.y[2];
-    error_4[i]=NN.output[3]-NN.y[3];
-    i = i + 1;
-}
-
-
 
 /* 3 layer */
 function NeuralNetwork3Layer(x, y){
-	var l2 = 5;
-	var l3 = 4;
+	this.training_set_inputs = x;
+	this.training_set_outputs = y;
+	
+	var l2 = 12;
+	var l3 = 12;
+	
 	this.synaptic_weights1 = Matrix.minus(Matrix.time(Matrix.rand(3, l2), 2), Matrix.numbers(3, l2, 1));
 	this.synaptic_weights2 = Matrix.minus(Matrix.time(Matrix.rand(l2, l3), 2), Matrix.numbers(l2, l3, 1));
 	this.synaptic_weights3 = Matrix.minus(Matrix.time(Matrix.rand(l3, 1), 2), Matrix.numbers(l3, 1, 1));
 	
-	this.train = function(training_set_inputs, training_set_outputs, number_of_training_iterations){
-		for (k = 0; k < number_of_training_iterations; k++){
-			var a2 = Matrix.sigmoid(Matrix.dot(training_set_inputs, this.synaptic_weights1));
-			var a3 = Matrix.sigmoid(Matrix.dot(a2, this.synaptic_weights2));
-			var a4 = Matrix.sigmoid(Matrix.dot(a3, this.synaptic_weights3));
+	this.feedforward = function(){		
+		this.layer1 = Matrix.sigmoid(Matrix.dot(this.training_set_inputs, this.synaptic_weights1));
+		this.layer2 = Matrix.sigmoid(Matrix.dot(this.layer1, this.synaptic_weights2));
+		this.layer3 = Matrix.sigmoid(Matrix.dot(this.layer2, this.synaptic_weights3));
+        return this.layer3;
+    }
+	
+	this.backprop = function(){
+		var del3 = Matrix.multiply(Matrix.minus(this.training_set_outputs, this.layer3), Matrix.sigmoid_derivative(this.layer3));
+		var del2 = Matrix.multiply(Matrix.dot(this.synaptic_weights3, Matrix.T(del3)),(Matrix.T(Matrix.sigmoid_derivative(this.layer2))));
+		var del1 = Matrix.multiply(Matrix.dot(this.synaptic_weights2, del2),(Matrix.T(Matrix.sigmoid_derivative(this.layer1))));
 			
-			var del4 = Matrix.multiply(Matrix.minus(training_set_outputs, a4), Matrix.sigmoid_derivative(a4));
-			var del3 = Matrix.multiply(Matrix.dot(this.synaptic_weights3, Matrix.T(del4)),(Matrix.T(Matrix.sigmoid_derivative(a3))));
-			var del2 = Matrix.multiply(Matrix.dot(this.synaptic_weights2, del3),(Matrix.T(Matrix.sigmoid_derivative(a2))));
+		var adjustment3 = Matrix.dot(Matrix.T(this.layer2), del3);
+		var adjustment2 = Matrix.dot(Matrix.T(this.layer1), Matrix.T(del2));
+		var adjustment1 = Matrix.dot(Matrix.T(this.training_set_inputs), Matrix.T(del1));
 			
-			var adjustment3 = Matrix.dot(Matrix.T(a3), del4);
-			var adjustment2 = Matrix.dot(Matrix.T(a2), Matrix.T(del3));
-			var adjustment1 = Matrix.dot(Matrix.T(training_set_inputs), Matrix.T(del2));
-			
-			this.synaptic_weights1 = Matrix.plus(this.synaptic_weights1, adjustment1);
-			this.synaptic_weights2 = Matrix.plus(this.synaptic_weights2, adjustment2);
-			this.synaptic_weights3 = Matrix.plus(this.synaptic_weights3, adjustment3);
+		this.synaptic_weights1 = Matrix.plus(this.synaptic_weights1, adjustment1);
+		this.synaptic_weights2 = Matrix.plus(this.synaptic_weights2, adjustment2);
+		this.synaptic_weights3 = Matrix.plus(this.synaptic_weights3, adjustment3);
+	}
+	
+	this.train = function(number_of_training){
+		for (k = 0; k < number_of_training; k++){
+			this.feedforward();
+			this.backprop();
 		}
 	}
 	
 	this.forward_pass = function(inputs){
-		var a2 = Matrix.sigmoid(Matrix.dot(inputs, this.synaptic_weights1));
-		var a3 = Matrix.sigmoid(Matrix.dot(a2, this.synaptic_weights2));
-		var a4 = Matrix.sigmoid(Matrix.dot(a3, this.synaptic_weights3));
-		return a4;
+		var layer1 = Matrix.sigmoid(Matrix.dot(inputs, this.synaptic_weights1));
+		var layer2 = Matrix.sigmoid(Matrix.dot(layer1, this.synaptic_weights2));
+		var layer3 = Matrix.sigmoid(Matrix.dot(layer2, this.synaptic_weights3));
+		return layer3;
 	}
-}	
+}
 
-var neural_network = new NeuralNetwork3Layer();
 training_set_inputs = [[0,0,1],[1,1,1],[1,0,1],[0,1,1]];
 training_set_outputs = Matrix.T([[0,1,1,0]]);
+var neural_network = new NeuralNetwork3Layer(training_set_inputs,training_set_outputs);
 
-neural_network.train(training_set_inputs, training_set_outputs, 10000);
+neural_network.train(10000);
 neural_network.forward_pass([[1,0,0]]);
+
+
+
+
+
+
+
+
+/*
+function NeuralNetwork4Layer(x, y){
+	this.inputs = x;
+	this.y = y;
+	
+	var l2 = 6;
+	var l3 = 6;
+	var l4 = 6;
+	
+	this.synaptic_weights1 = Matrix.minus(Matrix.time(Matrix.rand(3,  l2), 2), Matrix.numbers(3,  l2, 1));
+	this.synaptic_weights2 = Matrix.minus(Matrix.time(Matrix.rand(l2, l3), 2), Matrix.numbers(l2, l3, 1));
+	this.synaptic_weights3 = Matrix.minus(Matrix.time(Matrix.rand(l3, l4), 2), Matrix.numbers(l3, l4, 1));
+	this.synaptic_weights4 = Matrix.minus(Matrix.time(Matrix.rand(l4,  1), 2), Matrix.numbers(l4,  1, 1));
+	
+	this.feedforward = function(){		
+		this.layer1 = Matrix.sigmoid(Matrix.dot(this.inputs, this.synaptic_weights1));
+		this.layer2 = Matrix.sigmoid(Matrix.dot(this.layer1, this.synaptic_weights2));
+		this.layer3 = Matrix.sigmoid(Matrix.dot(this.layer2, this.synaptic_weights3));
+		this.layer4 = Matrix.sigmoid(Matrix.dot(this.layer3, this.synaptic_weights4));
+        return this.layer4;
+    }
+	
+	this.backprop = function(){
+		var del4 = Matrix.multiply(Matrix.minus(this.y, this.layer4), (Matrix.sigmoid_derivative(this.layer4)));
+		var del3 = Matrix.multiply(Matrix.dot(this.synaptic_weights4, Matrix.T(del4)),(Matrix.T(Matrix.sigmoid_derivative(this.layer3))));
+		var del2 = Matrix.multiply(Matrix.dot(this.synaptic_weights3, (del3)),        (Matrix.T(Matrix.sigmoid_derivative(this.layer2))));
+		var del1 = Matrix.multiply(Matrix.dot(this.synaptic_weights2, (del2)),        (Matrix.T(Matrix.sigmoid_derivative(this.layer1))));
+			
+		var adjustment4 = Matrix.dot(Matrix.T(this.layer3), del4);
+		var adjustment3 = Matrix.dot(Matrix.T(this.layer2), del3);
+		var adjustment2 = Matrix.dot(Matrix.T(this.layer1), del2);
+		var adjustment1 = Matrix.dot(Matrix.T(this.inputs), Matrix.T(del1));
+			
+		this.synaptic_weights1 = Matrix.plus(this.synaptic_weights1, adjustment1);
+		this.synaptic_weights2 = Matrix.plus(this.synaptic_weights2, adjustment2);
+		this.synaptic_weights3 = Matrix.plus(this.synaptic_weights3, adjustment3);
+		this.synaptic_weights4 = Matrix.plus(this.synaptic_weights4, adjustment4);
+	}
+	
+	this.train = function(number_of_training){
+		for (k = 0; k < number_of_training; k++){
+			this.feedforward();
+			this.backprop();
+		}
+	}
+	
+	this.forward_pass = function(inputs){
+		var layer1 = Matrix.sigmoid(Matrix.dot(inputs, this.synaptic_weights1));
+		var layer2 = Matrix.sigmoid(Matrix.dot((layer1), Matrix.T(this.synaptic_weights2)));
+		var layer3 = Matrix.sigmoid(Matrix.dot(layer2, this.synaptic_weights3));
+		var layer4 = Matrix.sigmoid(Matrix.dot(layer3, this.synaptic_weights4));
+		console.info(layer1,layer2,layer3,layer4);
+		return layer4;
+	}
+}
+
+training_set_inputs = [[0,0,1],[1,1,1],[1,0,1],[0,1,1]];
+training_set_outputs = Matrix.T([[0,1,1,0]]);
+var neural_network = new NeuralNetwork4Layer(training_set_inputs,training_set_outputs);
+
+neural_network.train(1);
+neural_network.forward_pass([[1,0,0]]);*/
