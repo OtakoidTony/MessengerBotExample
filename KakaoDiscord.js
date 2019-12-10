@@ -75,7 +75,7 @@
                 con.disconnect();
             }
             var result = str + "";
-            return JSON.parse(result).items;
+            return JSON.parse(result);
         } catch (e) {
             Log.debug(e);
         }
