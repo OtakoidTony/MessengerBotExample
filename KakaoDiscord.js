@@ -1,4 +1,4 @@
-function Discord(isBot, token) {
+ï»¿function Discord(isBot, token) {
     this.BaseURL = "https://discordapp.com/api";
     this.token = token;
     this.isBot = isBot;
@@ -19,7 +19,7 @@ function Discord(isBot, token) {
                 "tts": false,
                 "embed": {
                     "title": sender,
-                    "description": "Ä«Ä«¿ÀÅå¿¡¼­ º¸³½ ¸Ş½ÃÁöÀÔ´Ï´Ù."
+                    "description": "ì¹´ì¹´ì˜¤í†¡ì—ì„œ ë³´ë‚¸ ë©”ì‹œì§€ì…ë‹ˆë‹¤."
                 }
             };
             if (this.isBot) {
