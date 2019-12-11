@@ -4,8 +4,8 @@
     this.isBot = isBot;
 
     /**
-     * Returns an object with a single valid WSS URL, 
-     * which the client can use for Connecting.
+     * 클라이언트가 접속시 사용할 단일 유효 WSS URL이
+     * 담긴 오브젝트를 반환합니다.
      * */
     this.getGateway = function () {
         try {
@@ -26,9 +26,8 @@
     }
 
     /**
-     * Returns an object based on the information in Get Gateway, 
-     * plus additional metadata that can help during the operation 
-     * of large or sharded bots.
+     * 봇에 관련된 Get Gateway 기반의 함수입니다.
+     * 몇 함수는 이 함수로부터 쿠키를 얻어 사용합니다.
      * */
     this.getGatewayBot = function () {
         try {
@@ -50,11 +49,11 @@
     }
 
     /**
-     * Post a message to a guild text or DM channel.
-     * @param {any} sender
-     * @param {any} message
-     * @param {any} room
-     * @param {any} channel_id
+     * 디스코드로 메시지를 전송합니다.
+     * @param {any} sender 발신자 이름
+     * @param {any} message 디스코드로 전송할 메시지 내용
+     * @param {any} room 보낸 카카오톡 채팅방 이름
+     * @param {any} channel_id 디스코드 채널 ID
      */
     this.sendMessage = function (sender, message, room, channel_id) {
         try {
