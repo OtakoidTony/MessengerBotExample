@@ -51,10 +51,10 @@
 
     /**
      * Post a message to a guild text or DM channel.
-     * 
-     * @param {string} sender
-     * @param {string} message
-     * @param {string} channel_id
+     * @param {any} sender
+     * @param {any} message
+     * @param {any} room
+     * @param {any} channel_id
      */
     this.sendMessage = function (sender, message, room, channel_id) {
         try {
