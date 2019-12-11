@@ -52,6 +52,7 @@
      * 디스코드로 메시지를 전송합니다.
      * @param {any} sender 발신자 이름
      * @param {any} message 디스코드로 전송할 메시지 내용
+     * 주의: 2000자까지 발송 가능.
      * @param {any} room 보낸 카카오톡 채팅방 이름
      * @param {any} channel_id 디스코드 채널 ID
      */
@@ -93,9 +94,8 @@
     }
 
     /**
-     * Returns the messages for a channel. If operating on a guild channel, 
-     * this function requires the VIEW_CHANNEL permission to be present 
-     * on the current user.
+     * 채널 혹은 개인 채팅에서의 메시지를 수신합니다.
+     * 만약 길드채널인 경우 이 함수는 VIEW_CHANNEL 권한이 요구됩니다.
      * @param {string} channel_id
      */
     this.getMessage = function (channel_id) {
@@ -130,7 +130,7 @@
     }
 
     /**
-     * Get a channel by ID. Returns a channel object.
+     * 채널 객체를 반환하는 함수입니다.
      * @param {string} channel_id
      */
     this.getChannel = function (channel_id) {
