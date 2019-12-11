@@ -77,7 +77,7 @@
                     .timeout(5000)
                     .ignoreContentType(true)
                     .header("Host", "discordapp.com")
-                    .header("Authorization", "Bearer " + this.token)
+                    .header("Authorization", "Bot " + this.token)
                     .header("User-Agent", "Mozilla/5.0")
                     .header("Cache-Control", "no-cache")
                     .header("Accept-Encoding", "gzip, deflate")
