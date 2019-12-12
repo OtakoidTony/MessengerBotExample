@@ -1,4 +1,13 @@
-﻿function Discord(isBot, token) {
+﻿// TODO: Channel management | Create Delete DM Edit History Info Permission
+// TODO: Edit Profile       | Edit_Profile
+// TODO: Invites            | Create Delete Info Join
+// TODO: Message management | Send Send_File Edit Delete
+// TODO: Role management    | Create Delete Edit Info
+// TODO: Server management  | Ban Ban_List Create Delete Edit Info Kick Unban Change_Owner
+// TODO: User management    | Voice_Move
+
+
+function Discord(isBot, token) {
     this.BaseURL = "https://discordapp.com/api";
     this.token = token;
     this.isBot = isBot;
@@ -57,22 +66,22 @@
      * @param {any} channel_id 디스코드 채널 ID
      */
     this.sendMessage = function (sender, message, room, channel_id) {
+        var message_json = {
+            "tts": false,
+            "embed": {
+                "title": sender,
+                "description": message,
+                "author": {
+                    "name": room,
+                    "icon_url": "https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium_ov.png"
+                },
+                "image": {
+                    "url": "https://developers.kakao.com/assets/img/kakao.png"
+                }
+            }
+        };
         if (this.isBot) {
             try {
-                var message_json = {
-                    "tts": false,
-                    "embed": {
-                        "title": sender,
-                        "description": message,
-                        "author": {
-                            "name": room,
-                            "icon_url": "https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium_ov.png"
-                        },
-                        "image": {
-                            "url": "https://developers.kakao.com/assets/img/kakao.png"
-                        }
-                    }
-                };
                 var result = org.jsoup.Jsoup.connect(this.BaseURL + "/v6/channels/" + channel_id + "/messages")
                     .timeout(5000)
                     .ignoreContentType(true)
@@ -94,20 +103,6 @@
             }
         } else {
             try {
-                var message_json = {
-                    "tts": false,
-                    "embed": {
-                        "title": sender,
-                        "description": message,
-                        "author": {
-                            "name": room,
-                            "icon_url": "https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium_ov.png"
-                        },
-                        "image": {
-                            "url": "https://developers.kakao.com/assets/img/kakao.png"
-                        }
-                    }
-                };
                 var result = org.jsoup.Jsoup.connect(this.BaseURL + "/v6/channels/" + channel_id + "/messages")
                     .timeout(5000)
                     .ignoreContentType(true)
@@ -249,6 +244,69 @@
                 Log.debug(e);
             }
         }
-        
+    }
+
+    /**
+     * 새로운 초대 링크를 생성합니다.
+     * @param {string} channel_id 디스코드 채널 ID
+     * @param {number} max_age 초대링크 유효시간
+     * 기본값: 86400 (24 hours)
+     * @param {number} max_uses 초대링크 최대 사용치
+     * 기본값: 0 (무제한)
+     * @param {boolean} temporary 역할 부여한 경우의 초대 여부
+     * 기본값: false
+     * @param {boolean} unique 고유한 링크 생성 여부
+     * 기본값: false
+     */
+    this.createChannelInvite = function (channel_id, max_age, max_uses, temporary, unique) {
+        var json_params = {
+            'max_age': max_age,
+            'max_uses': max_uses,
+            'temporary': temporary,
+            'unique': unique
+        };
+        if (this.isBot) {
+            try {
+                var result = org.jsoup.Jsoup.connect(this.BaseURL + "/v6/channels/" + channel_id + "/invites")
+                    .timeout(5000)
+                    .ignoreContentType(true)
+                    .header("Host", "discordapp.com")
+                    .header("Authorization", "Bot " + this.token)
+                    .header("User-Agent", "Mozilla/5.0")
+                    .header("Cache-Control", "no-cache")
+                    .header("Accept-Encoding", "gzip, deflate")
+                    .header("Connection", "keep-alive")
+                    .header("Cache-Control", "no-cache")
+                    .header("Accept", "*/*")
+                    .cookies(this.getGatewayBot().cookies())
+                    .requestBody(JSON.stringify(json_params))
+                    .header("Content-Type", "application/json")
+                    .post();
+                return result;
+            } catch (e) {
+                Log.debug(e);
+            }
+        } else {
+            try {
+                var result = org.jsoup.Jsoup.connect(this.BaseURL + "/v6/channels/" + channel_id + "/invites")
+                    .timeout(5000)
+                    .ignoreContentType(true)
+                    .header("Host", "discordapp.com")
+                    .header("Authorization", "Bearer " + this.token)
+                    .header("User-Agent", "Mozilla/5.0")
+                    .header("Cache-Control", "no-cache")
+                    .header("Accept-Encoding", "gzip, deflate")
+                    .header("Connection", "keep-alive")
+                    .header("Cache-Control", "no-cache")
+                    .header("Accept", "*/*")
+                    .cookies(this.getGateway().cookies())
+                    .requestBody(JSON.stringify(json_params))
+                    .header("Content-Type", "application/json")
+                    .post();
+                return result;
+            } catch (e) {
+                Log.debug(e);
+            }
+        }
     }
 }
