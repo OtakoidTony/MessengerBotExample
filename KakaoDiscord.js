@@ -1,7 +1,7 @@
-﻿// TODO: Channel management | Create Delete DM Edit History Info Permission
+﻿// TODO: Channel management | Create DM Edit History Permission
 // TODO: Edit Profile       | Edit_Profile
-// TODO: Invites            | Create Delete Info Join
-// TODO: Message management | Send Send_File Edit Delete
+// TODO: Invites            | Join
+// TODO: Message management | Send_File Edit Delete
 // TODO: Role management    | Create Delete Edit Info
 // TODO: Server management  | Ban Ban_List Create Delete Edit Info Kick Unban Change_Owner
 // TODO: User management    | Voice_Move
@@ -11,6 +11,33 @@ function Discord(isBot, token) {
     this.BaseURL = "https://discordapp.com/api";
     this.token = token;
     this.isBot = isBot;
+
+    function GET(url) {
+        var url = new java.net.URL(url);
+        var con = url.openConnection();
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+        if (this.isBot) {
+            con.setRequestProperty("Authorization", "Bot " + this.token);
+        } else {
+            con.setRequestProperty("Authorization", "Bearer " + this.token);
+        }
+        if (con != null) {
+            con.setConnectTimeout(5000);
+            con.setUseCaches(false);
+            var isr = new java.io.InputStreamReader(con.getInputStream());
+            var br = new java.io.BufferedReader(isr);
+            var str = br.readLine();
+            var line = "";
+            while ((line = br.readLine()) != null) {
+                str += "\n" + line;
+            }
+            isr.close();
+            br.close();
+            con.disconnect();
+        }
+        var result = str + "";
+        return JSON.parse(result);
+    }
 
     /**
      * 클라이언트가 접속시 사용할 단일 유효 WSS URL이
@@ -132,30 +159,7 @@ function Discord(isBot, token) {
      */
     this.getMessage = function (channel_id) {
         try {
-            var url = new java.net.URL(this.BaseURL + "/v6/channels/" + channel_id + "/messages");
-            var con = url.openConnection();
-            con.setRequestProperty("User-Agent", "Mozilla/5.0");
-            if (this.isBot) {
-                con.setRequestProperty("Authorization", "Bot " + this.token);
-            } else {
-                con.setRequestProperty("Authorization", "Bearer " + this.token);
-            }
-            if (con != null) {
-                con.setConnectTimeout(5000);
-                con.setUseCaches(false);
-                var isr = new java.io.InputStreamReader(con.getInputStream());
-                var br = new java.io.BufferedReader(isr);
-                var str = br.readLine();
-                var line = "";
-                while ((line = br.readLine()) != null) {
-                    str += "\n" + line;
-                }
-                isr.close();
-                br.close();
-                con.disconnect();
-            }
-            var result = str + "";
-            return JSON.parse(result);
+            return GET(this.BaseURL + "/v6/channels/" + channel_id + "/messages");
         } catch (e) {
             Log.debug(e);
         }
@@ -200,7 +204,7 @@ function Discord(isBot, token) {
      * 채널을 삭제하거나 개인 채팅을 종료(삭제)할 때 사용하는 함수입니다.
      * @param {any} channel_id 디스코드 채널 ID
      */
-    this.delectChannel = function (channel_id) {
+    this.deleteChannel = function (channel_id) {
         if (this.isBot) {
             try {
                 var result = org.jsoup.Jsoup.connect(this.BaseURL + "/v6/channels/" + channel_id)
@@ -303,6 +307,60 @@ function Discord(isBot, token) {
                     .requestBody(JSON.stringify(json_params))
                     .header("Content-Type", "application/json")
                     .post();
+                return result;
+            } catch (e) {
+                Log.debug(e);
+            }
+        }
+    }
+
+    this.getChannelInvite = function (channel_id) {
+        try {
+            return GET(this.BaseURL + "/v6/channels/" + channel_id + "/invites");
+        } catch (e) {
+            Log.debug(e);
+        }
+    }
+
+    this.deleteInvite = function (invite_code) {
+        if (this.isBot) {
+            try {
+                var result = org.jsoup.Jsoup.connect(this.BaseURL + "/v6/invites/" + invite_code)
+                    .timeout(5000)
+                    .ignoreContentType(true)
+                    .header("Host", "discordapp.com")
+                    .header("Authorization", "Bot " + this.token)
+                    .header("User-Agent", "Mozilla/5.0")
+                    .header("Cache-Control", "no-cache")
+                    .header("Accept-Encoding", "gzip, deflate")
+                    .header("Connection", "keep-alive")
+                    .header("Cache-Control", "no-cache")
+                    .header("Accept", "*/*")
+                    .cookies(this.getGatewayBot().cookies())
+                    .header("Content-Type", "application/json")
+                    .method(org.jsoup.Connection.Method.DELETE)
+                    .execute();
+                return result;
+            } catch (e) {
+                Log.debug(e);
+            }
+        } else {
+            try {
+                var result = org.jsoup.Jsoup.connect(this.BaseURL + "/v6/invites/" + invite_code)
+                    .timeout(5000)
+                    .ignoreContentType(true)
+                    .header("Host", "discordapp.com")
+                    .header("Authorization", "Bearer " + this.token)
+                    .header("User-Agent", "Mozilla/5.0")
+                    .header("Cache-Control", "no-cache")
+                    .header("Accept-Encoding", "gzip, deflate")
+                    .header("Connection", "keep-alive")
+                    .header("Cache-Control", "no-cache")
+                    .header("Accept", "*/*")
+                    .cookies(this.getGateway().cookies())
+                    .header("Content-Type", "application/json")
+                    .method(org.jsoup.Connection.Method.DELETE)
+                    .execute();
                 return result;
             } catch (e) {
                 Log.debug(e);
