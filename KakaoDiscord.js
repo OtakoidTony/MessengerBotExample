@@ -6,11 +6,29 @@
 // TODO: Server management  | Ban Ban_List Create Delete Edit Info Kick Unban Change_Owner
 // TODO: User management    | Voice_Move
 
+const Socket = java.net.Socket;
 
 function Discord(isBot, token) {
     this.BaseURL = "https://discordapp.com/api";
+    this.GatewayUrl = "wss://gateway.discord.gg/?v=6&encoding=json";
+
     this.token = token;
     this.isBot = isBot;
+
+    this.identify_object = {
+        "token": token,
+        "properties": {
+            "$os": "linux",
+            "$browser": "MessengerBot",
+            "$device": "Android"
+        }
+    };
+
+
+    this.ClientSocket = new com.squareup.okhttp3.OkHttpClient();
+    this.RequestSocket = new com.squareup.okhttp3.Request.Builder().url(gdaxUrl).build();
+
+    
 
     function GET(url) {
         var url = new java.net.URL(url);
