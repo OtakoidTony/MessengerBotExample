@@ -238,6 +238,7 @@ function NeuralNetwork(x, y) {
     }
 }
 
+
 /* 3 layer */
 function NeuralNetwork3Layer(x, y){
 	this.training_set_inputs = x;
