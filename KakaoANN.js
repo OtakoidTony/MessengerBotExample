@@ -14,52 +14,26 @@ Matrix.dot = function(a, b) {
     }
     return m;
 }
-Matrix.T = function(A) {
-    return A[0].map((col, i) => A.map(row => row[i]));
-}
+
 Matrix.shape = function(A) {
     return [A.length, A[0].length];
 }
-Matrix.zeros = function(a, b) {
-    var i = 0;
-    var j = 0;
-    var A = [];
-    var B = [];
-    while (j < b) {
-        B.push(0);
-        j = j + 1;
-    }
-    while (i < a) {
-        A.push(B);
-        i = i + 1;
-    }
-    return A;
-}
+
 Matrix.numbers = function(a, b, n) {
-    var i = 0;
-    var j = 0;
     var A = [];
     var B = [];
-    while (j < b) {
+    for (var j = 0; j < b; j++) {
         B.push(n);
-        j = j + 1;
     }
-    while (i < a) {
+    for (var i = 0; i < a; i++) {
         A.push(B);
-        i = i + 1;
     }
     return A;
 }
-Matrix.time = function(A, t) {
-    var out = [];
-    for (var i in A) {
-        out[i] = [];
-        for (var j in A[i]) {
-            out[i][j] = A[i][j] * t;
-        }
-    }
-    return out;
+Matrix.zeros = function (a, b) {
+    return Matrix.numbers(a, b, 0);
 }
+
 Matrix.multiply_scalar = function(A, B) {
     var out = 0;
     for (var i in A) {
@@ -69,143 +43,216 @@ Matrix.multiply_scalar = function(A, B) {
     }
     return out;
 }
+Matrix.zeros_like = (A, t) => A.map((v) => v.map((k) => (0)));
+Matrix.T = (A) => A[0].map((col, i) => A.map(row => row[i]));
+Matrix.time = (A, t) => A.map((v) => v.map((k) => (k * t)));
 Matrix.plus = (a1, a2) => a1.map((b1, ind1) => b1.map((b2, ind2) => b2 + a2[ind1][ind2]));
 Matrix.minus = (a1, a2) => a1.map((b1, ind1) => b1.map((b2, ind2) => b2 - a2[ind1][ind2]));
-
+Matrix.multiply = (a1, a2) => a1.map((b1, ind1) => b1.map((b2, ind2) => b2 * a2[ind1][ind2]));
+Matrix.exp = (A) => A.map((v) => v.map((k) => Math.exp(k)));
+Matrix.log = (A) => A.map((v) => v.map((k) => Math.log(k)));
+Matrix.sigmoid = (A) => A.map((v) => v.map((k) => (1 / (1 + Math.exp(-k))));
+Matrix.sigmoid_derivative = (A) => A.map((v) => v.map((k) => (k * (1 - k))));
+Matrix.ReLU = (A) => A.map((v) => v.map((k) => (Math.max(0.00000000001, k))));
+Matrix.ReLU_derivative = (A) => A.map((v) => v.map((k) => (Math.max(0.00000000001, 1))));
+Matrix.sum = function (A) {
+    var result = 0;
+    for (var i = 0; i < A.length; i++) {
+        for (var j = 0; j < A[0].length; j++) {
+            result += A[i][j];
+        }
+    }
+    return result;
+}
 Matrix.rand = function(a, b) {
     var q = [];
-    var i = 0;
-    var j = 0;
-    while (i < a) {
+    for (var i = 0; i < a; i++) {
         q[i] = [];
-        while (j < b) {
+        for (var j = 0; j < b; j++) {
             q[i][j] = Math.random();
-            j = j + 1;
         }
-        j = 0;
-        i = i + 1;
     }
     return q;
 }
-Matrix.sigmoid = function(A) {
+Matrix.max = function (array) {
+    var temp = [];
+    for (var i in array) {
+        temp.push(Math.max.apply(Math, array[i]));
+    }
+    return Math.max.apply(Math, temp);
+};
+Matrix.min = function (array) {
+    var temp = [];
+    for (var i in array) {
+        temp.push(Math.min.apply(Math, array[i]));
+    }
+    return Math.min.apply(Math, temp);
+};
+Matrix.softmax = function (A) {
     var out = [];
+    var max = Matrix.max(A);
+    var max_matrix = Matrix.numbers(Matrix.shape(A)[0], Matrix.shape(A)[1], max));
     for (var i in A) {
         out[i] = [];
         for (var j in A[i]) {
-            out[i][j] = 1 / (1 + Math.exp(-A[i][j]));
+            out[i][j] = Math.exp(A[i][j] - max) / Matrix.sum(Matrix.exp(Matrix.minus(A, max_matrix)));
         }
     }
     return out;
 }
-Matrix.sigmoid_derivative = function(A) {
-    var out = [];
-    for (var i in A) {
-        out[i] = [];
-        for (var j in A[i]) {
-            out[i][j] = A[i][j] * (1 - A[i][j]);
-        }
-    }
-    return out;
+/**
+ * Cross Entropy Error = −∑{p·log(q)}
+ * @param {any} p
+ * @param {any} q
+ */
+Matrix.cross_entropy_error = function (p, q) {
+    var delta = 0.0000001;
+    var qlog = Matrix.log(q + delta);
+    return -Matrix.sum(Matrix.multiply(p, qlog));
 }
-Matrix.ReLU = function(A) {
-    var out = [];
-    for (var i in A) {
-        out[i] = [];
-        for (var j in A[i]) {
-            out[i][j] = Math.max(0.00000000001, A[i][j]);
+
+Matrix.argmax = function (A, axis) {
+    if (axis == 1) {
+        var temp = [];
+        for (var i in A) {
+            temp.push(A[i].indexOf(Math.max.apply(Math, A[i])));
         }
+        return [temp];
     }
-    return out;
-}
-Matrix.ReLU_derivative = function(A) {
-    var out = [];
-    for (var i in A) {
-        out[i] = [];
-        for (var j in A[i]) {
-            out[i][j] = Math.max(0.00000000001, 1);
+    if (axis == 0) {
+        var temp = [];
+        var A = Matrix.T(A);
+        for (var i in A) {
+            temp.push(A[i].indexOf(Math.max.apply(Math, A[i])));
         }
+        return [temp];
     }
-    return out;
 }
-Matrix.multiply = function(A, B) {
-    var answer = [];
+/**
+ * Mean Squared Error = 0.5∑(y-t)²
+ * @param {any} y
+ * @param {any} t
+ */
+Matrix.mean_squared_error = function (y, t) {
+    var error = Matrix.minus(y, t);
+    var squared = Matrix.multiply(error, error);
+    return 0.5 * Matrix.sum(squared);
+}
+
+function numerical_gradient(f, x) {
+    var delta = 0.00000000001;
+    return (f(x + delta) - f(x - delta)) / (2 * delta);
+}
+
+Matrix.numerical_gradient = (f, A) => A.map((v) => v.map((k) => (numerical_gradient(f, k))));
+
+
+Matrix.sum_axis_x = function (A) {
+    var result = [];
+    var sum = 0;
     for (var i = 0; i < A.length; i++) {
-        answer[i] = [];
         for (var j = 0; j < A[0].length; j++) {
-            answer[i][j] = A[i][j] * B[i][j];
+            sum = sum + A[j];
         }
+        result[i] = sum;
+        sum = 0;
     }
-    return answer;
+    return [result];
 }
 
-function sigmoid(x) {
-    return 1 / (1 + Math.exp(-x));
-}
-
-function sigmoid_derivative(p) {
-    return p * (1 - p);
-}
-
-function ReLU(x) {
-    if (x >= 0) {
-        return x;
-    } else {
-        return 0;
+/**
+ * Layer Object based on Y=XW+b
+ * @param {any} W Weight
+ * @param {any} b Bias
+ */
+function Affine(W, b) {
+    /**Weight */
+    this.W = W;
+    /**Bias */
+    this.b = b;
+    this.forward = function (x) {
+        this.x = x;
+        return Matrix.plus(Matrix.dot(x, this.W), this.b);
+    }
+    this.backward = function (dout) {
+        var dx = Matrix.dot(dout, Matrix.T(this.W));
+        this.dW = Matrix.dot(Matrix.T(this.x), dout);
+        this.db = Matrix.sum_axis_x(dout);
+        return dx;
     }
 }
-/*
-인공신경망을 구성하는 프로세서인 인공 뉴런의 기능은 다음과 같다.
-단순히 입력된 신호 x=[x1, x2, … , xn]을 연결가중치 w=[w1, w2, … , wn]과
-곱한 값을 모두 더한 다음, 그 결과에 비선형 함수 f를 취하는 것이다.
-이때 동일한 입력 x를 가했을 때의 출력은 w에 따라 다른 값이 된다.
-따라서 정보는 바로 연결 가중치 벡터 w에 저장된다고 볼 수 있다.
-출력 y의 값은 다음과 같은 식에 의해 계산된다. y=f(Σxw-θw₀)
 
-"인공 뉴런." 위키백과, . 1 7 2017, 04:00 UTC. 23 11 2019, 04:59 <https://ko.wikipedia.org/wiki/인공_뉴런>
-*/
-function ArtificialNeuron(X, W, Bias, ActivationFunction) {
-    var i = 0;
-    var output = 0;
-    while (i < X.length) {
-        output = output + (X[i] * W[i]);
-        i = i + 1;
+/**
+ * Layer Object based on Sigmoid Function
+ * */
+function Sigmoid() {
+    this.forward = function (x) {
+        var out = Matrix.sigmoid(x);
+        this.out = out;
+        return out;
     }
-    return ActivationFunction(output - Bias);
+    this.backward = function (dout) {
+        var shape = Matrix.shape(dout);
+        var one = Matrix.numbers(shape[0], shape[1], 1);
+        var dx = Matrix.multiply(Matrix.multiply(dout, Matrix.minus(one, this.out)), this.out);
+        return dx;
+    }
 }
 
-function NeuralNetwork(x, y) {
+function SoftmaxWithLoss() {
+    this.forward = function (x, t) {
+        this.t = t;
+        this.y = Matrix.softmax(x);
+        this.loss = Matrix.cross_entropy_error(this.y, this.t);
+        return this.loss;
+    }
+    this.backward = function () {
+        var batch_size = Matrix.shape(this.t)[0];
+        var dx = (this.y - this.t) / batch_size;
+        return dx;
+    }
+}
+
+/**
+ * Artificial Neural Network Neuron
+ * @param {Number} x Input
+ * @param {Function} f Activation Function
+ */
+function Node(x, f) {
     this.input = x;
-    this.weights1 = Matrix.rand(Matrix.shape(this.input)[1], Matrix.shape(this.input)[0]);
-    this.weights2 = Matrix.rand(Matrix.shape(y)[0], Matrix.shape(y)[1]);
-    this.y = y;
-    this.output = Matrix.zeros(Matrix.shape(y)[0], Matrix.shape(y)[1]);
-    /* ŷ=σ(W₂σ(W₁x+b₁)+b₂) */
-    this.feedforward = function() {
-        this.layer1 = Matrix.sigmoid(Matrix.dot(this.input, this.weights1));
-        this.layer2 = Matrix.sigmoid(Matrix.dot(this.layer1, this.weights2));
-        return this.layer2;
-    }
-    /* Loss(y,ŷ)=Σ(y-ŷ)² */
-    this.backprop = function() {
-        var run_1 = Matrix.minus(this.y, this.output); /* y-ŷ₂ */
-        var run_2 = Matrix.time(run_1, 2); /* 2(y-ŷ₂) */
-        var run_3 = Matrix.multiply(run_2, Matrix.sigmoid_derivative(this.output)); /* 2(y-ŷ₂)σ'(ŷ₂) */
-        var d_weights2 = Matrix.dot(Matrix.T(this.layer1), run_3); /* 2(y-ŷ₂)σ'(ŷ₂)ŷ₁ᵀ */
-        var run_4 = Matrix.dot(run_3, Matrix.T(this.weights2));
-        var run_5 = Matrix.multiply(run_4, Matrix.sigmoid_derivative(this.layer1));
-        var d_weights1 = Matrix.dot(Matrix.T(this.input), run_5);
-        this.weights1 = Matrix.plus(this.weights1, d_weights1);
-        this.weights2 = Matrix.plus(this.weights2, d_weights2);
-    }
-    this.train = function(X, y) {
-        if (X != null && y != null) {
-            this.input = X;
-            this.y = y;
-        }
-        this.output = this.feedforward();
-        this.backprop();
+    this.output = function (w, b) {
+        return this.f(this.x * w + b);
     }
 }
+
+function identity(x) {
+    return x;
+}
+
+/*
+ 입력층의 노드가 3개, 은닉층의 노드가 2개, 출력층의 노드가 3개인 신경망은?
+ 단, 은닉층 활성화 함수는 Sigmoid를 사용하고, 출력층 활성화 함수는 softmax를 사용하시오.
+ */
+function NeuralNetwork(x, y) {
+    this.training_set_inputs = x;
+    this.training_set_outputs = y;
+
+    this.x0_1;
+    this.x0_2;
+    this.x0_3;
+
+    this.b1 = Math.random();
+    this.b2 = Math.random();
+
+    this.a0_1;
+    this.a0_2;
+    this.a0_3;
+    
+}
+
+
+
+
 /* 3 layer */
 function NeuralNetwork3Layer(x, y) {
     this.training_set_inputs = x;
@@ -284,3 +331,4 @@ neural_network.forward_pass([
     [1, 0, 0]
 ]);
 neural_network.shape();
+
