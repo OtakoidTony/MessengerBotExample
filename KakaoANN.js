@@ -51,7 +51,7 @@ Matrix.minus = (a1, a2) => a1.map((b1, ind1) => b1.map((b2, ind2) => b2 - a2[ind
 Matrix.multiply = (a1, a2) => a1.map((b1, ind1) => b1.map((b2, ind2) => b2 * a2[ind1][ind2]));
 Matrix.exp = (A) => A.map((v) => v.map((k) => Math.exp(k)));
 Matrix.log = (A) => A.map((v) => v.map((k) => Math.log(k)));
-Matrix.sigmoid = (A) => A.map((v) => v.map((k) => (1 / (1 + Math.exp(-k))));
+Matrix.sigmoid = (A) => A.map((v) => v.map((k) => (1 / (1 + Math.exp(-k)))));
 Matrix.sigmoid_derivative = (A) => A.map((v) => v.map((k) => (k * (1 - k))));
 Matrix.ReLU = (A) => A.map((v) => v.map((k) => (Math.max(0.00000000001, k))));
 Matrix.ReLU_derivative = (A) => A.map((v) => v.map((k) => (Math.max(0.00000000001, 1))));
@@ -91,7 +91,7 @@ Matrix.min = function (array) {
 Matrix.softmax = function (A) {
     var out = [];
     var max = Matrix.max(A);
-    var max_matrix = Matrix.numbers(Matrix.shape(A)[0], Matrix.shape(A)[1], max));
+    var max_matrix = Matrix.numbers(Matrix.shape(A)[0], Matrix.shape(A)[1], max);
     for (var i in A) {
         out[i] = [];
         for (var j in A[i]) {
