@@ -6,7 +6,6 @@
 // TODO: Server management  | Ban Ban_List Create Delete Edit Info Kick Unban Change_Owner
 // TODO: User management    | Voice_Move
 
-const Socket = java.net.Socket;
 
 function Discord(isBot, token) {
     this.BaseURL = "https://discordapp.com/api";
