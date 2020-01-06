@@ -24,12 +24,6 @@ function Discord(isBot, token) {
         }
     };
 
-
-    this.ClientSocket = new com.squareup.okhttp3.OkHttpClient();
-    this.RequestSocket = new com.squareup.okhttp3.Request.Builder().url(gdaxUrl).build();
-
-    
-
     function GET(url) {
         var url = new java.net.URL(url);
         var con = url.openConnection();
