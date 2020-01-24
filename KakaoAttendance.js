@@ -28,7 +28,7 @@ function read(folderName, fileName) {
 var folder = new java.io.File(sdcard + "/RoomAttendance/");
 folder.mkdirs();
 
-var Attendance = load(folder, "Attendance.json"); // 출석부 객체
+var Attendance = read(folder, "Attendance.json"); // 출석부 객체
 if (Attendance == null) {
     Attendance = {};
 } else {
