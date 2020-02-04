@@ -129,6 +129,8 @@ function UserData(Data) {
             /* UserData.data.flags */
             this.data.flags["after_rescued_child"] = false;
             this.data.flags["cb3e6f66f9be29a494397b5b153ab6ff"] = false;
+            this.data.flags["when_run_to_3"] = false;
+            this.data.flags["goto_floor_2"] = false;
         }
     }
     /**
@@ -310,77 +312,82 @@ SHA256 = str => {
     return result;
 }
 
-
-
 Game.search = function(sender, replier) {
     /* 플레이어 데이터 로드 */
     var sender_data = new UserData(load_data(sender));
     sender_data.init(sender);
     var sender_message_name = "[" + sender_data.data.name + "] ";
-    replier.reply(sender_message_name + "이건 뭘까...?");
-    wait(wait_term);
-    var probability = Math.random() * 100;
-    if (temp_child_makers.indexOf(sender) == -1 && sender_data.data.level == 2 && sender_data.data.room == "1" &&
-        sender_data.data.can_move && Object.keys(sender_data.data.friends).length == 0) {
-        var scripts_child_rescue = [
-            "부우우우움. 부우우우움.",
-            "어디선가 휴대폰 진동 소리가 들린다.",
-            sender_message_name + "어디서 휴대폰 진동이...",
-            "진동이 울리는 곳으로 가보았더니 내 또래의 여자아이가 실오라기 하나 걸치지 않으며 겁에 질린 체로 휴대폰을 손에 쥔 체 웅크려 있었다.",
-            sender_message_name + "너는 누구야? 왜 옷을 안입고 있어?",
-            "[여자아이] ....",
-            sender_message_name + "내 옷이라도 입고 있어.",
-            "어차피 나는 속에 옷을 여러장 입고 있던터라 겉옷이라도 벗어 입혀주었다.",
-            sender_message_name + "(내 냄새는 안나겠지...? >_<)",
-            "[여자아이] ....",
-            "[SYS] 동료가 추가되었습니다.",
-            "[SYS] 동료의 이름을 지어주십시오."
+    if (sender_data.data.flags.when_run_to_3) {
+        var script_there_is_a_pw = [
+            "하아, 하아, 하아...",
         ];
-        for (var i in scripts_child_rescue) {
-            replier.reply(scripts_child_rescue[i]);
-            wait(wait_term);
-        }
-        sender_data.data.flags.cb3e6f66f9be29a494397b5b153ab6ff = true;
-        temp_child_makers.push(sender);
     } else {
-        /* 확률 = 60 - ( level * 10 ) */
-        if (probability >= (40 + (sender_data.data.level * 10))) {
-            var get_item = randomItem(Object.keys(GameItem[sender_data.data.level - 1]));
-            if ((parseInt(get_item[get_item.length - 1].charCodeAt(0).toString(16), 16) - parseInt("AC00", 16)) % 28 == 0) {
-                replier.reply(get_item + "가 떨어져있다.");
-            } else {
-                replier.reply(get_item + "이 떨어져있다.");
+        replier.reply(sender_message_name + "이건 뭘까...?");
+        wait(wait_term);
+        var probability = Math.random() * 100;
+        if (temp_child_makers.indexOf(sender) == -1 && sender_data.data.level == 2 && sender_data.data.room == "1" &&
+            sender_data.data.can_move && Object.keys(sender_data.data.friends).length == 0) {
+            var scripts_child_rescue = [
+                "부우우우움. 부우우우움.",
+                "어디선가 휴대폰 진동 소리가 들린다.",
+                sender_message_name + "어디서 휴대폰 진동이...",
+                "진동이 울리는 곳으로 가보았더니 내 또래의 여자아이가 실오라기 하나 걸치지 않으며 겁에 질린 체로 휴대폰을 손에 쥔 체 웅크려 있었다.",
+                sender_message_name + "너는 누구야? 왜 옷을 안입고 있어?",
+                "[여자아이] ....",
+                sender_message_name + "내 옷이라도 입고 있어.",
+                "어차피 나는 속에 옷을 여러장 입고 있던터라 겉옷이라도 벗어 입혀주었다.",
+                sender_message_name + "(내 냄새는 안나겠지...? >_<)",
+                "[여자아이] ....",
+                "[SYS] 동료가 추가되었습니다.",
+                "[SYS] 동료의 이름을 지어주십시오."
+            ];
+            for (var i in scripts_child_rescue) {
+                replier.reply(scripts_child_rescue[i]);
+                wait(wait_term);
             }
-            wait(wait_term);
-            if (get_item in sender_data.data.item) {
-                replier.reply("이미 있는 거다.");
-                sender_data.data.item[get_item] = sender_data.data.item[get_item] + 1;
-            } else {
-                /* 발견한 아이템이 처음 발견한 아이템일 때 이벤트 */
-                sender_data.data.item[get_item] = 1;
-                replier.reply(GameItem[sender_data.data.level - 1][get_item]);
-            }
-            if ((sender_data.data.level == 1) && (Object.keys(sender_data.data.item).length == Object.keys(GameItem[sender_data.data.level - 1]).length)) {
-                replier.reply("터벅. 터벅. 터벅. 터벅.");
-                wait(wait_term);
-                replier.reply(sender_message_name + "누... 누구지...?");
-                wait(wait_term);
-                replier.reply("끼이익...");
-                wait(wait_term);
-                replier.reply("덜컹.");
-                wait(wait_term);
-                replier.reply(sender_message_name + "누가 문을...");
-                replier.reply(Game.Sys.Script.Commands.New.room);
-                replier.reply(Game.Sys.Script.Commands.New.map);
-                sender_data.data.can_move = true;
-                sender_data.data.level = 2;
-            }
-            /* json 파일로 저장 */
+            sender_data.data.flags.cb3e6f66f9be29a494397b5b153ab6ff = true;
+            temp_child_makers.push(sender);
             sender_data.save(sender);
         } else {
-            replier.reply("아무것도 없다.");
-            wait(wait_term);
-            replier.reply(sender_message_name + "내가 잘못봤나보다...");
+            /* 확률 = 60 - ( level * 10 ) */
+            if (probability >= (40 + (sender_data.data.level * 10))) {
+                var get_item = randomItem(Object.keys(GameItem[sender_data.data.level - 1]));
+                if ((parseInt(get_item[get_item.length - 1].charCodeAt(0).toString(16), 16) - parseInt("AC00", 16)) % 28 == 0) {
+                    replier.reply(get_item + "가 떨어져있다.");
+                } else {
+                    replier.reply(get_item + "이 떨어져있다.");
+                }
+                wait(wait_term);
+                if (get_item in sender_data.data.item) {
+                    replier.reply("이미 있는 거다.");
+                    sender_data.data.item[get_item] = sender_data.data.item[get_item] + 1;
+                } else {
+                    /* 발견한 아이템이 처음 발견한 아이템일 때 이벤트 */
+                    sender_data.data.item[get_item] = 1;
+                    replier.reply(GameItem[sender_data.data.level - 1][get_item]);
+                }
+                if ((sender_data.data.level == 1) && (Object.keys(sender_data.data.item).length == Object.keys(GameItem[sender_data.data.level - 1]).length)) {
+                    replier.reply("터벅. 터벅. 터벅. 터벅.");
+                    wait(wait_term);
+                    replier.reply(sender_message_name + "누... 누구지...?");
+                    wait(wait_term);
+                    replier.reply("끼이익...");
+                    wait(wait_term);
+                    replier.reply("덜컹.");
+                    wait(wait_term);
+                    replier.reply(sender_message_name + "누가 문을...");
+                    replier.reply(Game.Sys.Script.Commands.New.room);
+                    replier.reply(Game.Sys.Script.Commands.New.map);
+                    sender_data.data.can_move = true;
+                    sender_data.data.level = 2;
+                }
+                /* json 파일로 저장 */
+                sender_data.save(sender);
+            } else {
+                replier.reply("아무것도 없다.");
+                wait(wait_term);
+                replier.reply(sender_message_name + "내가 잘못봤나보다...");
+            }
         }
     }
 }
@@ -432,6 +439,14 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                     wait(wait_term);
                 }
                 sender_data.data.flags.cb3e6f66f9be29a494397b5b153ab6ff = false;
+                sender_data.data.flags.when_run_to_3 = true;
+                sender_data.save(sender);
+                /**
+                 * https://github.com/OtakoidTony/MessengerBotExample/issues/4#issuecomment-562832800
+                 * 
+                 * 3번 방에서 계단을 이용해 새로운 방으로 들어가야 하며,
+                 * 들어가기 위해서는 암호를 풀어야 함.
+                 */
             }
         }
         if (command(msg)[0] == ":start") {
