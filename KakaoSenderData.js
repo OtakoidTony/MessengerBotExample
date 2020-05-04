@@ -33,10 +33,6 @@ Array.prototype.findObject = function (label, value) {
     else return null;
 };
 
-
-var folder = new java.io.File(sdcard + "/Kakao_senderData/");
-folder.mkdirs();
-
 var senderData = FileStream.read("sdcard/Kakao_senderData/senderData.json");
 if (senderData == null) {
     senderData = {};
@@ -50,12 +46,27 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
         replier.reply('rojiku created senderData[room] data');
     }
     if (senderData[room].findObjectIndex('name', sender) == -1) {
-        senderData[room].push({'name': sender, 'score': 1});
+        senderData[room].push({
+            'name': sender,
+            'score': 1
+        });
     } else {
         senderData[room].findObject('name', sender)['score'] += 1;
     }
     if (msg == "call rojiku display ranking system") {
-        replier.reply(JSON.stringify(senderData[room].sort_by('score', ascending = false), null, '\t'));
+        senderData[room].sort_by('score', ascending = false)
+        var output = '';
+        for (var i = 0; i < senderData[room].length; i++) {
+            output +='Name: '+senderData[room][i].name+'\n';
+            if(i==senderData[room].length-1){
+                output +='Time: '+senderData[room][i].score;
+            }else{
+                output +='Time: '+senderData[room][i].score+'\n\n';
+            }
+            
+        }
+        replier.reply(output);
+
     }
     FileStream.write("sdcard/Kakao_senderData/senderData.json", JSON.stringify(senderData, null, '\t'));
 }
