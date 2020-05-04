@@ -92,8 +92,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
         senderData[room].findObject('name', sender)['score'] += 1;
     }
     if (msg == "call rojiku display ranking system") {
-
-        replier.reply();
+        replier.reply(JSON.stringify(senderData[room].sort_by('score', ascending = false), null, '\t'));
     }
     save(folder, "senderData.json", JSON.stringify(senderData, null, '\t'));
 }
