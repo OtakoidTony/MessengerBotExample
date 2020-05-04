@@ -1,4 +1,3 @@
-
 Array.prototype.sort_by = function (name, ascending) {
     if (ascending) {
         return this.sort(function (a, b) {
