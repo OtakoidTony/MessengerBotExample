@@ -1,4 +1,4 @@
-﻿var Matrix = {};
+var Matrix = {};
 Matrix.dot = function (a, b) {
     var aNumRows = a.length,
         aNumCols = a[0].length,
