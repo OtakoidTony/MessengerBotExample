@@ -1,5 +1,5 @@
 function randomItem(a) {
-    return a[java.lang.Math.floor(java.lang.Math.random() * a.length)];
+    return a[Math.floor(Math.random() * a.length)];
 }
 
 var msgDict = {
