@@ -83,13 +83,16 @@ Array.prototype.findObject = function (label, value) {
 
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
     if (!room in senderData) senderData[room] = [];
-    if (!sender in senderData[room]) {
-        senderData[room][sender] = 1;
+    if (senderData[room].findObjectIndex('name', sender) == -1) {
+        senderData[room].push({
+            'name': sender,
+            'score': 1
+        })
     } else {
-        senderData[room][sender] += 1;
+        senderData[room].findObject('name', sender)['score'] += 1;
     }
-    if (msg == "!rank") {
-
+    if (msg == "call rojiku display ranking system") {
+        
         replier.reply();
     }
 }
