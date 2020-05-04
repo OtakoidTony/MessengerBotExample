@@ -54,7 +54,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
         senderData[room].findObject('name', sender)['score'] += 1;
     }
     if (msg == "call rojiku display ranking system") {
-        senderData[room].sort_by('score', ascending = false)
+        senderData[room].sort_by('score', ascending = false);
         var output = '';
         for (var i = 0; i < senderData[room].length; i++) {
             output += 'Name: ' + senderData[room][i].name + '\n';
