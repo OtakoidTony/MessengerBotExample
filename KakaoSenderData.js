@@ -57,13 +57,13 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
         senderData[room].sort_by('score', ascending = false)
         var output = '';
         for (var i = 0; i < senderData[room].length; i++) {
-            output +='Name: '+senderData[room][i].name+'\n';
-            if(i==senderData[room].length-1){
-                output +='Time: '+senderData[room][i].score;
-            }else{
-                output +='Time: '+senderData[room][i].score+'\n\n';
+            output += 'Name: ' + senderData[room][i].name + '\n';
+            if (i == senderData[room].length - 1) {
+                output += 'Time: ' + senderData[room][i].score;
+            } else {
+                output += 'Time: ' + senderData[room][i].score + '\n\n';
             }
-            
+
         }
         replier.reply(output);
 
