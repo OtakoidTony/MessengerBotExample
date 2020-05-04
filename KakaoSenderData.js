@@ -63,10 +63,8 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             } else {
                 output += 'Time: ' + senderData[room][i].score + '\n\n';
             }
-
         }
         replier.reply(output);
-
     }
     FileStream.write("sdcard/Kakao_senderData/senderData.json", JSON.stringify(senderData, null, '\t'));
 }
