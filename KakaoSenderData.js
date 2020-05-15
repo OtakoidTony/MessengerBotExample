@@ -40,10 +40,12 @@ if (senderData == null) {
     senderData = JSON.parse(senderData);
 }
 
+
+var vb = Api.getContext().getSystemService(android.content.Context.VIBRATOR_SERVICE);
+
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
     if (!(room in senderData)) {
         senderData[room] = [];
-        replier.reply('rojiku created senderData[room] data');
     }
     if (senderData[room].findObjectIndex('name', sender) == -1) {
         senderData[room].push({
@@ -53,18 +55,68 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
     } else {
         senderData[room].findObject('name', sender)['score'] += 1;
     }
-    if (msg == "call rojiku display ranking system") {
-        senderData[room].sort_by('score', ascending = false);
-        var output = '';
-        for (var i = 0; i < senderData[room].length; i++) {
-            output += 'Name: ' + senderData[room][i].name + '\n';
-            if (i == senderData[room].length - 1) {
-                output += 'Time: ' + senderData[room][i].score;
-            } else {
-                output += 'Time: ' + senderData[room][i].score + '\n\n';
+    if (msg_arg[0] == "call" || msg_arg[0] == "Call") {
+        if (msg_arg[1] == "rojiku") {
+            if (msg_arg[2] == "vibrate") {
+                if (msg_arg.length == 3) {
+                    vb.vibrate(1000);
+                } else {
+                    if (msg_arg.length == 4) {
+                        if (!isNaN(msg_arg[3])) {
+                            if (msg_arg[3] > 5) {
+                                replier.reply("SYSTEM ALERT:\nIllegal Argument Exception");
+                            } else {
+                                vb.vibrate(1000 * msg_arg[3]);
+                            }
+                        } else {
+                            replier.reply("SYSTEM ALERT:\nIllegal Argument Exception");
+                        }
+                    }
+                }
+            }
+            if (msg_arg[2] == "display") {
+
+                if (msg_arg[3] == "ranking" && msg_arg[4] == "system") {
+                    if (msg_arg.length == 5) {
+                        senderData[room].sort_by('score', ascending = false);
+                        var output = '';
+                        for (var i = 0; i < senderData[room].length; i++) {
+                            output += 'Name: ' + senderData[room][i].name + '\n';
+                            if (i == senderData[room].length - 1) {
+                                output += 'Time: ' + senderData[room][i].score;
+                            } else {
+                                output += 'Time: ' + senderData[room][i].score + '\n\n';
+                            }
+                        }
+                        replier.reply(output);
+                    } else {
+                        if (msg_arg[5] == "head" && msg_arg.length == 7) {
+                            if (!isNaN(msg_arg[6])) {
+                                senderData[room].sort_by('score', ascending = false);
+                                head = senderData[room].slice(0, parseInt(msg_arg[6]))
+                                var output = '';
+                                for (var i = 0; i < head[room].length; i++) {
+                                    output += 'Name: ' + head[room][i].name + '\n';
+                                    if (i == head[room].length - 1) {
+                                        output += 'Time: ' + head[room][i].score;
+                                    } else {
+                                        output += 'Time: ' + head[room][i].score + '\n\n';
+                                    }
+                                }
+                                replier.reply(output);
+                            } else {
+                                replier.reply("SYSTEM ALERT:\nIllegal Argument Exception");
+                            }
+                        }
+                    }
+                }
+
+                if ((msg_arg[3] == "author" || msg_arg[3] == "developer") && msg_arg.length == 4) {
+                    replier.reply("This Bot is developed by Rojiku.");
+                }
+
             }
         }
-        replier.reply(output);
     }
     FileStream.write("sdcard/Kakao_senderData/senderData.json", JSON.stringify(senderData, null, '\t'));
 }
