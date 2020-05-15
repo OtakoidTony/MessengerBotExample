@@ -58,6 +58,11 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
     var msg_arg = msg.split(' ');
     if (msg_arg[0] == "call" || msg_arg[0] == "Call") {
         if (msg_arg[1] == "rojiku") {
+            if (msg_arg[2] == "inspect" && msg_arg[3] == "battery") {
+                var res = "Current remaining battery level:\n" + Device.getBatteryLevel() + "%\n\n";
+                res += "Current battery temperature:\n" + Device.getBatteryTemp() + "°C";
+                replier.reply(res);
+            }
             if (msg_arg[2] == "vibrate") {
                 if (msg_arg.length == 3) {
                     vb.vibrate(1000);
