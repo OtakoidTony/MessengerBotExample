@@ -55,6 +55,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
     } else {
         senderData[room].findObject('name', sender)['score'] += 1;
     }
+    var msg_arg = msg.split(' ');
     if (msg_arg[0] == "call" || msg_arg[0] == "Call") {
         if (msg_arg[1] == "rojiku") {
             if (msg_arg[2] == "vibrate") {
@@ -93,7 +94,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                         if (msg_arg[5] == "head" && msg_arg.length == 7) {
                             if (!isNaN(msg_arg[6])) {
                                 senderData[room].sort_by('score', ascending = false);
-                                head = senderData[room].slice(0, parseInt(msg_arg[6]))
+                                var head = senderData[room].slice(0, parseInt(msg_arg[6]));
                                 var output = '';
                                 for (var i = 0; i < head[room].length; i++) {
                                     output += 'Name: ' + head[room][i].name + '\n';
