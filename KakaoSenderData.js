@@ -60,7 +60,8 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
         if (msg_arg[1] == "rojiku") {
             if (msg_arg[2] == "inspect" && msg_arg[3] == "battery") {
                 var res = "Current remaining battery level:\n" + Device.getBatteryLevel() + "%\n\n";
-                res += "Current battery temperature:\n" + Device.getBatteryTemp() + "°C";
+                res += "Current battery temperature:\n" + Device.getBatteryTemperature()/10 + "°C\n\n";
+                res += "Current battery Voltage:\n" + Device.getBatteryVoltage() + "mV";
                 replier.reply(res);
             }
             if (msg_arg[2] == "vibrate") {
