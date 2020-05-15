@@ -96,12 +96,12 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                                 senderData[room].sort_by('score', ascending = false);
                                 var head = senderData[room].slice(0, parseInt(msg_arg[6]));
                                 var output = '';
-                                for (var i = 0; i < head[room].length; i++) {
-                                    output += 'Name: ' + head[room][i].name + '\n';
-                                    if (i == head[room].length - 1) {
-                                        output += 'Time: ' + head[room][i].score;
+                                for (var i = 0; i < head.length; i++) {
+                                    output += 'Name: ' + head[i].name + '\n';
+                                    if (i == head.length - 1) {
+                                        output += 'Time: ' + head[i].score;
                                     } else {
-                                        output += 'Time: ' + head[room][i].score + '\n\n';
+                                        output += 'Time: ' + head[i].score + '\n\n';
                                     }
                                 }
                                 replier.reply(output);
