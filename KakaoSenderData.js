@@ -75,7 +75,8 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                             } else {
                                 var output = ''
                                 output += 'Name: ' + senderData[room][user_index].name + '\n';
-                                output += 'Time: ' + senderData[room][user_index].score;
+                                output += 'Time: ' + senderData[room][user_index].score + '\n';
+                                output += 'Rank: ' + (user_index + 1);
                                 replier.reply(output);
                             }
                         }
