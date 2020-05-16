@@ -40,7 +40,6 @@ if (senderData == null) {
     senderData = JSON.parse(senderData);
 }
 
-
 var vb = Api.getContext().getSystemService(android.content.Context.VIBRATOR_SERVICE);
 
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
@@ -58,11 +57,31 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
     var msg_arg = msg.split(' ');
     if (msg_arg[0] == "call" || msg_arg[0] == "Call") {
         if (msg_arg[1] == "rojiku") {
-            if (msg_arg[2] == "inspect" && msg_arg[3] == "battery") {
-                var res = "Current remaining battery level:\n" + Device.getBatteryLevel() + "%\n\n";
-                res += "Current battery temperature:\n" + Device.getBatteryTemperature()/10 + "°C\n\n";
-                res += "Current battery Voltage:\n" + Device.getBatteryVoltage() + "mV";
-                replier.reply(res);
+            if (msg_arg[2] == "inspect") {
+                if (msg_arg[3] == "battery") {
+                    var res = "Current remaining battery level:\n" + Device.getBatteryLevel() + "%\n\n";
+                    res += "Current battery temperature:\n" + Device.getBatteryTemperature() / 10 + "°C\n\n";
+                    res += "Current battery Voltage:\n" + Device.getBatteryVoltage() + "mV";
+                    replier.reply(res);
+                }
+                if (msg_arg[3] == "ranking") {
+                    if (msg_arg[4] == "system") {
+                        if (msg_arg[5] == "select") {
+                            var user_name = msg.substring((msg_arg[0] + ' ' + msg_arg[1] + ' ' + msg_arg[2] + ' ' + msg_arg[3] + ' ' + msg_arg[4] + ' ' + msg_arg[5] + ' ').length, msg.length);
+                            senderData[room].sort_by('score', ascending = false);
+                            var user_index = senderData[room].findObjectIndex('name', user_name);
+                            if (user_index == -1) {
+                                replier.reply("SYSTEM ALERT:\nIndex Out Of Bounds Exception")
+                            } else {
+                                var output = ''
+                                output += 'Name: ' + senderData[room][user_index].name + '\n';
+                                output += 'Time: ' + senderData[room][user_index].score;
+                                replier.reply(output);
+                            }
+                        }
+
+                    }
+                }
             }
             if (msg_arg[2] == "vibrate") {
                 if (msg_arg.length == 3) {
