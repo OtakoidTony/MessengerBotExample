@@ -106,7 +106,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                 if (msg_arg[3] == "ranking" && msg_arg[4] == "system") {
                     if (msg_arg.length == 5) {
                         senderData[room].sort_by('score', ascending = false);
-                        var output = '';
+                        var output = '\u200b'.repeat(500) + '\n\n';
                         for (var i = 0; i < senderData[room].length; i++) {
                             output += 'Name: ' + senderData[room][i].name + '\n';
                             if (i == senderData[room].length - 1) {
