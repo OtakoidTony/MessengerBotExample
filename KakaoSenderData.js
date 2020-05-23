@@ -80,6 +80,26 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                                 replier.reply(output);
                             }
                         }
+                        if (msg_arg[5] == "search") {
+                            var target = msg.substring((msg_arg[0] + ' ' + msg_arg[1] + ' ' + msg_arg[2] + ' ' + msg_arg[3] + ' ' + msg_arg[4] + ' ' + msg_arg[5] + ' ').length, msg.length);
+                            var resultData = [];
+                            for (let index = 0; index < senderData[room].length; index++) {
+                                if (senderData[room][index].name.indexOf(target) != -1)
+                                    resultData.push(senderData[room][index]);
+                            }
+
+                            resultData.sort_by('score', ascending = false);
+                            var output = '\u200b'.repeat(500) + '\n\n';
+                            for (var i = 0; i < resultData.length; i++) {
+                                output += 'Name: ' + resultData[i].name + '\n';
+                                if (i == resultData.length - 1) {
+                                    output += 'Time: ' + resultData[i].score;
+                                } else {
+                                    output += 'Time: ' + resultData[i].score + '\n\n';
+                                }
+                            }
+                            replier.reply(output);
+                        }
 
                     }
                 }
