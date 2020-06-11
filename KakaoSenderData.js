@@ -92,9 +92,9 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                 output += 'Rank: ' + (i + 1) + "등" + '\n';
                 output += 'Score: ' + senderData[room][i].score + '\n';
                 if (i == senderData[room].length - 1) {
-                    output += 'Time: ' + user_time.getFullYear() + "년 " + (user_time.getMonth() + 1) + "월" + user_time.getDate() + "일";
+                    output += 'Time: ' + user_time.getFullYear() + "년 " + (user_time.getMonth() + 1) + "월 " + user_time.getDate() + "일";
                 } else {
-                    output += 'Time: ' + user_time.getFullYear() + "년 " + (user_time.getMonth() + 1) + "월" + user_time.getDate() + "일" + '\n\n';
+                    output += 'Time: ' + user_time.getFullYear() + "년 " + (user_time.getMonth() + 1) + "월 " + user_time.getDate() + "일" + '\n\n';
                 }
             }
             replier.reply(output);
@@ -120,9 +120,9 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                     output += 'Rank: ' + (i + 1) + "등" + '\n';
                     output += 'Score: ' + resultData[i].score + '\n';
                     if (i == resultData.length - 1) {
-                        output += 'Time: ' + user_time.getFullYear() + "년 " + (user_time.getMonth() + 1) + "월" + user_time.getDate() + "일";
+                        output += 'Time: ' + user_time.getFullYear() + "년 " + (user_time.getMonth() + 1) + "월 " + user_time.getDate() + "일";
                     } else {
-                        output += 'Time: ' + user_time.getFullYear() + "년 " + (user_time.getMonth() + 1) + "월" + user_time.getDate() + "일" + '\n\n';
+                        output += 'Time: ' + user_time.getFullYear() + "년 " + (user_time.getMonth() + 1) + "월 " + user_time.getDate() + "일" + '\n\n';
                     }
                 }
                 replier.reply(output);
