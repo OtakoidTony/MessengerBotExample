@@ -50,21 +50,26 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
         senderData[room].push({
             'name': sender,
             'score': 1,
-            'time': new Date.now()
+            'time': (new Date()).toString()
         });
     } else {
         senderData[room].findObject('name', sender)['score'] += 1;
+        senderData[room].findObject('name', sender)['time'] = (new Date()).toString();
     }
     var msg_arg = msg.split(' ');
 
+
+    if (msg_arg[0]=="!테스트"){
+        replier.reply(senderData[room].findObject('name', sender)['time'].toString());
+    }
     // 당일 출석한 회원 목록 표시
     if (msg_arg[0] == "!출석부") {
         senderData[room].sort_by('score', ascending = false);
         var output = '\u200b'.repeat(500) + '\n\n';
         var today = new Date();
         for (var i = 0; i < senderData[room].length; i++) {
-            user_time = senderData[i].time;
-            if (user_time.getFullYear() == today.getFullYear() && user_time.getMonth() == today.getMonth() && user_time.getDay == today.getDay()) {
+            user_time = new Date(senderData[room][i].time);
+            if (user_time.getFullYear() == today.getFullYear() && user_time.getMonth() == today.getMonth() && user_time.getDay() == today.getDay()) {
                 if (i == senderData[room].length - 1) {
                     output += 'Name: ' + senderData[room][i].name;
                 } else {
@@ -82,7 +87,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             senderData[room].sort_by('score', ascending = false);
             var output = '\u200b'.repeat(500) + '\n\n';
             for (var i = 0; i < senderData[room].length; i++) {
-                user_time = senderData[i].time;
+                user_time = new Date(senderData[room][i].time);
                 output += 'Name: ' + senderData[room][i].name + '\n';
                 output += 'Rank: ' + (i + 1) + "등" + '\n';
                 output += 'Time: ' + user_time.getFullYear() + "년 " + user_time.getMonth() + "월" + user_time.getDay() + "일";
@@ -110,7 +115,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                 resultData.sort_by('score', ascending = false);
                 var output = '\u200b'.repeat(500) + '\n\n';
                 for (var i = 0; i < resultData.length; i++) {
-                    user_time = resultData[i].time;
+                    user_time = new Date(resultData[i].time);
                     output += 'Name: ' + resultData[i].name + '\n';
                     output += 'Rank: ' + (i + 1) + "등" + '\n';
                     output += 'Time: ' + user_time.getFullYear() + "년 " + user_time.getMonth() + "월" + user_time.getDay() + "일";
@@ -141,7 +146,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                             senderData[room].sort_by('score', ascending = false);
                             var user_index = senderData[room].findObjectIndex('name', user_name);
                             if (user_index == -1) {
-                                replier.reply("SYSTEM ALERT:\nIndex Out Of Bounds Exception")
+                                replier.reply("SYSTEM ALERT:\nIndex Out Of Bounds Exception");
                             } else {
                                 var user_time = senderData[room][user_index].time;
                                 var output = ''
