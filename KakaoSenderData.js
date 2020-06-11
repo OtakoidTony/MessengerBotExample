@@ -59,7 +59,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
     var msg_arg = msg.split(' ');
 
 
-    if (msg_arg[0]=="!테스트"){
+    if (msg_arg[0] == "!테스트") {
         replier.reply(senderData[room].findObject('name', sender)['time'].toString());
     }
     // 당일 출석한 회원 목록 표시
@@ -69,7 +69,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
         var today = new Date();
         for (var i = 0; i < senderData[room].length; i++) {
             user_time = new Date(senderData[room][i].time);
-            if (user_time.getFullYear() == today.getFullYear() && user_time.getMonth() == today.getMonth() && user_time.getDay() == today.getDay()) {
+            if (user_time.getFullYear() == today.getFullYear() && user_time.getMonth() == today.getMonth() && user_time.getDate() == today.getDate()) {
                 if (i == senderData[room].length - 1) {
                     output += 'Name: ' + senderData[room][i].name;
                 } else {
@@ -90,7 +90,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                 user_time = new Date(senderData[room][i].time);
                 output += 'Name: ' + senderData[room][i].name + '\n';
                 output += 'Rank: ' + (i + 1) + "등" + '\n';
-                output += 'Time: ' + user_time.getFullYear() + "년 " + user_time.getMonth() + "월" + user_time.getDay() + "일";
+                output += 'Time: ' + user_time.getFullYear() + "년 " + (user_time.getMonth() + 1) + "월" + user_time.getDate() + "일";
                 if (i == senderData[room].length - 1) {
                     output += 'Score: ' + senderData[room][i].score;
                 } else {
@@ -118,7 +118,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                     user_time = new Date(resultData[i].time);
                     output += 'Name: ' + resultData[i].name + '\n';
                     output += 'Rank: ' + (i + 1) + "등" + '\n';
-                    output += 'Time: ' + user_time.getFullYear() + "년 " + user_time.getMonth() + "월" + user_time.getDay() + "일";
+                    output += 'Time: ' + user_time.getFullYear() + "년 " + (user_time.getMonth() + 1) + "월" + user_time.getDate() + "일";
                     if (i == resultData.length - 1) {
                         output += 'Score: ' + resultData[i].score;
                     } else {
@@ -126,117 +126,6 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                     }
                 }
                 replier.reply(output);
-            }
-        }
-    }
-
-    if (msg_arg[0] == "call" || msg_arg[0] == "Call") {
-        if (msg_arg[1] == "rojiku") {
-            if (msg_arg[2] == "inspect") {
-                if (msg_arg[3] == "battery") {
-                    var res = "Current remaining battery level:\n" + Device.getBatteryLevel() + "%\n\n";
-                    res += "Current battery temperature:\n" + Device.getBatteryTemperature() / 10 + "°C\n\n";
-                    res += "Current battery Voltage:\n" + Device.getBatteryVoltage() + "mV";
-                    replier.reply(res);
-                }
-                if (msg_arg[3] == "ranking") {
-                    if (msg_arg[4] == "system") {
-                        if (msg_arg[5] == "select") {
-                            var user_name = msg.substring((msg_arg[0] + ' ' + msg_arg[1] + ' ' + msg_arg[2] + ' ' + msg_arg[3] + ' ' + msg_arg[4] + ' ' + msg_arg[5] + ' ').length, msg.length);
-                            senderData[room].sort_by('score', ascending = false);
-                            var user_index = senderData[room].findObjectIndex('name', user_name);
-                            if (user_index == -1) {
-                                replier.reply("SYSTEM ALERT:\nIndex Out Of Bounds Exception");
-                            } else {
-                                var user_time = senderData[room][user_index].time;
-                                var output = ''
-                                output += 'Name: ' + senderData[room][user_index].name + '\n';
-                                output += 'Rank: ' + (user_index + 1) + '\n';
-                                output += 'Time: ' + user_time.getFullYear() + "년 " + user_time.getMonth() + "월" + user_time.getDay() + "일";
-                                output += 'Score: ' + senderData[room][user_index].score;
-                                replier.reply(output);
-                            }
-                        }
-                        if (msg_arg[5] == "search") {
-                            var target = msg.substring((msg_arg[0] + ' ' + msg_arg[1] + ' ' + msg_arg[2] + ' ' + msg_arg[3] + ' ' + msg_arg[4] + ' ' + msg_arg[5] + ' ').length, msg.length);
-                            var resultData = [];
-                            for (let index = 0; index < senderData[room].length; index++)
-                                if (senderData[room][index].name.indexOf(target) != -1)
-                                    resultData.push(senderData[room][index]);
-
-                            resultData.sort_by('score', ascending = false);
-                            var output = '\u200b'.repeat(500) + '\n\n';
-                            for (var i = 0; i < resultData.length; i++) {
-                                output += 'Name: ' + resultData[i].name + '\n';
-                                if (i == resultData.length - 1) {
-                                    output += 'Score: ' + resultData[i].score;
-                                } else {
-                                    output += 'Score: ' + resultData[i].score + '\n\n';
-                                }
-                            }
-                            replier.reply(output);
-                        }
-                    }
-                }
-            }
-            if (msg_arg[2] == "vibrate") {
-                if (msg_arg.length == 3) {
-                    vb.vibrate(1000);
-                } else {
-                    if (msg_arg.length == 4) {
-                        if (!isNaN(msg_arg[3])) {
-                            if (msg_arg[3] > 5) {
-                                replier.reply("SYSTEM ALERT:\nIllegal Argument Exception");
-                            } else {
-                                vb.vibrate(1000 * msg_arg[3]);
-                            }
-                        } else {
-                            replier.reply("SYSTEM ALERT:\nIllegal Argument Exception");
-                        }
-                    }
-                }
-            }
-            if (msg_arg[2] == "display") {
-
-                if (msg_arg[3] == "ranking" && msg_arg[4] == "system") {
-                    if (msg_arg.length == 5) {
-                        senderData[room].sort_by('score', ascending = false);
-                        var output = '\u200b'.repeat(500) + '\n\n';
-                        for (var i = 0; i < senderData[room].length; i++) {
-                            output += 'Name: ' + senderData[room][i].name + '\n';
-                            if (i == senderData[room].length - 1) {
-                                output += 'Score: ' + senderData[room][i].score;
-                            } else {
-                                output += 'Score: ' + senderData[room][i].score + '\n\n';
-                            }
-                        }
-                        replier.reply(output);
-                    } else {
-                        if (msg_arg[5] == "head" && msg_arg.length == 7) {
-                            if (!isNaN(msg_arg[6])) {
-                                senderData[room].sort_by('score', ascending = false);
-                                var head = senderData[room].slice(0, parseInt(msg_arg[6]));
-                                var output = '';
-                                for (var i = 0; i < head.length; i++) {
-                                    output += 'Name: ' + head[i].name + '\n';
-                                    if (i == head.length - 1) {
-                                        output += 'Score: ' + head[i].score;
-                                    } else {
-                                        output += 'Score: ' + head[i].score + '\n\n';
-                                    }
-                                }
-                                replier.reply(output);
-                            } else {
-                                replier.reply("SYSTEM ALERT:\nIllegal Argument Exception");
-                            }
-                        }
-                    }
-                }
-
-                if ((msg_arg[3] == "author" || msg_arg[3] == "developer") && msg_arg.length == 4) {
-                    replier.reply("This Bot is developed by Rojiku.");
-                }
-
             }
         }
     }
