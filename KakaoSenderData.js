@@ -90,11 +90,11 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                 user_time = new Date(senderData[room][i].time);
                 output += 'Name: ' + senderData[room][i].name + '\n';
                 output += 'Rank: ' + (i + 1) + "등" + '\n';
-                output += 'Time: ' + user_time.getFullYear() + "년 " + (user_time.getMonth() + 1) + "월" + user_time.getDate() + "일";
+                output += 'Score: ' + senderData[room][i].score + '\n';
                 if (i == senderData[room].length - 1) {
-                    output += 'Score: ' + senderData[room][i].score;
+                    output += 'Time: ' + user_time.getFullYear() + "년 " + (user_time.getMonth() + 1) + "월" + user_time.getDate() + "일";
                 } else {
-                    output += 'Score: ' + senderData[room][i].score + '\n\n';
+                    output += 'Time: ' + user_time.getFullYear() + "년 " + (user_time.getMonth() + 1) + "월" + user_time.getDate() + "일" + '\n\n';
                 }
             }
             replier.reply(output);
@@ -118,11 +118,11 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                     user_time = new Date(resultData[i].time);
                     output += 'Name: ' + resultData[i].name + '\n';
                     output += 'Rank: ' + (i + 1) + "등" + '\n';
-                    output += 'Time: ' + user_time.getFullYear() + "년 " + (user_time.getMonth() + 1) + "월" + user_time.getDate() + "일";
+                    output += 'Score: ' + resultData[i].score + '\n';
                     if (i == resultData.length - 1) {
-                        output += 'Score: ' + resultData[i].score;
+                        output += 'Time: ' + user_time.getFullYear() + "년 " + (user_time.getMonth() + 1) + "월" + user_time.getDate() + "일";
                     } else {
-                        output += 'Score: ' + resultData[i].score + '\n\n';
+                        output += 'Time: ' + user_time.getFullYear() + "년 " + (user_time.getMonth() + 1) + "월" + user_time.getDate() + "일" + '\n\n';
                     }
                 }
                 replier.reply(output);
