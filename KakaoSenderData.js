@@ -106,6 +106,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             // 닉네임 검색 기능.
             // !랭킹 검색 <닉네임의 일부>
             if (msg_arg[1] == "검색") {
+                senderData[room].sort_by('score', ascending = false);
                 var target = msg.substring((msg_arg[0] + ' ' + msg_arg[1] + ' ').length, msg.length);
                 var resultData = [];
                 for (let index = 0; index < senderData[room].length; index++)
