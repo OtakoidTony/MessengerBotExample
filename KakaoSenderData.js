@@ -118,7 +118,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                 for (var i = 0; i < resultData.length; i++) {
                     user_time = new Date(resultData[i].time);
                     output += 'Name: ' + resultData[i].name + '\n';
-                    output += 'Rank: ' + (senderData[room].findObjectIndex(resultData[i]) + 1) + "등" + '\n';
+                    output += 'Rank: ' + (senderData[room].findObjectIndex('name', resultData[i].name) + 1) + "등" + '\n';
                     output += 'Score: ' + resultData[i].score + '\n';
                     if (i == resultData.length - 1) {
                         output += 'Time: ' + user_time.getFullYear() + "년 " + (user_time.getMonth() + 1) + "월 " + user_time.getDate() + "일";
