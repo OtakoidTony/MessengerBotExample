@@ -42,10 +42,30 @@ if (senderData == null) {
 
 var vb = Api.getContext().getSystemService(android.content.Context.VIBRATOR_SERVICE);
 
+const Mee6LevelSystem = {
+    'requireXP': function (lvl) {
+        return 5 * (lvl ** 2) + 50 * lvl + 100;
+    },
+    'level': function (xp) {
+        test = xp + 1
+        level = -1
+        while (true) {
+            level += 1
+            if (test <= 0) break;
+            test -= Mee6LevelSystem.requireXP(level)
+        }
+        return level - 1
+    }
+}
+
+var wipeClient = [];
+var allWipeClient = [];
+
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
     if (!(room in senderData)) {
         senderData[room] = [];
     }
+
     if (senderData[room].findObjectIndex('name', sender) == -1) {
         senderData[room].push({
             'name': sender,
@@ -56,12 +76,65 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
         senderData[room].findObject('name', sender)['score'] += 1;
         senderData[room].findObject('name', sender)['time'] = (new Date()).toString();
     }
+
     var msg_arg = msg.split(' ');
 
+    if (msg_arg[0] == "!내정보") {
+        senderData[room].sort_by('score', ascending = false);
+        var resultIndex = senderData[room].findObjectIndex('name', sender);
+        var result = senderData[room][resultIndex];
+        var resText = "";
+        resText += sender + "님의 정보\n\n";
+        resText += "랭킹: " + (resultIndex + 1) + "\n";
+        resText += "레벨: " + Mee6LevelSystem.level(result.score) + "\n";
+        resText += "횟수: " + result.score;
+        replier.reply(resText);
+    }
+
+    if (msg_arg[0] == "!초기화") {
+        if (!(sender in wipeClient)) {
+            wipeClient.push(sender);
+        }
+        var res = "정말로 초기화하시겠습니까?\n\n";
+        res += "[y] Yes, [n] No";
+        replier.reply(res);
+    }
+
+    if (sender in wipeClient) {
+        if (msg == 'y') {
+            wipeClient.splice(wipeClient.indexOf(sender), 1);
+            if (!(sender in allWipeClient)) {
+                allWipeClient.push(sender);
+            }
+            var res = "[a] wipe all room data\n";
+            res += "[t] wipe only this room data"
+            replier.reply(res);
+        }
+        if (msg == 'n') {
+            wipeClient.splice(wipeClient.indexOf(sender), 1);
+            replier.reply("취소되었습니다.");
+        }
+    }
+
+    if (sender in allWipeClient) {
+        if (msg == 'a') {
+            allWipeClient.splice(allWipeClient.indexOf(sender), 1);
+            senderData = {};
+            FileStream.write("sdcard/Kakao_senderData/senderData.json", JSON.stringify(senderData, null, '\t'));
+            replier.reply("모든 방에 대한 데이터가 말소되었습니다.");
+        }
+        if (msg == 't') {
+            allWipeClient.splice(allWipeClient.indexOf(sender), 1);
+            senderData[room] = [];
+            FileStream.write("sdcard/Kakao_senderData/senderData.json", JSON.stringify(senderData, null, '\t'));
+            replier.reply("이 채팅방에 대한 데이터가 말소되었습니다.");
+        }
+    }
 
     if (msg_arg[0] == "!테스트") {
         replier.reply(senderData[room].findObject('name', sender)['time'].toString());
     }
+
     // 당일 출석한 회원 목록 표시
     if (msg_arg[0] == "!출석부") {
         senderData[room].sort_by('score', ascending = false);
