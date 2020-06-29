@@ -107,7 +107,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                 allWipeClient.push(sender);
             }
             var res = "[a] wipe all room data\n";
-            res += "[t] wipe only this room data"
+            res += "[t] wipe only this room data";
             replier.reply(res);
         }
         if (msg == 'n') {
