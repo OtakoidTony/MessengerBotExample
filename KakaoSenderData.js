@@ -43,9 +43,20 @@ if (senderData == null) {
 var vb = Api.getContext().getSystemService(android.content.Context.VIBRATOR_SERVICE);
 
 const Mee6LevelSystem = {
+    /**
+     * 입력받은 레벨에 대하여 다음 레벨로 올라가기 위한 경험치를 반환하는 함수
+     *   
+     * Mee6 Levels XP Document:  
+     * https://github.com/Mee6/Mee6-documentation/blob/master/docs/levels_xp.md
+     * @param lvl 레벨
+     */
     'requireXP': function (lvl) {
         return 5 * (lvl ** 2) + 50 * lvl + 100;
     },
+    /**
+     * 경험치로부터 레벨을 계산하여 반환하는 함수
+     * @param xp 경험치
+     */
     'level': function (xp) {
         test = xp + 1
         level = -1
@@ -135,7 +146,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
         replier.reply(senderData[room].findObject('name', sender)['time'].toString());
     }
 
-    // 당일 출석한 회원 목록 표시
+    /* 당일 출석한 회원 목록 표시 */
     if (msg_arg[0] == "!출석부") {
         senderData[room].sort_by('score', ascending = false);
         var output = '\u200b'.repeat(500) + '\n\n';
@@ -155,7 +166,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
 
     if (msg_arg[0] == "!랭킹") {
 
-        // 모든 회원에 대한 랭킹 표시
+        /* 모든 회원에 대한 랭킹 표시 */
         if (msg_arg.length == 1) {
             senderData[room].sort_by('score', ascending = false);
             var output = '\u200b'.repeat(500) + '\n\n';
@@ -176,8 +187,8 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
 
         if (msg_arg.length == 3) {
 
-            // 닉네임 검색 기능.
-            // !랭킹 검색 <닉네임의 일부>
+            /* 닉네임 검색 기능. */
+            /* !랭킹 검색 <닉네임의 일부> */
             if (msg_arg[1] == "검색") {
                 senderData[room].sort_by('score', ascending = false);
                 var target = msg.substring((msg_arg[0] + ' ' + msg_arg[1] + ' ').length, msg.length);
