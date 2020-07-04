@@ -88,7 +88,7 @@ const Mee6LevelSystem = {
      * @param lvl 레벨
      */
     'requireXP': function (lvl) {
-        return 5 * (lvl ** 2) + 50 * lvl + 100;
+        return 5 * (lvl * lvl) + 50 * lvl + 100;
     },
     /**
      * 경험치로부터 레벨을 계산하여 반환하는 함수
