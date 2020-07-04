@@ -130,10 +130,10 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
     if (msg_arg[0] == "!json갱신") {
         /* senderData를 편집한 파일(patchData.json)을 불러와 patchData에 할당. */
         var patchData = FileStream.read("sdcard/Kakao_senderData/patchData.json");
-        
+
         /* patchData가 null값인 경우, patchData에 기존의 senderData를 할당. */
         if (patchData == null) patchData = senderData;
-        
+
         /* patchData가 null값이 아닌 경우, patchData를 객체로 변환. */
         else patchData = JSON.parse(patchData);
 
@@ -159,7 +159,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
     }
 
     if (msg_arg[0] == "!초기화") {
-        if (!(sender in wipeClient)) {
+        if (wipeClient.indexOf(sender) == -1) {
             wipeClient.push(sender);
         }
         var res = "정말로 초기화하시겠습니까?\n\n";
@@ -167,10 +167,10 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
         replier.reply(res);
     }
 
-    if (sender in wipeClient) {
+    if (wipeClient.indexOf(sender) != -1) {
         if (msg == 'y') {
             wipeClient.splice(wipeClient.indexOf(sender), 1);
-            if (!(sender in allWipeClient)) {
+            if (allWipeClient.indexOf(sender) == -1) {
                 allWipeClient.push(sender);
             }
             var res = "[a] wipe all room data\n";
@@ -183,7 +183,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
         }
     }
 
-    if (sender in allWipeClient) {
+    if (allWipeClient.indexOf(sender) != -1) {
         if (msg == 'a') {
             allWipeClient.splice(allWipeClient.indexOf(sender), 1);
             senderData = {};
