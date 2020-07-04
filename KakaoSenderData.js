@@ -1,3 +1,17 @@
+/***********************************************************
+ * File Name   : KakaoSenderData.js
+ * Author      : Rojiku
+ * Description : 
+ *     채팅방에서 참가자가 발화한 횟수를 기록하고 등수를
+ *     매기는 기능을 가진 챗봇. 출석부 기능 또한 구현되어
+ *     있으며, 차후 관련 기능을 업데이트할 예정.
+ ***********************************************************/
+
+/**
+ * name을 기준으로 객체배열을 정렬하는 함수
+ * @param name 정렬할 기준이 되는 key
+ * @param ascending 오름차순 여부
+ */
 Array.prototype.sort_by = function (name, ascending) {
     if (ascending) {
         return this.sort(function (a, b) {
@@ -22,29 +36,52 @@ Array.prototype.sort_by = function (name, ascending) {
     }
 };
 
-Array.prototype.findObjectIndex = function (label, value) {
+/**
+ * 객체 배열 중에 key에 해당하는 값이 value인 객체의 인덱스를 반환하는 함수
+ * @param key 찾을 값에 대한 key
+ * @param value key에 해당하는 값
+ */
+Array.prototype.findObjectIndex = function (key, value) {
     for (var i = 0; i < this.length; i++)
-        if (this[i][label] == value) return i;
+        if (this[i][key] == value) return i;
     return -1;
 };
 
-Array.prototype.findObject = function (label, value) {
-    if (this.findObjectIndex(label, value) != -1) return this[this.findObjectIndex(label, value)];
+/**
+ * 객체 배열 중에 key에 해당하는 값이 value인 객체를 반환하는 함수  
+ * 해당하는 객체가 없을 경우 null을 반환.
+ * @param key 찾을 값에 대한 key
+ * @param value key에 해당하는 값
+ */
+Array.prototype.findObject = function (key, value) {
+    if (this.findObjectIndex(key, value) != -1) return this[this.findObjectIndex(key, value)];
     else return null;
 };
 
-var senderData = FileStream.read("sdcard/Kakao_senderData/senderData.json");
-if (senderData == null) {
-    senderData = {};
-} else {
-    senderData = JSON.parse(senderData);
+/**
+ * 입력받은 Date객체에 대하여 같은 날짜인지 아닌지를 반환하는 함수
+ * @param targetDate 비교할 Date 객체
+ */
+Date.prototype.isSameDate = function (targetDate) {
+    return (
+        /* 일(Day)이 같은지 판별 */
+        this.getDate() == targetDate.getDate() &&
+
+        /* 월(Month)이 같은지 판별 */
+        this.getMonth() == targetDate.getMonth() &&
+
+        /* 년도(Year)가 같은지 판별 */
+        this.getFullYear() == targetDate.getFullYear()
+    );
 }
 
-var vb = Api.getContext().getSystemService(android.content.Context.VIBRATOR_SERVICE);
+var senderData = FileStream.read("sdcard/Kakao_senderData/senderData.json");
+if (senderData == null) senderData = {};
+else senderData = JSON.parse(senderData);
 
 const Mee6LevelSystem = {
     /**
-     * 입력받은 레벨에 대하여 다음 레벨로 올라가기 위한 경험치를 반환하는 함수
+     * 입력받은 레벨에 대하여 다음 레벨로 올라가기 위한 경험치를 반환하는 함수  
      *   
      * Mee6 Levels XP Document:  
      * https://github.com/Mee6/Mee6-documentation/blob/master/docs/levels_xp.md
@@ -90,6 +127,25 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
 
     var msg_arg = msg.split(' ');
 
+    if (msg_arg[0] == "!json갱신") {
+        /* senderData를 편집한 파일(patchData.json)을 불러와 patchData에 할당. */
+        var patchData = FileStream.read("sdcard/Kakao_senderData/patchData.json");
+        
+        /* patchData가 null값인 경우, patchData에 기존의 senderData를 할당. */
+        if (patchData == null) patchData = senderData;
+        
+        /* patchData가 null값이 아닌 경우, patchData를 객체로 변환. */
+        else patchData = JSON.parse(patchData);
+
+        /* senderData에 patchData를 덮어쓰기. */
+        senderData = patchData;
+
+        /* 변경된 사항을 저장. */
+        FileStream.write("sdcard/Kakao_senderData/senderData.json", JSON.stringify(senderData, null, '\t'));
+
+        replier.reply("Sender Data가 갱신되었습니다.");
+    }
+
     if (msg_arg[0] == "!내정보") {
         senderData[room].sort_by('score', ascending = false);
         var resultIndex = senderData[room].findObjectIndex('name', sender);
@@ -132,18 +188,14 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             allWipeClient.splice(allWipeClient.indexOf(sender), 1);
             senderData = {};
             FileStream.write("sdcard/Kakao_senderData/senderData.json", JSON.stringify(senderData, null, '\t'));
-            replier.reply("모든 방에 대한 데이터가 말소되었습니다.");
+            replier.reply("모든 방에 대한 데이터가 초기화되었습니다.");
         }
         if (msg == 't') {
             allWipeClient.splice(allWipeClient.indexOf(sender), 1);
             senderData[room] = [];
             FileStream.write("sdcard/Kakao_senderData/senderData.json", JSON.stringify(senderData, null, '\t'));
-            replier.reply("이 채팅방에 대한 데이터가 말소되었습니다.");
+            replier.reply("이 채팅방에 대한 데이터가 초기화되었습니다.");
         }
-    }
-
-    if (msg_arg[0] == "!테스트") {
-        replier.reply(senderData[room].findObject('name', sender)['time'].toString());
     }
 
     /* 당일 출석한 회원 목록 표시 */
@@ -153,7 +205,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
         var today = new Date();
         for (var i = 0; i < senderData[room].length; i++) {
             user_time = new Date(senderData[room][i].time);
-            if (user_time.getFullYear() == today.getFullYear() && user_time.getMonth() == today.getMonth() && user_time.getDate() == today.getDate()) {
+            if (user_time.isSameDate(today)) {
                 if (i == senderData[room].length - 1) {
                     output += 'Name: ' + senderData[room][i].name;
                 } else {
