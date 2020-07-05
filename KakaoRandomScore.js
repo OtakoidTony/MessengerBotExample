@@ -97,7 +97,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             var score = parseInt(Math.random() * 10) + 1;
             senderData[room].push({
                 'name': sender,
-                'score': parseInt(Math.random() * 10) + 1,
+                'score': score,
                 'date': (new Date()).toString()
             });
             replier.reply(score + "점 출석되었습니다.");
