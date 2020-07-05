@@ -72,9 +72,10 @@ Date.prototype.isSameDate = function (targetDate) {
     );
 }
 
-var senderData = FileStream.read("sdcard/Kakao_senderData/senderData.json");
+const fileUrl = "sdcard/Kakao_senderData2/senderData.json";
+
+var senderData = JSON.parse(FileStream.read(fileUrl));
 if (senderData == null) senderData = {};
-else senderData = JSON.parse(senderData);
 
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
     if (!(room in senderData)) {
@@ -83,12 +84,12 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
 
     if (msg == "!방초기화") {
         senderData[room] = [];
-        FileStream.write("sdcard/Kakao_senderData/senderData.json", JSON.stringify(senderData, null, '\t'));
+        FileStream.write(fileUrl, JSON.stringify(senderData, null, '\t'));
     }
 
     if (msg == "!전체초기화") {
         senderData = {};
-        FileStream.write("sdcard/Kakao_senderData/senderData.json", JSON.stringify(senderData, null, '\t'));
+        FileStream.write(fileUrl, JSON.stringify(senderData, null, '\t'));
     }
 
     if (msg == "!출석") {
@@ -106,7 +107,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                 var score = parseInt(Math.random() * 10) + 1;
                 senderData[room].findObject('name', sender).score += score;
                 replier.reply(score + "점 출석되었습니다.");
-                FileStream.write("sdcard/Kakao_senderData/senderData.json", JSON.stringify(senderData, null, '\t'));
+                FileStream.write(fileUrl, JSON.stringify(senderData, null, '\t'));
             }
         }
     }
