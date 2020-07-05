@@ -93,8 +93,9 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             if (targetDate.isSameDate(new Date())) {
                 replier.reply("이미 출석하였습니다.");
             } else {
-                senderData[room].findObject('name', sender).score += parseInt(Math.random() * 10) + 1;
-                replier.reply("출석되었습니다.");
+                var score = parseInt(Math.random() * 10) + 1;
+                senderData[room].findObject('name', sender).score += score;
+                replier.reply(score + "점 출석되었습니다.");
                 FileStream.write("sdcard/Kakao_senderData/senderData.json", JSON.stringify(senderData, null, '\t'));
             }
         }
