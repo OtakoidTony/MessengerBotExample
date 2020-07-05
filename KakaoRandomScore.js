@@ -81,6 +81,16 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
         senderData[room] = [];
     }
 
+    if (msg == "!방초기화") {
+        senderData[room] = [];
+        FileStream.write("sdcard/Kakao_senderData/senderData.json", JSON.stringify(senderData, null, '\t'));
+    }
+
+    if (msg == "!전체초기화") {
+        senderData = {};
+        FileStream.write("sdcard/Kakao_senderData/senderData.json", JSON.stringify(senderData, null, '\t'));
+    }
+
     if (msg == "!출석") {
         if (senderData[room].findObjectIndex('name', sender) == -1) {
             senderData[room].push({
