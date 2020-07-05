@@ -1,26 +1,4 @@
 /**
- * 객체 배열 중에 key에 해당하는 값이 value인 객체의 인덱스를 반환하는 함수
- * @param key 찾을 값에 대한 key
- * @param value key에 해당하는 값
- */
-Array.prototype.findObjectIndex = function (key, value) {
-    for (var i = 0; i < this.length; i++)
-        if (this[i][key] == value) return i;
-    return -1;
-};
-
-/**
- * 객체 배열 중에 key에 해당하는 값이 value인 객체를 반환하는 함수  
- * 해당하는 객체가 없을 경우 null을 반환.
- * @param key 찾을 값에 대한 key
- * @param value key에 해당하는 값
- */
-Array.prototype.findObject = function (key, value) {
-    if (this.findObjectIndex(key, value) != -1) return this[this.findObjectIndex(key, value)];
-    else return null;
-};
-
-/**
  * 성별과 생년월일를 입력받아 운세에 대한 정보를 담은 객체를 내보내는 함수
  * @param gender 'f' or 'm'
  * @param birth ex) 19990101
@@ -69,7 +47,6 @@ function isValidDate(dateStr) {
     }
     return true;
 }
-
 
 
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
