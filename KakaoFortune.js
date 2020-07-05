@@ -24,6 +24,7 @@ Array.prototype.findObject = function (key, value) {
  * 성별과 생년월일를 입력받아 운세에 대한 정보를 담은 객체를 내보내는 함수
  * @param gender 'f' or 'm'
  * @param birth ex) 19990101
+ * @deprecated JSON.parse()의 매개가 JSON형식을 따르지 않음.
  */
 function fortune(gender, birth) {
     return JSON.parse(Utils.getWebText("https://m.search.naver.com/p/csearch/dcontent/external_api/json_todayunse_v2.naver?_callback=window.__jindo2_callback._fortune_my_0&gender=" + gender + "&birth=" + birth + "&solarCal=solar&time=").split("window.__jindo2_callback._fortune_my_0(")[1].split(");")[0]);
@@ -35,7 +36,7 @@ function fortune(gender, birth) {
  * @param birth ex) 19990101
  */
 function totalFortune(gender, birth) {
-    return fortune(gender, birth).result.day.content[0];
+    return JSON.parse('['+Utils.getWebText("https://m.search.naver.com/p/csearch/dcontent/external_api/json_todayunse_v2.naver?_callback=window.__jindo2_callback._fortune_my_0&gender=" + gender + "&birth=" + birth + "&solarCal=solar&time=").split("[")[1].split("]")[0]+']')[0];
 }
 
 /**
