@@ -55,6 +55,23 @@ Array.prototype.findObject = function (key, value) {
     else return null;
 };
 
+/**
+ * 입력받은 Date객체에 대하여 같은 날짜인지 아닌지를 반환하는 함수
+ * @param targetDate 비교할 Date 객체
+ */
+Date.prototype.isSameDate = function (targetDate) {
+    return (
+        /* 일(Day)이 같은지 판별 */
+        this.getDate() == targetDate.getDate() &&
+
+        /* 월(Month)이 같은지 판별 */
+        this.getMonth() == targetDate.getMonth() &&
+
+        /* 년도(Year)가 같은지 판별 */
+        this.getFullYear() == targetDate.getFullYear()
+    );
+}
+
 var senderData = FileStream.read("sdcard/Kakao_senderData/senderData.json");
 if (senderData == null) senderData = {};
 else senderData = JSON.parse(senderData);
@@ -68,13 +85,19 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
         if (senderData[room].findObjectIndex('name', sender) == -1) {
             senderData[room].push({
                 'name': sender,
-                'score': parseInt(Math.random() * 10) + 1
+                'score': parseInt(Math.random() * 10) + 1,
+                'date': (new Date()).toString()
             });
         } else {
-            senderData[room].findObject('name', sender).score += parseInt(Math.random() * 10) + 1;
+            var targetDate = new Date(senderData[room].findObject('name', sender).date);
+            if (targetDate.isSameDate(new Date())) {
+                replier.reply("이미 출석하였습니다.");
+            } else {
+                senderData[room].findObject('name', sender).score += parseInt(Math.random() * 10) + 1;
+                replier.reply("출석되었습니다.");
+                FileStream.write("sdcard/Kakao_senderData/senderData.json", JSON.stringify(senderData, null, '\t'));
+            }
         }
-        replier.reply("출석되었습니다.");
-        FileStream.write("sdcard/Kakao_senderData/senderData.json", JSON.stringify(senderData, null, '\t'));
     }
 
     if (msg == "!출석통계") {
