@@ -72,7 +72,7 @@ Date.prototype.isSameDate = function (targetDate) {
     );
 }
 
-const fileUrl = "sdcard/Kakao_senderData2/senderData.json";
+const fileUrl = "sdcard/Kakao_senderData/senderData.json";
 
 var senderData = JSON.parse(FileStream.read(fileUrl));
 if (senderData == null) senderData = {};
@@ -94,11 +94,14 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
 
     if (msg == "!출석") {
         if (senderData[room].findObjectIndex('name', sender) == -1) {
+            var score = parseInt(Math.random() * 10) + 1;
             senderData[room].push({
                 'name': sender,
                 'score': parseInt(Math.random() * 10) + 1,
                 'date': (new Date()).toString()
             });
+            replier.reply(score + "점 출석되었습니다.");
+            FileStream.write(fileUrl, JSON.stringify(senderData, null, '\t'));
         } else {
             var targetDate = new Date(senderData[room].findObject('name', sender).date);
             if (targetDate.isSameDate(new Date())) {
