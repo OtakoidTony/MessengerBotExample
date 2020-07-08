@@ -109,6 +109,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             } else {
                 var score = parseInt(Math.random() * 10) + 1;
                 senderData[room].findObject('name', sender).score += score;
+                senderData[room].findObject('name', sender).date = (new Date()).toString();
                 replier.reply(score + "점 출석되었습니다.");
                 FileStream.write(fileUrl, JSON.stringify(senderData, null, '\t'));
             }
