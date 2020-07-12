@@ -47,6 +47,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                         "temp": null,
                         "owner": sender
                     })
+                    FileStream.write("sdcard/Kakao_loginSystem/database.json", JSON.stringify(Attendance, null, '\t'));
                 } else {
                     replier.reply("이미 있는 id입니다. 탈퇴하려면,\n!탈퇴 [id] [pw]\n을 입력해주십시오.");
                 }
