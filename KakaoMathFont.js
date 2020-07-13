@@ -1,4 +1,3 @@
-
 const doubleStruck = {
     "lower": [
         "𝕒", "𝕓", "𝕔", "𝕕", "𝕖", "𝕗", "𝕘", "𝕙", "𝕚", "𝕛",
@@ -6,8 +5,8 @@ const doubleStruck = {
         "𝕦", "𝕧", "𝕨", "𝕩", "𝕪", "𝕫"
     ],
     "upper": [
-        "𝔸", "𝔹", "ℂ", "𝔻", "𝔼", "𝔽", "𝔾", "ℍ", "𝕀", "𝕁", 
-        "𝕂", "𝕃", "𝕄", "ℕ", "𝕆", "ℙ", "ℚ", "ℝ", "𝕊", "𝕋", 
+        "𝔸", "𝔹", "ℂ", "𝔻", "𝔼", "𝔽", "𝔾", "ℍ", "𝕀", "𝕁",
+        "𝕂", "𝕃", "𝕄", "ℕ", "𝕆", "ℙ", "ℚ", "ℝ", "𝕊", "𝕋",
         "𝕌", "𝕍", "𝕎", "𝕏", "𝕐", "ℤ"
     ]
 }
@@ -19,28 +18,28 @@ const fraktur = {
 
 
 
-String.prototype.toDoubleStruck = function(){
+String.prototype.toDoubleStruck = function () {
     var result = "";
     for (var i = 0; i < this.length; i++) {
         if (this[i] >= 'a' && this[i] <= 'z') {
-            result += doubleStruck.lower[this.charCodeAt(i)-'a'.charCodeAt(0)];
-        }else if(this[i] >= 'A' && this[i] <= 'Z'){
-            result += doubleStruck.upper[this.charCodeAt(i)-'A'.charCodeAt(0)];
-        }else{
+            result += doubleStruck.lower[this.charCodeAt(i) - 'a'.charCodeAt(0)];
+        } else if (this[i] >= 'A' && this[i] <= 'Z') {
+            result += doubleStruck.upper[this.charCodeAt(i) - 'A'.charCodeAt(0)];
+        } else {
             result += this[i];
         }
     }
     return result;
 }
 
-String.prototype.toFraktur = function(){
+String.prototype.toFraktur = function () {
     var result = "";
     for (var i = 0; i < this.length; i++) {
         if (this[i] >= 'a' && this[i] <= 'z') {
-            result += fraktur.lower[this.charCodeAt(i)-'a'.charCodeAt(0)];
-        }else if(this[i] >= 'A' && this[i] <= 'Z'){
-            result += fraktur.upper[this.charCodeAt(i)-'A'.charCodeAt(0)];
-        }else{
+            result += fraktur.lower[this.charCodeAt(i) - 'a'.charCodeAt(0)];
+        } else if (this[i] >= 'A' && this[i] <= 'Z') {
+            result += fraktur.upper[this.charCodeAt(i) - 'A'.charCodeAt(0)];
+        } else {
             result += this[i];
         }
     }
