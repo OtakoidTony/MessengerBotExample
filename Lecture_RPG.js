@@ -46,7 +46,7 @@ const Mee6LevelSystem = {
      * @param {number} lvl 현재 레벨
      */
     'requireXP': function (lvl) {
-        return 5 * (lvl ** 2) + 50 * lvl + 100;
+        return 5 * (lvl * lvl) + 50 * lvl + 100;
     },
     /**
      * 경험치를 통해 현재 레벨이 몇 레벨인지를 반환하는 함수
