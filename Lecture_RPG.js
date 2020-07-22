@@ -37,6 +37,33 @@ Array.prototype.findObject = function (key, value) {
     else return null;
 };
 
+/**
+ * Mee6의 레벨 기능을 JavaScript로 구현한 객체
+ */
+const Mee6LevelSystem = {
+    /**
+     * 다음 레벨로 가기에 필요한 경험치를 반환하는 함수
+     * @param {number} lvl 현재 레벨
+     */
+    'requireXP': function (lvl) {
+        return 5 * (lvl ** 2) + 50 * lvl + 100;
+    },
+    /**
+     * 경험치를 통해 현재 레벨이 몇 레벨인지를 반환하는 함수
+     * @param {number} xp 현재 경험치 
+     */
+    'level': function (xp) {
+        test = xp + 1
+        level = -1
+        while (true) {
+            level += 1
+            if (test <= 0) break;
+            test -= requireXP(level)
+        }
+        return level - 1
+    }
+}
+
 /* 데이터가 저장될 경로를 지정해줍니다. */
 const fileUrl = "sdcard/MsgBot_RPG/database.json"
 
@@ -86,8 +113,8 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
             /* 본 코드는 70% 확률로 토벌에 성공하는 것으로 설정했습니다. */
             if (successRate < 0.7) {
                 var res = "토벌에 성공하였습니다.\n\n";
-                res += "경험치: +"+receivedExp+"\n";
-                res += "골드: +"+receivedGold;
+                res += "경험치: +" + receivedExp + "\n";
+                res += "골드: +" + receivedGold;
 
                 /* 위에서 정의한 함수를 이용하여 유저의 데이터를 변경해줍니다. */
                 gameDatabase.findObject('name', sender).exp += receivedExp;
@@ -96,10 +123,22 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
                 /* 변경사항이 생기면 반드시 저장해줍니다. */
                 FileStream.write(fileUrl, JSON.stringify(gameDatabase, null, '\t'));
                 replier.reply(res);
-            }else{
+            } else {
                 replier.reply("토벌에 실패하였습니다.");
             }
         }
     }
 
+    if (msg == "!내정보") {
+        /* 이번에도 역시, 가입되지 않은 유저인 경우에 가입을 하도록 유도합니다. */
+        if (gameDatabase.findObjectIndex('name', sender) == -1) {
+            replier.reply("가입되지 않은 유저입니다.\n!가입 을 입력하여 가입해주세요.");
+        } else {
+            var res = "";
+            res += "골드: " + gameDatabase.findObject('name', sender).gold + "\n";
+            res += "레벨: " + Mee6LevelSystem.level(gameDatabase.findObject('name', sender).exp) + "\n"
+            res += "경험치: " + gameDatabase.findObject('name', sender).exp;
+            replier.reply(res);
+        }
+    }
 }
