@@ -5,7 +5,7 @@
  * @param {String} text 번역할 텍스트
  * @returns {String} 번역 결과
  */
-papago = function(source, target, text) {
+function papago(source, target, text) {
     return JSON.parse(org.jsoup.Jsoup.connect("https://papago.naver.com/apis/n2mt/translate")
         .requestBody('data=' + encodeURIComponent(JSON.stringify({
             "source": source,
