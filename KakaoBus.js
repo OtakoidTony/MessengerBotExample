@@ -23,8 +23,9 @@ displayBusData = function(busID) {
     result = ""
     for (var i = 0; i < data.length; i++) {
         result += "|↓| \n"
-        result += "|↓| " + data[i].stationName + (i == data.length - 1 ? "" : "\n");
+        result += "|↓| " + data[i].stationName + "\n";
     }
+    result += "|↓| ";
     result = result.split("\n")
     busRes = Utils.getBusLocationData(busID).busLocationList
 
