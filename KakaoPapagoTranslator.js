@@ -27,6 +27,10 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
     param = msg.splitInto2Parts('\n');
     firstLineParam = param[0].split(' ');
     if (firstLineParam[0]=="!번역"){
-        replier.reply(papago(firstLineParam[1], firstLineParam[2], param[1]));
+        try{
+            replier.reply(papago(firstLineParam[1], firstLineParam[2], param[1]));
+        }catch(e){
+            replier.reply("올바르지 않은 국가코드 입니다.");
+        }
     }
 }
