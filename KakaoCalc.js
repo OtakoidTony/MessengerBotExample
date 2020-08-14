@@ -70,11 +70,9 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName,
         test = test.replace(/ /gi, "");
         test = test.replace(/[0-9]/g, "");
         i = 0;
-        var WhiteList = new Array("sin", "cos", "exp", "eta", "zeta", "factorial", "\(", "\)", "+", "-", "*", "/");
-        while (i<=WhiteList.length){
+        var WhiteList = ["sin", "cos", "exp", "eta", "zeta", "factorial", "\(", "\)", "+", "-", "*", "/"];
+        for (var i=0; i<WhiteList.length; i++)
             test = test.replaceAll(WhiteList[i], '');
-            i = i+1;
-        }
         if (test==""){
             replier.reply(eval(input));
         }
