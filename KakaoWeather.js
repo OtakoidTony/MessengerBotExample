@@ -30,7 +30,7 @@ function getWeather() {
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId) {
     if (msg == "$날씨") {
         var weather = getWeather();
-        var result = "현재 지역별 날씨" + "\0".repeat(500) + "\n\n\n";
+        var result = "현재 지역별 날씨" + "\u200b".repeat(500) + "\n\n\n";
         for (var i = 0; i < weather.length; i++) {
             result += "지역: " + weather[i].location + "\n";
             result += "기온: " + weather[i].temperature + "\n";
